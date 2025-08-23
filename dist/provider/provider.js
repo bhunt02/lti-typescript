@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Provider = void 0;
+exports.register = register;
 const server_1 = require("../utils/server");
 const platform_1 = require("../utils/platform");
 const auth_1 = require("../utils/auth");
@@ -19,6 +20,11 @@ const context_token_entity_1 = require("../entities/context_token.entity");
 const id_token_entity_1 = require("../entities/id_token.entity");
 const platform_entity_1 = require("../entities/platform.entity");
 const key_entity_1 = require("../entities/key.entity");
+async function register(encryptionKey, databaseOptions, options) {
+    const provider = new Provider();
+    await provider.setup(encryptionKey, databaseOptions, options);
+    return provider;
+}
 class Provider {
     constructor() {
         this._loginRoute = '/login';

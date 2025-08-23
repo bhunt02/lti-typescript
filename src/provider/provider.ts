@@ -51,6 +51,31 @@ export type CallbackWithToken = (
   next?: NextFunction,
 ) => Promise<void | ExpressResponse> | (void | ExpressResponse);
 
+export async function register(
+  encryptionKey: string,
+  databaseOptions: Omit<
+    DataSourceOptions,
+    | 'subscribers'
+    | 'migrations'
+    | 'migrationsTableName'
+    | 'migrationsTransactionMode'
+    | 'namingStrategy'
+    | 'logging'
+    | 'logger'
+  >,
+  options: ProviderOptions,
+) {
+  const provider = new Provider();
+
+  await provider.setup(
+    encryptionKey,
+    databaseOptions as DataSourceOptions,
+    options,
+  );
+
+  return provider;
+}
+
 /**
  * @descripttion LTI Provider Class that implements the LTI 1.3 protocol and services.
  */
