@@ -53,16 +53,7 @@ export type CallbackWithToken = (
 
 export async function register(
   encryptionKey: string,
-  databaseOptions: Omit<
-    DataSourceOptions,
-    | 'subscribers'
-    | 'migrations'
-    | 'migrationsTableName'
-    | 'migrationsTransactionMode'
-    | 'namingStrategy'
-    | 'logging'
-    | 'logger'
-  >,
+  databaseOptions: DataSourceOptions,
   options: ProviderOptions,
 ) {
   const provider = new Provider();
