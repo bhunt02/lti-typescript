@@ -9,9 +9,7 @@
     "node": ">=20.19.3"
   },
   "scripts": {
-    "build": "rimraf dist && yarn build:src && yarn build:type",
-    "build:src": "yarn tsc --removeComments --project tsconfig.build.json",
-    "build:type": "yarn tsc --removeComments -d --emitDeclarationOnly --outFile dist/index.d.ts  --project tsconfig.build.json",
+    "build": "rimraf dist && yarn tsc --removeComments --project tsconfig.build.json -d",
     "test": "jest -i --forceExit",
     "test:cov": "yarn test --coverage",
     "test:update-snapshots": "yarn test --updateSnapshot",
