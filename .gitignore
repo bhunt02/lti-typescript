@@ -23,3 +23,5 @@ yarn-error.log*
 husky.sh
 .vscode/
 
+# build files
+dist/
