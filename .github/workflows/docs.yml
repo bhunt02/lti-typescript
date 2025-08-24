@@ -5,7 +5,6 @@ on:
       - master
 
 permissions:
-  contents: write
   pages: write
   id-token: write
 
@@ -30,14 +29,19 @@ jobs:
       - name: Build
         run: yarn build:pages "lti-typescript"
 
-      - name: Push
-        uses: s0/git-publish-subdir-action@develop
-        env:
-          REPO: self
-          BRANCH: pages
-          FOLDER: lti-typescript
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          MESSAGE: "Build: ({sha}) {msg}" # The commit message
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Build
+        run: yarn build:pages "lti-typescript"
+
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          name: compiled
+          path: lti-typescript/
+          retention-days: '1'
 
       - name: Deploy to GitHub Pages
         uses: actions/deploy-pages@v4
