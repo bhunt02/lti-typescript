@@ -253,7 +253,8 @@ showdown.extension('prettify', function () {
   }];
 });
 
-const outDir = path.join(path.dirname('.'),'out');
+const args = process.argv.slice(2);
+const outDir = path.join(path.dirname('.'), args[0] ?? 'out');
 
 const docsDir = path.join(path.dirname('.'),'/docs');
 const docFiles = fs.readdirSync(docsDir).map((v) => path.join(docsDir, v));
