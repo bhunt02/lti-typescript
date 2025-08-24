@@ -26,9 +26,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Set up databases
-        run: psql -d postgresql://postgres@localhost/postgres -c "CREATE DATABASE lti_test;" \
-          -c "GRANT ALL PRIVILEGES ON DATABASE lti_test TO postgres;" \
-          -c "ALTER DATABASE lti_test OWNER TO postgres;"
+        run: psql -d postgresql://postgres@localhost/postgres -c "CREATE DATABASE lti_test;" && psql -d postgresql://postgres@localhost/postgres -c "GRANT ALL PRIVILEGES ON DATABASE lti_test TO postgres;" && psql -d postgresql://postgres@localhost/postgres -c "ALTER DATABASE lti_test OWNER TO postgres;"
         env:
           PGPASSWORD: mysecretpassword
       - name: Create postgres.env from example
