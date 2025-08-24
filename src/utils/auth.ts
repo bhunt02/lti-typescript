@@ -293,9 +293,9 @@ export class Auth {
 
   /**
    * @description Validates de token based on the LTI 1.3 core claims specifications.
-   * @param {IdToken} token - Id token you wish to validate.
+   * @param {JwtPayload & IdToken} token - Id token you wish to validate.
    */
-  static async claimValidation(token: IdToken) {
+  static async claimValidation(token: JwtPayload & IdToken) {
     Debug.log(this, 'Initiating LTI 1.3 core claims validation');
 
     Debug.log(this, 'Checking Message type claim');

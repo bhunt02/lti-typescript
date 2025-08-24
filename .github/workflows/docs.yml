@@ -1,4 +1,4 @@
-name: build.yml
+name: docs.yml
 on:
   push:
     branches:
