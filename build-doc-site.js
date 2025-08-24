@@ -287,11 +287,11 @@ function getBreadcrumb(path, document) {
   const ol = document.createElement('ol');
   const lis = [];
   for (let path of outFiles) {
-    path = path.replace(/README.html/g,'index.html');
+    path = path.replace(/README.md/g,'index.md');
 
     const li = document.createElement('li');
     const a = document.createElement('a');
-    a.setAttribute('href', '/'+path);
+    a.setAttribute('href', '/' + path === 'index.md' ? '' : path);
     const span = document.createElement('span');
     span.setAttribute('aria-current','page');
     const segments = path.split('.')[0].split('/');
