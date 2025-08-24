@@ -286,7 +286,9 @@ function getBreadcrumb(path, document) {
   const nav = document.createElement('nav');
   const ol = document.createElement('ol');
   const lis = [];
-  for (const path of outFiles) {
+  for (let path of outFiles) {
+    path = path.replace(/README.html/g,'index.html');
+
     const li = document.createElement('li');
     const a = document.createElement('a');
     a.setAttribute('href', '/'+path);
@@ -375,4 +377,3 @@ for (let file of files) {
     });
   }
 }
-//const readme = marked('');
