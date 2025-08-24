@@ -25,3 +25,4 @@ husky.sh
 
 # build files
 dist/
+out/

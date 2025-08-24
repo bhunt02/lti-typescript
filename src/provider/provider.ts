@@ -1365,7 +1365,7 @@ export class Provider {
   async deletePlatform(
     url: string,
     clientId: string,
-  ): Promise<Platform | undefined> {
+  ): Promise<void> {
     const platform = await this.getPlatform(url, clientId);
     return await platform?.delete();
   }
@@ -1375,7 +1375,7 @@ export class Provider {
    * @param {string} platformId - Platform Id.
    * @returns {Promise<Platform | undefined>}
    */
-  async deletePlatformById(platformId: string): Promise<Platform | undefined> {
+  async deletePlatformById(platformId: string): Promise<void> {
     const platform = await this.getPlatformById(platformId);
     return await platform?.delete();
   }
@@ -1407,7 +1407,7 @@ export class Provider {
       isNewResource?: boolean;
       query?: Record<string, any>;
     } = { newResource: false, query: undefined },
-  ) {
+  ): Promise<void> {
     if (!res || !path) throw new Error('MISSING_ARGUMENT');
     if (!res.locals.token) return res.redirect(path); // If no token is present, just redirects
     Debug.log(this, 'Redirecting to: ', path);

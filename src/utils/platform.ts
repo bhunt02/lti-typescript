@@ -1,4 +1,4 @@
-import {AccessTokenType, AuthConfigType, AuthTokenMethodEnum} from './types';
+import {AccessTokenType, AuthConfigType, AuthTokenMethodEnum, KeyObject, PlatformProperties} from './types';
 import {PlatformModel} from '../entities/platform.entity';
 import {Database} from './database';
 import {PrivateKeyModel, PublicKeyModel} from '../entities/key.entity';
@@ -47,7 +47,7 @@ export class Platform {
    * @description Sets/Gets the platform name.
    * @param {string} name - Platform name.
    */
-  async setName(name: string) {
+  async setName(name: string): Promise<void> {
     await Database.update(
       PlatformModel,
       {
@@ -64,7 +64,7 @@ export class Platform {
    * @description Sets the platform status.
    * @param {Boolean} active Whether the Platform is active or not.
    */
-  async setActive(active: boolean) {
+  async setActive(active: boolean): Promise<void> {
     await Database.update(
       PlatformModel,
       {
@@ -82,22 +82,22 @@ export class Platform {
    * @description Gets the RSA public key assigned to the platform.
    *
    */
-  async platformPublicKey() {
+  async platformPublicKey(): Promise<KeyObject> {
     const key = await Database.findOne(PublicKeyModel, {
       where: { kid: this.kid },
     });
-    return key.data;
+    return key.data as unknown as KeyObject;
   }
 
   /**
    * @description Gets the RSA private key assigned to the platform.
    *
    */
-  async platformPrivateKey() {
+  async platformPrivateKey(): Promise<KeyObject> {
     const key = await Database.findOne(PrivateKeyModel, {
       where: { kid: this.kid },
     });
-    return key.data;
+    return key.data as unknown as KeyObject;
   }
 
   /**
@@ -105,7 +105,7 @@ export class Platform {
    * @param {string} method Method of authorization "RSA_KEY" or "JWK_KEY" or "JWK_SET".
    * @param {string} key Either the RSA public key provided by the platform, or the JWK key, or the JWK keyset address.
    */
-  async setAuthConfig(method?: AuthTokenMethodEnum, key?: string) {
+  async setAuthConfig(method?: AuthTokenMethodEnum, key?: string): Promise<void> {
     await Database.update(
       PlatformModel,
       {
@@ -124,7 +124,7 @@ export class Platform {
    * @description Sets the platform authorization endpoint used to perform the OIDC login.
    * @param {string} authenticationEndpoint Platform authentication endpoint.
    */
-  async setAuthenticationEndpoint(authenticationEndpoint: string) {
+  async setAuthenticationEndpoint(authenticationEndpoint: string): Promise<void> {
     await Database.update(
       PlatformModel,
       {
@@ -142,7 +142,7 @@ export class Platform {
    * @description Sets the platform access token endpoint used to authenticate messages to the platform.
    * @param {string} accessTokenEndpoint Platform access token endpoint.
    */
-  async setAccessTokenEndpoint(accessTokenEndpoint: string) {
+  async setAccessTokenEndpoint(accessTokenEndpoint: string): Promise<void> {
     await Database.update(
       PlatformModel,
       {
@@ -160,7 +160,7 @@ export class Platform {
    * @description Sets the platform authorization server endpoint used to authenticate messages to the platform.
    * @param {string} authorizationServer Platform authorization server endpoint.
    */
-  async setAuthorizationServer(authorizationServer: string | null) {
+  async setAuthorizationServer(authorizationServer: string | null): Promise<void> {
     await Database.update(
       PlatformModel,
       {
@@ -210,7 +210,7 @@ export class Platform {
   /**
    * @description Retrieves the platform information as a JSON object.
    */
-  async platformParams() {
+  async platformParams(): Promise<PlatformProperties & { publicKey: KeyObject }> {
     return {
       kid: this.kid,
       platformUrl: this.platformUrl,
@@ -227,14 +227,12 @@ export class Platform {
   /**
    * @description Deletes a registered platform.
    */
-  async delete(): Promise<this> {
+  async delete(): Promise<void> {
     await Database.delete(PublicKeyModel, { kid: this.kid });
     await Database.delete(PrivateKeyModel, { kid: this.kid });
     await Database.delete(PlatformModel, {
-      platformUrl: this.platformUrl,
-      clientId: this.clientId,
+      kid: this.kid,
     });
-    return this;
   }
 
   api: PlatformApi = new PlatformApi();

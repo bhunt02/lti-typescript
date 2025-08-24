@@ -5,14 +5,15 @@ import {Debug} from '../../utils/debug';
 import {Provider} from '../provider';
 import {AccessTokenType, CreateLineItem, getLineItemOptions, IdToken, LineItem, ScoreType,} from '../../utils/types';
 
-type LinkType = { url: string };
-type ParsedLinkType = {
+export type LinkType = { url: string };
+export type ParsedLinkType = {
   next?: LinkType;
   prev?: LinkType;
   first?: LinkType;
   last?: LinkType;
 };
-type ResultType = {
+
+export type ResultType = {
   next?: string;
   prev?: string;
   first?: string;
@@ -281,7 +282,7 @@ export class GradeService {
       },
     });
     Debug.log(this, 'LineItem sucessfully updated');
-    return response;
+    return response as LineItem;
   }
 
   /**
@@ -328,13 +329,13 @@ export class GradeService {
    * @description Publishes a score or grade to a lineItem. Represents the Score Publish service described in the lti 1.3 specification.
    * @param {IdToken} idToken - Idtoken for the user.
    * @param {String} lineItemId - LineItem ID.
-   * @param {ScoreType} score - Score/Grade following the LTI Standard application/vnd.ims.lis.v1.score+json.
+   * @param {Omit<ScoreType,'timestamp'>} score - Score/Grade following the LTI Standard application/vnd.ims.lis.v1.score+json.
    * @param {AccessTokenType} accessToken Optionally passed access token if already acquired
    */
   async submitScore(
     idToken: IdToken,
     lineItemId: string,
-    score: ScoreType,
+    score: Omit<ScoreType,'timestamp'>,
     accessToken?: AccessTokenType,
   ): Promise<ScoreType> {
     if (!idToken) {
@@ -351,8 +352,12 @@ export class GradeService {
     }
     Debug.log(this, 'Target platform: ' + idToken.iss);
 
+    let newScore: ScoreType = {
+      ...score,
+      timestamp: new Date(Date.now()).toISOString(),
+    };
     const shouldFetchScoreMaximum =
-      score.scoreGiven !== undefined && score.scoreMaximum === undefined;
+      newScore.scoreGiven !== undefined && newScore.scoreMaximum === undefined;
     const scopes = ['https://purl.imsglobal.org/spec/lti-ags/scope/score'];
     if (shouldFetchScoreMaximum) {
       scopes.push('https://purl.imsglobal.org/spec/lti-ags/scope/lineitem');
@@ -387,29 +392,26 @@ export class GradeService {
         lineItemId,
         accessToken,
       );
-      score.scoreMaximum = lineItem.scoreMaximum;
+      newScore.scoreMaximum = lineItem.scoreMaximum;
     }
 
     // If no user is specified, sends the score to the user that originated request
-    if (score.userId === undefined) {
-      score.userId = idToken.user;
+    if (newScore.userId === undefined) {
+      newScore.userId = idToken.user;
     }
 
-    // Creating timestamp
-    score.timestamp = new Date(Date.now()).toISOString();
-
     Debug.log(this, 'Sending score to: ' + scoreUrl);
-    Debug.log(this, score);
+    Debug.log(this, newScore);
 
     await platform.api.post(scoreUrl, {
       headers: {
         Authorization: accessToken.token_type + ' ' + accessToken.access_token,
         'Content-Type': 'application/vnd.ims.lis.v1.score+json',
       },
-      body: JSON.stringify(score),
+      body: JSON.stringify(newScore),
     });
     Debug.log(this, 'Score successfully sent');
-    return score;
+    return newScore;
   }
 
   /**

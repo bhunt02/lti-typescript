@@ -27,7 +27,7 @@ export class DeepLinkingService {
       log?: string;
       errLog?: string;
     },
-  ) {
+  ): Promise<string> {
     const message = await this.createDeepLinkingMessage(
       idToken,
       contentItems,
@@ -63,7 +63,7 @@ export class DeepLinkingService {
       log?: string;
       errLog?: string;
     },
-  ) {
+  ): Promise<string> {
     Debug.log(this, 'Starting deep linking process');
     if (!idToken) {
       Debug.log(this, 'Missing IdToken object.');
