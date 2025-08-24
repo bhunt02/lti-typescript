@@ -1,14 +1,14 @@
 # Table of Contents
 
-## [1. Introduction](Introduction)
-## [2. Platform](Platform)
-## [3. Dynamic Registration Service](DynamicRegistration)
-## [4. Names and Roles Service](NamesAndRoles)
-## [5. Deep Linking Service](DeepLinking)
-## [6. Grades Service](Grading)
+## [1. Introduction](1-Introduction.md)
+## [2. Platform](2-Platform.md)
+## [3. Dynamic Registration Service](3-DynamicRegistration.md)
+## [4. Names and Roles Service](4-NamesAndRoles.md)
+## [5. Deep Linking Service](5-DeepLinking.md)
+## [6. Grades Service](5-Grading.md)
 
 ## Appendix
-### [i. Redirection URIs](RedirectionURIs)
+### [i. Redirection URIs](i-RedirectionURIs.md)
 
 ---
 

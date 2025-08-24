@@ -268,7 +268,7 @@ const outDir = path.join(path.dirname('.'), args[0] ?? 'out');
 const docsDir = path.join(path.dirname('.'),'/docs');
 const docFiles = fs.readdirSync(docsDir).map((v) => path.join(docsDir, v));
 const files = ['README.md',...docFiles.filter(v => v.endsWith('.md'))];
-const outFiles = files.map(v => path.join(outDir,v));
+const outFiles = files.map(v => path.join(outDir,v.replace(/[0-9ivx]+-/,'')));
 
 try {
   fs.mkdirSync(path.join(outDir, 'docs'), { recursive: true });
@@ -350,6 +350,9 @@ async function writeHtmlToFile (
   location,
   html,
 ) {
+  html = html.replace(/href="[0-9ivx]+-/g,'href="');
+  html = html.replace(/href="\.\/docs\/[0-9ivx]+-/g,'href="./docs/');
+
   const dom = new JSDOM(html)
   const document = dom.window.document
 
@@ -386,7 +389,7 @@ for (let file of files) {
   text = text.replace(/(Promise)(\\<)(.*)(>)/g,'Promise&#60;$3&#62;');
 
   file = file.replace(/README.md/g,'index.md');
-
+  file = file.replace(/[0-9ivx]+-/,'');
   const val = conv.makeHtml(text);
 
   const outFile = path.join(outDir, file.split('.')[0]+'.html');

@@ -145,17 +145,17 @@ Proxy method used to instantiate a Provider object and call setup(...) with the 
 **Type**: ```Express```
 
 #### Provider.GradeService
-[GradeService Class](Grading), implementing the Assignment and Grade service of the LTI® 1.3 protocol.
+[GradeService Class](5-Grading), implementing the Assignment and Grade service of the LTI® 1.3 protocol.
 
 **Type**: ```GradeService```
 
 #### Provider.DeepLinkingService
-[DeepLinkingService Class](DeepLinking), implementing the Deep Linking service of the LTI® 1.3 protocol.
+[DeepLinkingService Class](5-DeepLinking), implementing the Deep Linking service of the LTI® 1.3 protocol.
 
 **Type**: ```DeepLinkingService```
 
 #### Provider.NamesAndRolesService
-[NamesAndRolesService Class](NamesAndRoles), implementing the Names and Roles Provisioning service of the LTI® 1.3 protocol.
+[NamesAndRolesService Class](4-NamesAndRoles), implementing the Names and Roles Provisioning service of the LTI® 1.3 protocol.
 
 **Type**: ```NamesAndRolesService```
 
@@ -324,7 +324,7 @@ provider.whitelist(...provider.whitelist, '/log', '/home', { route: '/route', me
 
 #### Provider.registerPlatform(platform: Omit<PlatformProperties,'kid'>): Promise\<Platform>
 
-Registers a new [Platform](Platform) and returns a promise resolving to the new platform instance.
+Registers a new [Platform](2-Platform) and returns a promise resolving to the new platform instance.
 
 ```typescript
 await provider.registerPlatform({
@@ -339,7 +339,7 @@ await provider.registerPlatform({
 
 #### Provider.getPlatform(url: string, clientId: string): Promise\<Platform | undefined>
 
-Retrieves a [Platform](Platform) (if exists) with the given URL and client ID.
+Retrieves a [Platform](2-Platform) (if exists) with the given URL and client ID.
 
 ```typescript
 const platform = await provider.getPlatform('https://platform.url', 'TOOLCLIENTID');
@@ -347,7 +347,7 @@ const platform = await provider.getPlatform('https://platform.url', 'TOOLCLIENTI
 
 #### Provider.getPlatformById(platformId: string): Promise\<Platform | undefined>
 
-Retrieves a [Platform](Platform) (if exists) whose `kid` matches the provided `platformId`.
+Retrieves a [Platform](2-Platform) (if exists) whose `kid` matches the provided `platformId`.
 
 ```typescript
 const platform = await provider.getPlatformById('asdih1k12poihalkja52');
@@ -355,7 +355,7 @@ const platform = await provider.getPlatformById('asdih1k12poihalkja52');
 
 #### Provider.deletePlatform(url: string, clientId: string): Promise\<void>
 
-Deletes a [Platform](Platform) (if exists) with the given URL and client ID.
+Deletes a [Platform](2-Platform) (if exists) with the given URL and client ID.
 
 ```typescript
 await provider.deletePlatform('https://platform.url', 'TOOLCLIENTID');
@@ -363,7 +363,7 @@ await provider.deletePlatform('https://platform.url', 'TOOLCLIENTID');
 
 #### async Provider.deletePlatformById(platformId: string): Promise\<void>
 
-Deletes a [Platform](Platform) (if exists) whose `kid` matches the passed `platformId`.
+Deletes a [Platform](2-Platform) (if exists) whose `kid` matches the passed `platformId`.
 
 ```typescript
 await provider.deletePlatformById('60b1fce753c875193d71b');
@@ -371,7 +371,7 @@ await provider.deletePlatformById('60b1fce753c875193d71b');
 
 #### Provider.getPlatforms(url: string): Promise\<Platform[]>
 
-Gets all [platforms](Platform) whose URL matches the passed URL.
+Gets all [platforms](2-Platform) whose URL matches the passed URL.
 
 ```typescript
 const platforms = await provider.getPlatforms('http://platform.url');
@@ -379,7 +379,7 @@ const platforms = await provider.getPlatforms('http://platform.url');
 
 #### Provider.getAllPlatforms(): Promise\<Platform[]>
 
-Gets all [platforms](Platform).
+Gets all [platforms](2-Platform).
 
 ```typescript
 const platforms = await provider.getAllPlatforms();
@@ -743,7 +743,7 @@ provider.onDeepLinking(async (token, req, res, next) => {
 });
 ```
 
-> [See more about the Deep Linking Service](./DeepLinking)
+> [See more about the Deep Linking Service](./5-DeepLinking)
 
 #### onInvalidToken
 
@@ -806,7 +806,7 @@ provider.onUnregisteredPlatform((req, res) => {
 
 #### onInactivePlatform
 
-The `onInactivePlatform` callback is called whenever the Platform attempting to start a LTI launch was registered through [Dynamic Registration](./DynamicRegistration) and is not active.
+The `onInactivePlatform` callback is called whenever the Platform attempting to start a LTI launch was registered through [Dynamic Registration](./3-DynamicRegistration) and is not active.
 
 The callback route will be given the two Express route parameters (request, response).
 
@@ -863,13 +863,13 @@ app.use('/lti', provider.app)
 
 *Platform manipulation methods require a connection to the database, so they can only be used after the `provider.deploy()` method.*
 
-> [Check the Platform Class Documentation](Platform)
+> [Check the Platform Class Documentation](2-Platform)
 
 #### Registering a new Platform
 
 A LTI® tool works in conjunction with an LTI® ready platform, so in order for a platform to display your tool's resource, it needs to first be registered in the tool provider.
 
-The`provider.registerPlatform()` method returns a Promise that resolves the created [Platform](Platform) object.
+The`provider.registerPlatform()` method returns a Promise that resolves the created [Platform](2-Platform) object.
 
 ```typescript
 let plat = await provider.registerPlatform({
@@ -922,7 +922,7 @@ authToken: {
 }
 ```
 
-Platforms can also be registered by utilizing the [Dynamic Registration Service](DynamicRegistration).
+Platforms can also be registered by utilizing the [Dynamic Registration Service](3-DynamicRegistration).
 
 #### Retrieving a Platform
 
@@ -930,7 +930,7 @@ Registered platforms can be retrieved using the following methods:
 
 * `provider.getPlatform(platformUrl: string, clientId: string)`
 
-The `provider.getPlatform()` method receives two arguments, `platformUrl` and `clientId`, and returns a Promise that resolves a [Platform](Platform) object.
+The `provider.getPlatform()` method receives two arguments, `platformUrl` and `clientId`, and returns a Promise that resolves a [Platform](2-Platform) object.
 
 ``` typescript
 const platform = await provider.getPlatform('http://platform.url', 'CLIENTID') // Returns Platform object
@@ -938,7 +938,7 @@ const platform = await provider.getPlatform('http://platform.url', 'CLIENTID') /
 
 * `provider.getPlatforms(platformUrl: string)`
 
-The `provider.getPlatforms()` method receives one argument, `platformUrl`, and returns a Promise that resolves to an array of [Platform](Platform) objects which match the provided URL.
+The `provider.getPlatforms()` method receives one argument, `platformUrl`, and returns a Promise that resolves to an array of [Platform](2-Platform) objects which match the provided URL.
 
 ```typescript
 const platforms = await provider.getPlatforms('http://platform.url'); // Returns Platform array
@@ -946,7 +946,7 @@ const platforms = await provider.getPlatforms('http://platform.url'); // Returns
 
 * `provider.getPlatformById(platformId: string)`
 
-The `provider.getPlatformById()` method receives the `platformId` and returns a Promise that resolves a [Platform](Platform) object.
+The `provider.getPlatformById()` method receives the `platformId` and returns a Promise that resolves a [Platform](2-Platform) object.
 
 ```typescript
 const platform = await provider.getPlatformById('60b1fce753c875193d71'); // Returns Platform object
@@ -956,7 +956,7 @@ The platform ID can be found through the `Platform.kid` method or in the platfor
 
 * `provider.getAllPlatforms()`
 
-The `provider.getAllPlatforms()` method returns a Promise that resolves an Array containing every registered [Platform](Platform).
+The `provider.getAllPlatforms()` method returns a Promise that resolves an Array containing every registered [Platform](2-Platform).
 
 ```typescript
 const platforms = await provider.getAllPlatforms(); // Returns every registered platform
@@ -970,7 +970,7 @@ After a platform is registered, it's **name**, **authenticationEndpoint**, **acc
 
 The Platform object gives you methods to retrieve and modify platform configuration.
 
-> [Check the Platform Class Documentation](Platform)
+> [Check the Platform Class Documentation](2-Platform)
 
 
 * Registration Method:
@@ -1303,19 +1303,19 @@ ___
 
 ### Deep Linking Service with LTI-TypeScript
 
-The Deep Linking Service class documentation can be accessed [here](DeepLinking).
+The Deep Linking Service class documentation can be accessed [here](5-DeepLinking).
 
 ### Assignment and Grades Service with LTI-TypeScript
 
-The Assignment and Grades Service class documentation can be accessed [here](Grading).
+The Assignment and Grades Service class documentation can be accessed [here](5-Grading).
 
 ### Names and Roles Provisioning Service with LTI-TypeScript
 
-The Names and Roles Provisioning Service class documentation can be accessed [here](NamesAndRoles).
+The Names and Roles Provisioning Service class documentation can be accessed [here](4-NamesAndRoles).
 
 ### Dynamic Registration Service with LTI-TypeScript
 
-The Dynamic Registration Service documentation can be accessed [here](DynamicRegistration).
+The Dynamic Registration Service documentation can be accessed [here](3-DynamicRegistration).
 
 ---
 
