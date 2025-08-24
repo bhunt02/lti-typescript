@@ -1,3 +1,5 @@
+![Tests](https://github.com/bhunt02/lti-typescript/actions/workflows/test.yml/badge.svg)
+
 # LTI-TypeScript
 
 ## Table of Contents
