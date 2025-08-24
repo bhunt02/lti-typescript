@@ -1,0 +1,1244 @@
+<html><head><style>
+html {
+    box-sizing: border-box
+}
+
+body {
+  padding: 2rem;
+}
+
+*,*:before,*:after {
+    box-sizing: inherit
+}
+
+/* Extract from normalize.css by Nicolas Gallagher and Jonathan Neal git.io/normalize */
+html {
+    -ms-text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%
+}
+
+body {
+    margin: 0
+}
+
+article,aside,details,figcaption,figure,footer,header,main,menu,nav,section {
+    display: block
+}
+
+summary {
+    display: list-item
+}
+
+audio,canvas,progress,video {
+    display: inline-block
+}
+
+progress {
+    vertical-align: baseline
+}
+
+audio:not([controls]) {
+    display: none;
+    height: 0
+}
+
+[hidden],template {
+    display: none
+}
+
+a {
+    background-color: transparent
+}
+
+a:active,a:hover {
+    outline-width: 0
+}
+
+abbr[title] {
+    border-bottom: none;
+    text-decoration: underline;
+    text-decoration: underline dotted
+}
+
+b,strong {
+    font-weight: bolder
+}
+
+dfn {
+    font-style: italic
+}
+
+mark {
+    background: #ff0;
+    color: #000
+}
+
+small {
+    font-size: 80%
+}
+
+sub,sup {
+    font-size: 75%;
+    line-height: 0;
+    position: relative;
+    vertical-align: baseline
+}
+
+sub {
+    bottom: -0.25em
+}
+
+sup {
+    top: -0.5em
+}
+
+figure {
+    margin: 1em 40px
+}
+
+img {
+    border-style: none
+}
+
+code,kbd,pre,samp {
+    font-family: monospace,monospace;
+    font-size: 1em
+}
+
+hr {
+    box-sizing: content-box;
+    height: 0;
+    overflow: visible
+}
+
+button,input,select,textarea,optgroup {
+    font: inherit;
+    margin: 0
+}
+
+optgroup {
+    font-weight: bold
+}
+
+button,input {
+    overflow: visible
+}
+
+button,select {
+    text-transform: none
+}
+
+button,[type=button],[type=reset],[type=submit] {
+    -webkit-appearance: button
+}
+
+button::-moz-focus-inner,[type=button]::-moz-focus-inner,[type=reset]::-moz-focus-inner,[type=submit]::-moz-focus-inner {
+    border-style: none;
+    padding: 0
+}
+
+button:-moz-focusring,[type=button]:-moz-focusring,[type=reset]:-moz-focusring,[type=submit]:-moz-focusring {
+    outline: 1px dotted ButtonText
+}
+
+fieldset {
+    border: 1px solid #c0c0c0;
+    margin: 0 2px;
+    padding: .35em .625em .75em
+}
+
+legend {
+    color: inherit;
+    display: table;
+    max-width: 100%;
+    padding: 0;
+    white-space: normal
+}
+
+textarea {
+    overflow: auto
+}
+
+[type=checkbox],[type=radio] {
+    padding: 0
+}
+
+[type=number]::-webkit-inner-spin-button,[type=number]::-webkit-outer-spin-button {
+    height: auto
+}
+
+[type=search] {
+    -webkit-appearance: textfield;
+    outline-offset: -2px
+}
+
+[type=search]::-webkit-search-decoration {
+    -webkit-appearance: none
+}
+
+::-webkit-file-upload-button {
+    -webkit-appearance: button;
+    font: inherit
+}
+
+/* End extract */
+html,body {
+    font-family: Verdana,sans-serif;
+    font-size: 15px;
+    line-height: 1.5
+}
+
+html {
+    overflow-x: hidden
+}
+
+h1 {
+    font-size: 36px
+}
+
+h2 {
+    font-size: 30px
+}
+
+h3 {
+    font-size: 24px
+}
+
+h4 {
+    font-size: 20px
+}
+
+h5 {
+    font-size: 18px
+}
+
+h6 {
+    font-size: 16px
+}
+
+.breadcrumb {
+  padding: 0 0.5rem;
+}
+
+.breadcrumb ol {
+  display: flex;
+  flex-wrap: wrap;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  gap: 1rem;
+  align-items: end;
+}
+</style><title>Introduction &amp;amp; Setup Documentation</title></head><nav aria-label="Breadcrumb" class="breadcrumb"><ol><li><a href="/out/README.html">README</a></li><li><a href="/out/docs/Deep Linking.html">Deep Linking</a></li><li><a href="/out/docs/Dynamic Registration.html">Dynamic Registration</a></li><li><a href="/out/docs/Grading.html">Grading</a></li><li><span aria-current="page">Introduction</span></li><li><a href="/out/docs/Names and Roles.html">Names and Roles</a></li><li><a href="/out/docs/Platform.html">Platform</a></li><li><a href="/out/docs/Redirection URIs.html">Redirection URIs</a></li><li><a href="/out/docs/Table of Contents.html">Table of Contents</a></li></ol></nav><body><h1 id="introductionsetupdocumentation">Introduction &amp; Setup Documentation</h1>
+<h2 id="tableofcontents">Table of Contents</h2>
+<ul>
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#quickstart">Quick Start</a></li>
+<li><a href="#documentation">Documentation</a></li>
+<li><a href="#settingupltitypescript">Setting up LTI-Typescript</a><ul>
+<li><a href="#encryptionkey">Encryption key</a></li>
+<li><a href="#databaseoptions">Database Options</a></li>
+<li><a href="#reservedendpoints">Reserved Endpoints</a></li>
+<li><a href="#cookieconfiguration">Cookie configuration</a></li>
+<li><a href="#developmentmode">Development mode</a></li>
+<li><a href="#tokenmaxage">Token max age</a></li>
+<li><a href="#serveraddon">Server addon</a></li>
+<li><a href="#servingstaticfiles">Serving static files</a></li>
+<li><a href="#crossoriginresourcesharing">Cors</a></li></ul></li>
+<li><a href="#usingltitypescript">Using LTI-Typescript</a><ul>
+<li><a href="#app">App</a></li>
+<li><a href="#reservedendpointroutes">Reserved Endpoint Routes</a></li>
+<li><a href="#onconnect">OnConnect Callback</a></li>
+<li><a href="#ondeeplinking">OnDeepLinking Callback</a></li>
+<li><a href="#oninvalidtoken">OnInvalidToken Callback</a></li>
+<li><a href="#onsessiontimeout">OnSessionTimeout Callback</a></li>
+<li><a href="#onunregisteredplatform">OnUnregisteredPlatform Callback</a></li>
+<li><a href="#oninactiveplatform">OnInactivePlatform Callback</a></li>
+<li><a href="#deploy">Deploy</a></li>
+<li><a href="#registeringanewplatform">Registering a Platform</a></li>
+<li><a href="#retrievingaplatform">Retrieving a Platform</a></li>
+<li><a href="#modifyingaplatform">Modifying a Platform</a></li>
+<li><a href="#deletingaplatform">Deleting a Platform</a></li></ul></li>
+<li><a href="#authenticationandrouting">Authentication and Routing</a><ul>
+<li><a href="#idtoken">Id Token</a></li>
+<li><a href="#contexttoken">Context Token</a></li>
+<li><a href="#authentication">Launch authentication</a></li>
+<li><a href="#requestauthentication">Request authentication</a></li>
+<li><a href="#whitelistingroutes">Whitelisting routes</a></li>
+<li><a href="#redirectingwithltitypescript">Redirecting with LTI-TypeScript</a></li></ul></li>
+<li><a href="#ltiadvantageservices">LTI&#174; Advantage Services</a><ul>
+<li><a href="#deeplinkingservicewithltitypescript">Deep Linking</a></li>
+<li><a href="#assignmentandgradesservicewithltitypescript">Assignment and Grades</a></li>
+<li><a href="#namesandrolesprovisioningservicewithltitypescript">Names and Roles Provisioning</a></li>
+<li><a href="#dynamicregistrationservicewithltitypescript">Dynamic Registration Service</a></li></ul></li>
+<li><a href="#debugging">Debugging</a></li>
+<li><a href="#license">License</a></li>
+</ul>
+<hr>
+<h2 id="introduction">Introduction</h2>
+<p>The Learning Tools Interoperability (LTI&#174;) protocol is a standard for integration of rich learning applications within educational environments. <sup><a href="https://www.imsglobal.org/spec/lti/v1p3/">ref</a></sup></p>
+<p>This library implements a tool provider as an <a href="https://expressjs.com/">Express</a> server, with preconfigured routes and methods that manage the <a href="https://www.imsglobal.org/spec/lti/v1p3/">LTI&#174; 1.3</a> protocol for you.
+Making it fast and simple to create a working learning tool with access to every LTI&#174; service, without having to worry about manually implementing any of the security and validation required to do so.</p>
+<p>This library is a fork of the original work by <a href="https://github.com/Cvmcosta">CVM Costa</a>. The original library can be found <a href="https://github.com/Cvmcosta/ltijs">here</a>.</p>
+<hr>
+<h3 id="postgresqltypeorm">PostgreSQL &amp; TypeORM</h3>
+<p>The library is configured to run with a PostgreSQL database, using TypeORM to manage database entities.</p>
+<p>You will need to run PostgreSQL as a service on your device or using Docker.</p>
+<ul>
+<li><a href="https://neon.com/postgresql/postgresql-getting-started">Install PostgreSQL natively</a></li>
+<li><a href="https://docs.docker.com/get-started/">Get started with Docker</a></li>
+</ul>
+<blockquote>
+  <p><strong>TypeORM supports more than just PostgreSQL!</strong>
+  You can modify this library and the entities it uses via the exported <code class="prettyprint">register()</code> function, by specifying the <code class="prettyprint">{ entities: [] }</code>
+  value explicitly.
+  If overriding the standard entities, you will need to construct your own entity definitions
+  and ensure that they meet the requirements of the library.</p>
+</blockquote>
+<hr>
+<h2 id="quickstart">Quick start</h2>
+<blockquote>
+  <p>Setting up LTI-TypeScript</p>
+</blockquote>
+<pre class="prettyprint linenums"><code class="typescript language-typescript">import { register } from 'lti-typescript';
+
+async function main() {
+  const provider = await register(
+          'LTIKEY', // Encryption key used to sign cookies and tokens
+          {
+            type: 'postgres',
+            url: 'postgres://user:password@localhost:5432/database',
+            // See TypeORM documentation for more options: https://typeorm.io/docs/data-source/data-source-options
+          },
+          {
+            appRoute: '/', // Optionally, specify some of the reserved routes
+            loginRoute: '/login', // Optionally, specify some of the reserved routes
+            cookies: {
+              secure: false, // Set secure to true if the testing platform is in a different domain and https is being used
+              sameSite: 'none' // Set sameSite to 'None' if the testing platform is in a different domain and https is being used
+            },
+            devMode: true // Set DevMode to false if running in a production environment with https
+            // The full list of Provider options is defined by the "ProviderOptions" type.
+          }
+  )
+
+  // Set lti launch callback
+  provider.onConnect((token, req, res) =&gt; {
+    console.log(token)
+    return res.send('It\'s alive!')
+  });
+
+  // Deploy server and open connection to the database
+  await provider.deploy({ port: 3000 }); // Specifying port. Defaults to 3000
+
+  // Register platform
+  await provider.registerPlatform({
+    url: 'https://platform.url',
+    name: 'Platform Name',
+    clientId: 'TOOLCLIENTID',
+    authenticationEndpoint: 'https://platform.url/auth',
+    accesstokenEndpoint: 'https://platform.url/token',
+    authConfig: { method: 'JWK_SET', key: 'https://platform.url/keyset' }
+  });
+}
+</code></pre>
+<hr>
+<h2 id="documentation">Documentation</h2>
+<h3 id="database">Database</h3>
+<blockquote>
+  <p>Static, application-wide Database class which is initialized in Provider.setup()</p>
+</blockquote>
+<ul>
+<li>The Database class is populated with static methods that will automatically perform encryption/decryption of encrypted data entries.</li>
+<li>These methods are based on existing methods of TypeORM's DataSource and Repository classes.</li>
+</ul>
+<h3 id="registerencryptionkeystringdatasourceoptionsdatasourceoptionsoptionsprovideroptionspromise60provider62">register(encryptionKey: string, dataSourceOptions: DataSourceOptions, options: ProviderOptions): Promise&lt;Provider&gt;</h3>
+<p>Proxy method used to instantiate a Provider object and call setup(…) with the passed parameters.</p>
+<h3 id="provider">Provider</h3>
+<blockquote>
+  <p>The LTI-TypeScript Provider Class implements the LTI&#174; 1.3 protocol and services.</p>
+</blockquote>
+<h4 id="providerapp">Provider.app</h4>
+<p><a href="https://expressjs.com/">Express</a> server instance.</p>
+<p><strong>Type</strong>: <code class="prettyprint">Express</code></p>
+<h4 id="providergradeservice">Provider.GradeService</h4>
+<p><a href="Grading">GradeService Class</a>, implementing the Assignment and Grade service of the LTI&#174; 1.3 protocol.</p>
+<p><strong>Type</strong>: <code class="prettyprint">GradeService</code></p>
+<h4 id="providerdeeplinkingservice">Provider.DeepLinkingService</h4>
+<p>[DeepLinkingService Class](Deep Linking), implementing the Deep Linking service of the LTI&#174; 1.3 protocol.</p>
+<p><strong>Type</strong>: <code class="prettyprint">DeepLinkingService</code></p>
+<h4 id="providernamesandrolesservice">Provider.NamesAndRolesService</h4>
+<p>[NamesAndRolesService Class](Names and Roles), implementing the Names and Roles Provisioning service of the LTI&#174; 1.3 protocol.</p>
+<p><strong>Type</strong>: <code class="prettyprint">NamesAndRolesService</code></p>
+<h4 id="providersetupencryptionkeystringdatasourceoptionsdatasourceoptionsoptionsprovideroptionspromise60provider62">Provider.setup(encryptionKey: string, dataSourceOptions: DataSourceOptions, options: ProviderOptions): Promise&lt;Provider&gt;</h4>
+<p>Method used to setup and configure the LTI&#174; provider. Additionally, initializes connection to the configured database.</p>
+<h4 id="providerdeployoptionsportnumbersilentbooleanserverlessbooleanpromise60true62">Provider.deploy(options: { port?: number; silent?: boolean; serverless?: boolean } = {}): Promise&lt;true&gt;</h4>
+<ul>
+<li>Defaults:<ul>
+<li> <code class="prettyprint">port: 3000</code></li>
+<li> <code class="prettyprint">silent: false</code></li>
+<li> <code class="prettyprint">serverless: false</code></li></ul></li>
+</ul>
+<p>Starts listening to a given (if specified) port for LTI&#174; requests.</p>
+<ul>
+<li>Use <code class="prettyprint">serverless: true</code> to use LTI-TypeScript as a middleware.</li>
+</ul>
+<h5 id="returns">Returns</h5>
+<ul>
+<li>Promise that resolves <code class="prettyprint">true</code> when the server starts listening.</li>
+</ul>
+<h4 id="providerclosesilentbooleantruepromise60void62">Provider.close(silent: boolean = true): Promise&lt;void&gt;</h4>
+<p>Closes connection to database and stops server.</p>
+<h4 id="provideronconnectconnectcallbackcallbackwithtokenvoid">Provider.onConnect(connectCallback: CallbackWithToken): void</h4>
+<p>Sets the callback method called whenever theres a sucessfull connection, exposing a token object containing the decoded idToken and the usual Express route parameters (Request, Response and Next).</p>
+<h5 id="examples">Examples</h5>
+<pre class="prettyprint linenums"><code class="typescript language-typescript">provider.onConnect(async (token: IdToken, req: express.Request, res: express.Request, next: express.NextFunction) =&gt; {
+  return res.send(token)
+});
+</code></pre>
+<ul>
+<li>The default method set to this callback simply fowards the request to the next handler, so the usage of onConnect is optional:</li>
+</ul>
+<pre class="prettyprint linenums"><code class="typescript language-typescript">// Equivalent to onConnect usage above
+provider.app.get(provider.appRoute(), async (req: express.Request, res: express.Request, next: express.NextFunction) =&gt; {
+  return res.send(res.locals.token)
+});
+</code></pre>
+<h4 id="providerondeeplinkingdeeplinkingcallbackcallbackwithtokenvoid">Provider.onDeepLinking(deepLinkingCallback: CallbackWithToken): void</h4>
+<p>Sets the callback method called whenever theres a sucessfull deep linking request connection, exposing a token object containing the decoded idToken and the usual Express route parameters (Request, Response and Next). Through this callback you can display your Deep Linking view.</p>
+<h5 id="examples-1">Examples</h5>
+<pre class="prettyprint linenums"><code class="typescript language-typescript">provider.onDeepLinking(async (token: IdToken, req: express.Request, res: express.Request, next: express.NextFunction) =&gt; {
+  return res.send(token)
+});
+</code></pre>
+<h4 id="provideronsessiontimeoutsessiontimeoutcallbackcallback">Provider.onSessionTimeout(sessionTimeoutCallback: Callback)</h4>
+<p>Sets the callback method called when no valid session is found during a request validation.</p>
+<h5 id="examples-2">Examples</h5>
+<pre class="prettyprint linenums"><code class="typescript language-typescript">provider.onSessionTimeout(async (req: express.Request, res: express.Request, next: express.NextFunction) =&gt; {
+  return res.status(401).send(res.locals.err)
+});
+</code></pre>
+<blockquote>
+  <p>LTI-TypeScript provides a default method for this callback.</p>
+</blockquote>
+<h4 id="provideroninvalidtokeninvalidtokencallbackcallback">Provider.onInvalidToken(invalidTokenCallback: Callback)</h4>
+<p>Sets the callback method called when the token received fails the validation process.</p>
+<h5 id="examples-3">Examples</h5>
+<pre class="prettyprint linenums"><code class="typescript language-typescript">provider.onInvalidToken(async (req: express.Request, res: express.Request, next: express.NextFunction) =&gt; {
+  return res.status(401).send(res.locals.err)
+});
+</code></pre>
+<blockquote>
+  <p>LTI-TypeScript provides a default method for this callback.</p>
+</blockquote>
+<h4 id="provideronunregisteredplatformunregisteredplatformcallbackcallback">Provider.onUnregisteredPlatform(unregisteredPlatformCallback: Callback)</h4>
+<p>Sets the callback function called when the Platform attempting to login is not registered.</p>
+<h5 id="examples-4">Examples</h5>
+<pre class="prettyprint linenums"><code class="typescript language-typescript">provider.onUnregisteredPlatform((req: express.Request, res: express.Request, next: express.NextFunction) =&gt; {
+  return res.status(400).send({ status: 400, error: 'Bad Request', details: { message: 'Unregistered Platform!' } })
+});
+</code></pre>
+<blockquote>
+  <p>LTI-Typescript provides a default method for this callback.</p>
+</blockquote>
+<h4 id="provideroninactiveplatforminactiveplatformcallbackcallback">Provider.onInactivePlatform(inactivePlatformCallback: Callback)</h4>
+<p>Sets the callback function called when the Platform attempting to login is not activated.</p>
+<h5 id="examples-5">Examples</h5>
+<pre class="prettyprint linenums"><code class="typescript language-typescript">provider.onInactivePlatform((req: express.Request, res: express.Request, next: express.NextFunction) =&gt; {
+  return res.status(401).send({ status: 401, error: 'Unauthorized', details: { message: 'Platform not active!' } })
+});
+</code></pre>
+<blockquote>
+  <p>LTI-TypeScript provides a default method for this callback.</p>
+</blockquote>
+<h4 id="getproviderapproutestring">get Provider.appRoute: string</h4>
+<p>Gets the main application Route that will receive the final decoded Idtoken.</p>
+<pre class="prettyprint linenums"><code class="typescript language-typescript">provider.appRoute;
+</code></pre>
+<h4 id="getproviderloginroutestring">get Provider.loginRoute: string</h4>
+<p>Gets the login Route responsible for dealing with the OIDC login flow.</p>
+<pre class="prettyprint linenums"><code class="typescript language-typescript">provider.loginRoute;
+</code></pre>
+<h4 id="getproviderkeysetroutestring">get Provider.keysetRoute: string</h4>
+<p>Gets the public JWK keyset Route.</p>
+<pre class="prettyprint linenums"><code class="typescript language-typescript">provider.keysetRoute;
+</code></pre>
+<h4 id="getproviderdynregroutestring">get Provider.dynRegRoute: string</h4>
+<p>Gets the dynamic registration Route.</p>
+<pre class="prettyprint linenums"><code class="typescript language-typescript">provider.dynRegRoute
+</code></pre>
+<h4 id="getproviderwhiteliststringroutetype">get Provider.whitelist: (string | RouteType)[]</h4>
+<p>Returns the list of whitelisted routes</p>
+<h4 id="setproviderwhitelisturlsstringroutetype">set Provider.whitelist = urls: (string | RouteType)[]</h4>
+<p>Whitelists routes to bypass the LTI-TypeScript authentication protocol. If validation fails, these routes are still accessed but aren't given an identity token.</p>
+<ul>
+<li>Note that previously whitelisted routes are overwritten when calling <code class="prettyprint">provider.whitelist = [...]</code>.</li>
+<li>You can retain the original whitelisted routes by doing: <code class="prettyprint">provider.whitelist = [...provider.whitelist, &lt;new routes&gt;]</code></li>
+</ul>
+<h5 id="examples-6">Examples</h5>
+<pre class="prettyprint linenums"><code class="typescript language-typescript">// Whitelisting routes
+provider.whitelist('/log', '/home');
+
+// Whitelisting routes with specific methods
+provider.whitelist(...provider.whitelist, '/log', '/home', { route: '/route', method: 'POST' });
+</code></pre>
+<h4 id="providerregisterplatformplatformomitplatformpropertieskidpromise60platform62">Provider.registerPlatform(platform: Omit<platformproperties,'kid'>): Promise&lt;Platform&gt;</platformproperties,'kid'></h4>
+<p>Registers a new <a href="Platform">Platform</a> and returns a promise resolving to the new platform instance.</p>
+<pre class="prettyprint linenums"><code class="typescript language-typescript">await provider.registerPlatform({
+  url: 'https://platform.url',
+  name: 'Platform Name',
+  clientId: 'TOOLCLIENTID',
+  authenticationEndpoint: 'https://platform.url/auth',
+  accesstokenEndpoint: 'https://platform.url/token',
+  authConfig: { method: 'JWK_SET', key: 'https://platform.url/keyset' }
+});
+</code></pre>
+<h4 id="providergetplatformurlstringclientidstringpromise60platformundefined62">Provider.getPlatform(url: string, clientId: string): Promise&lt;Platform | undefined&gt;</h4>
+<p>Retrieves a <a href="Platform">Platform</a> (if exists) with the given URL and client ID.</p>
+<pre class="prettyprint linenums"><code class="typescript language-typescript">const platform = await provider.getPlatform('https://platform.url', 'TOOLCLIENTID');
+</code></pre>
+<h4 id="providergetplatformbyidplatformidstringpromise60platformundefined62">Provider.getPlatformById(platformId: string): Promise&lt;Platform | undefined&gt;</h4>
+<p>Retrieves a <a href="Platform">Platform</a> (if exists) whose <code class="prettyprint">kid</code> matches the provided <code class="prettyprint">platformId</code>.</p>
+<pre class="prettyprint linenums"><code class="typescript language-typescript">const platform = await provider.getPlatformById('asdih1k12poihalkja52');
+</code></pre>
+<h4 id="providerdeleteplatformurlstringclientidstringpromise60void62">Provider.deletePlatform(url: string, clientId: string): Promise&lt;void&gt;</h4>
+<p>Deletes a <a href="Platform">Platform</a> (if exists) with the given URL and client ID.</p>
+<pre class="prettyprint linenums"><code class="typescript language-typescript">await provider.deletePlatform('https://platform.url', 'TOOLCLIENTID');
+</code></pre>
+<h4 id="asyncproviderdeleteplatformbyidplatformidstringpromise60void62">async Provider.deletePlatformById(platformId: string): Promise&lt;void&gt;</h4>
+<p>Deletes a <a href="Platform">Platform</a> (if exists) whose <code class="prettyprint">kid</code> matches the passed <code class="prettyprint">platformId</code>.</p>
+<pre class="prettyprint linenums"><code class="typescript language-typescript">await provider.deletePlatformById('60b1fce753c875193d71b');
+</code></pre>
+<h4 id="providergetplatformsurlstringpromise60platform62">Provider.getPlatforms(url: string): Promise&lt;Platform[]&gt;</h4>
+<p>Gets all <a href="Platform">platforms</a> whose URL matches the passed URL.</p>
+<pre class="prettyprint linenums"><code class="typescript language-typescript">const platforms = await provider.getPlatforms('http://platform.url');
+</code></pre>
+<h4 id="providergetallplatformspromise60platform62">Provider.getAllPlatforms(): Promise&lt;Platform[]&gt;</h4>
+<p>Gets all <a href="Platform">platforms</a>.</p>
+<pre class="prettyprint linenums"><code class="typescript language-typescript">const platforms = await provider.getAllPlatforms();
+</code></pre>
+<h4 id="providerredirectresponseexpressresponsepathstringoptionsnewresourcebooleanisnewresourcebooleanqueryrecordstringanynewresourcefalsequeryundefinedpromise60void62">Provider.redirect(response: ExpressResponse, path: string, options: { newResource?: boolean; isNewResource?: boolean; query?: Record<string, any="">;} = { newResource: false, query: undefined }): Promise&lt;void&gt;</string,></h4>
+<p>Redirects to a new location. Passes Ltik if present.</p>
+<pre class="prettyprint linenums"><code class="typescript language-typescript">provider.redirect(res, '/path', { newResource: true, query: { param: 'value' } })
+// Redirects to /path?param=value
+</code></pre>
+<hr>
+<h2 id="settingupltitypescript">Setting up LTI-TypeScript</h2>
+<p>When using LTI-TypeScript, the first step must <strong>always</strong> be to call the <code class="prettyprint">Provider.setup(...)</code> method OR the <code class="prettyprint">register(...)</code> method to configure the LTI&#174; provider:</p>
+<pre class="prettyprint linenums"><code class="typescript language-typescript">// Require Ltijs package
+import { register } from 'lti-typescript';
+
+const provider = await register(
+        'LTIKEY', // Encryption key used to sign cookies and tokens
+        {
+          type: 'postgres',
+          url: 'postgres://user:password@localhost:5432/database',
+          // See TypeORM documentation for more options: https://typeorm.io/docs/data-source/data-source-options
+        },
+        {
+          appRoute: '/', // Optionally, specify some of the reserved routes
+          loginRoute: '/login', // Optionally, specify some of the reserved routes
+          cookies: {
+            secure: false, // Set secure to true if the testing platform is in a different domain and https is being used
+            sameSite: 'none' // Set sameSite to 'None' if the testing platform is in a different domain and https is being used
+          },
+          devMode: true // Set DevMode to false if running in a production environment with https
+          // The full list of Provider options is defined by the "ProviderOptions" type.
+        }
+);
+</code></pre>
+<pre class="prettyprint linenums"><code class="typescript language-typescript">import { Provider } from 'lti-typescript';
+
+const provider = new Provider();
+provider.setup(
+        'LTIKEY', // Encryption key used to sign cookies and tokens
+        {
+          type: 'postgres',
+          url: 'postgres://user:password@localhost:5432/database',
+          // See TypeORM documentation for more options: https://typeorm.io/docs/data-source/data-source-options
+        },
+        {
+          appRoute: '/', // Optionally, specify some of the reserved routes
+          loginRoute: '/login', // Optionally, specify some of the reserved routes
+          cookies: {
+            secure: false, // Set secure to true if the testing platform is in a different domain and https is being used
+            sameSite: 'none' // Set sameSite to 'None' if the testing platform is in a different domain and https is being used
+          },
+          devMode: true // Set DevMode to false if running in a production environment with https
+          // The full list of Provider options is defined by the "ProviderOptions" type.
+        }
+);
+</code></pre>
+<p>This method receives three arguments: <strong>encryption key</strong>, <strong>database options</strong> and <strong>provider options</strong>:</p>
+<h3 id="encryptionkey">Encryption Key</h3>
+<p>The <code class="prettyprint">encryptionKey</code> parameter is a string that will be used as a secret to sign the cookies set by LTI-TypeScript and encrypt some of the database information, such as access tokens and private keys.</p>
+<h3 id="databaseoptions">Database Options</h3>
+<p>The second parameter of the setup method, <strong>databaseOptions</strong>, is an object which satisfies the TypeORM <code class="prettyprint">DataSourceOptions</code> type.</p>
+<h3 id="provideroptions">Provider Options</h3>
+<p>The third parameter, <strong>providerOptions</strong>, is an optional parameter that handles the additional provider configuration:</p>
+<h4 id="reservedendpoints">Reserved Endpoints</h4>
+<p>Through the <strong>options</strong> parameter you can specify the routes for the reserved endpoints used by LTI-TypeScript:</p>
+<ul>
+<li><p> <code class="prettyprint">appRoute</code> (or <code class="prettyprint">appUrl</code>) - Route used to handle successful launch requests through the <code class="prettyprint">onConnect</code> callback. <strong>Default: '/'</strong>.</p></li>
+<li><p> <code class="prettyprint">loginRoute</code> (or <code class="prettyprint">loginUrl</code>) - Route used to handle the initial OIDC login flow. <strong>Default: '/login'</strong>.</p></li>
+<li><p> <code class="prettyprint">keySetRoute</code> (or <code class="prettyprint">keySetUrl</code>) - Route used serve the tool's JWK keyset. <strong>Default: '/keys'</strong>.</p></li>
+<li><p> <code class="prettyprint">dynRegRoute</code> (or <code class="prettyprint">dynRegUrl</code>) - Route used to handle Dynamic Registration requests. <strong>Default: '/register'</strong>.</p></li>
+</ul>
+<pre class="prettyprint linenums"><code class="typescript language-typescript">{
+...
+  appRoute: '/app',// Scpecifying main app route
+          loginRoute: '/loginroute', // Specifying login route
+          keysetRoute: '/keyset', // Specifying keyset route
+          dynRegRoute: '/register' // Specifying Dynamic registration route
+...
+}
+</code></pre>
+<h4 id="cookieconfiguration">Cookie Configuration</h4>
+<p>LTI-TypeScript sets session cookies throughout the LTI&#174; validation process, how these cookies are set can be configured through the <code class="prettyprint">cookies</code> field of the <strong>providerOptions</strong> parameter:</p>
+<ul>
+<li><p><strong>secure</strong> - Determines if the cookie can only be sent through <strong>https</strong>. <strong>Default: false</strong>.</p></li>
+<li><p><strong>sameSite</strong> - Determines if the cookie can be sent cross domain. <strong>Default: Lax</strong>.</p></li>
+<li><p><strong>domain</strong> - Determines the cookie domain. This option can be used to set cookies that can be shared between all subdomains.</p></li>
+</ul>
+<pre class="prettyprint linenums"><code class="typescript language-typescript">{
+...
+  cookies: { // Cookie configuration
+    secure: true,
+            sameSite: 'None',
+            domain: '.domain.com'
+  },
+...
+}
+</code></pre>
+<p><strong><em>If the platform and tool are in different domains, some browsers will not allow cookies to be set unless they have the <code class="prettyprint">secure: true</code> and <code class="prettyprint">sameSite: 'None'</code> flags. If you are in a development environment and cannot set secure cookies (over https), consider using LTI-TypeScript in <code class="prettyprint">Development mode</code>.</em></strong></p>
+<h4 id="developmentmode">Development mode:</h4>
+<p>LTI-TypeScript relies on cookies for part of the validation process, but in some development environments, cookies might not be able to be set, for instance if you are trying to set cross domain cookies over an insecure http connection.</p>
+<p>In situations like this you can set the <code class="prettyprint">devMode</code> field as true and LTI-TypeScript will stop trying to validate the cookies and will instead use the information obtained through the <code class="prettyprint">ltik</code> token to retrieve the correct context information.</p>
+<pre class="prettyprint linenums"><code class="typescript language-typescript">{
+...
+  devMode: true, // Using development mode
+...
+}
+</code></pre>
+<p><strong><em>DevMode should never be used in a production environment, and it should not be necessary, since most of the cookie issues can be solved by using the <code class="prettyprint">secure: true</code> and <code class="prettyprint">sameSite: None</code> flags.</em></strong></p>
+<p><a href="#requestauthentication">See more about request authentication.</a></p>
+<h4 id="tokenmaxage">Token Max Age</h4>
+<p>As part of the LTI&#174; 1.3 protocol validation steps, LTI-TypeScript checks the idtoken's <code class="prettyprint">iat</code> claim and flags the token as invalid if it is older than <strong>10 seconds</strong>.</p>
+<p>This limit can be configured (or removed) through the <code class="prettyprint">tokenMaxAge</code> field:</p>
+<ul>
+<li> <code class="prettyprint">tokenMaxAge</code> - Sets the idToken max age allowed in seconds. If <strong>false</strong>, disables max age validation. <strong>Default: 10</strong>.</li>
+</ul>
+<pre class="prettyprint linenums"><code class="typescript language-typescript">{
+...
+  tokenMaxAge: 60, // Setting maximum token age as 60 seconds
+...
+}
+</code></pre>
+<h4 id="serveraddon">Server addon:</h4>
+<p>Through the <code class="prettyprint">serverAddon</code> field you can setup a method that will be executed on the moment of the server creation.
+This method will receive the <code class="prettyprint">Express</code> app as a parameter and so it can be used to register middlewares or change server configuration:</p>
+<pre class="prettyprint linenums"><code class="typescript language-typescript">const middleware = (app) =&gt; {
+  app.use(async (req, res, next) =&gt; {
+    console.log('Middleware works!')
+    next() // Passing to next handler
+  });
+}
+
+const provider = new Provider();
+provider.setup(
+        &lt;encryptionKey&gt;,
+        &lt;databaseOptions&gt;,
+        {
+          ...
+                  serverAddon: middleware // Setting addon method
+...
+},
+); 
+</code></pre>
+<blockquote>
+  <p><strong>Registered middlewares need to call <code class="prettyprint">next()</code>, otherwise no further handlers will be reached.</strong></p>
+</blockquote>
+<h4 id="servingstaticfiles">Serving static files:</h4>
+<p> <code class="prettyprint">Express</code> allows us to specify a path from where static files will be served.</p>
+<p>LTI-TypeScript can use this functionality by setting the staticPath parameter of the constructor's additional options.</p>
+<pre class="prettyprint linenums"><code class="typescript language-typescript">{
+...
+  staticPath: path.join(__dirname, 'public'), // Setting static path
+...
+}
+</code></pre>
+<p>The specified path is internally bound to the root route:</p>
+<pre class="prettyprint linenums"><code class="typescript language-typescript">app.use('/', express.static(SPECIFIED_PATH, { index: '_' }))
+</code></pre>
+<p>Accessing the files:</p>
+<pre class="prettyprint linenums"><code>http://localhost:3000/images/kitten.jpg
+http://localhost:3000/css/style.css
+http://localhost:3000/js/app.js
+http://localhost:3000/images/bg.png
+http://localhost:3000/hello.html
+</code></pre>
+<p>This can also be achieved and further customized by using <a href="#serveraddon">server addons</a>:</p>
+<pre class="prettyprint linenums"><code class="typescript language-typescript">// Creating middleware registration
+const middleware = (app) =&gt; {
+  app.use('/static', express.static(__dirname + '/public'));
+}
+
+//Configure provider
+const provider = new Provider();
+provider.setup(
+        &lt;encryptionKey&gt;,
+        &lt;databaseOptions&gt;,
+        {
+          ...
+                  serverAddon: middleware // Setting addon method
+...
+},
+); 
+</code></pre>
+<p>And then accessing the files through the specified <code class="prettyprint">/static</code> route:</p>
+<pre class="prettyprint linenums"><code>http://localhost:3000/static/images/kitten.jpg
+http://localhost:3000/static/css/style.css
+http://localhost:3000/static/js/app.js
+http://localhost:3000/static/images/bg.png
+http://localhost:3000/static/hello.html
+</code></pre>
+<h4 id="crossoriginresourcesharing">Cross-Origin Resource Sharing:</h4>
+<p>LTI-TypeScript <code class="prettyprint">Express</code> instance is configured to accept cross origin requests by default, this can be disabled by setting the <code class="prettyprint">cors</code> field to <strong>false</strong>:</p>
+<pre class="prettyprint linenums"><code class="typescript language-typescript">{
+...
+  cors: false, // Disabling cors
+...
+}
+</code></pre>
+<hr>
+<h2 id="usingltitypescript">Using LTI-TypeScript</h2>
+<p>After the <code class="prettyprint">register()</code> or <code class="prettyprint">provider.setup()</code> methods are called, the returned <code class="prettyprint">provider</code> object gives you access to various functionalities to help you create your LTI&#174; Provider.</p>
+<p>The Provider is not a singleton class, and you can instantiate multiple instances of LTI-TypeScript across different ports (or middlewares) if needed.</p>
+<p>Provider instances will need to be tracked to ensure resources can be closed properly and preventing unnecessary duplicate connections.</p>
+<h3 id="app">App</h3>
+<p>The <code class="prettyprint">provider.app</code> object is an instance of the underlying <code class="prettyprint">Express</code> server, through this object you can create routes just like you would when using regular <a href="https://expressjs.com/">Express</a>.</p>
+<pre class="prettyprint linenums"><code class="typescript language-typescript">provider.app.get('/route', async (req,res,next) =&gt; {
+  return res.send('It works!')
+});
+</code></pre>
+<h3 id="reservedendpointroutes">Reserved endpoint routes</h3>
+<p>LTI-TypeScript reserved endpoint routes can be retrieved by using the following methods:</p>
+<ul>
+<li><strong>provider.appRoute</strong></li>
+</ul>
+<pre class="prettyprint linenums"><code class="typescript language-typescript">const appRoute = provider.appRoute; // returns '/' by default
+</code></pre>
+<ul>
+<li><strong>provider.loginRoute</strong></li>
+</ul>
+<pre class="prettyprint linenums"><code class="typescript language-typescript">const loginRoute = provider.loginRoute; // returns '/login' by default
+</code></pre>
+<ul>
+<li><strong>provider.keysetRoute</strong></li>
+</ul>
+<pre class="prettyprint linenums"><code class="typescript language-typescript">const keySetRoute = provider.keySetRoute; // returns '/keys' by default
+</code></pre>
+<ul>
+<li><strong>provider.dynRegRoute</strong></li>
+</ul>
+<pre class="prettyprint linenums"><code class="typescript language-typescript">const dynRegRoute = provider.dynRegRoute; // returns '/register' by default
+</code></pre>
+<h3 id="callbacks">Callbacks</h3>
+<p>LTI-TypeScript allows you to configure it's main behaviours through callbacks:</p>
+<h4 id="onconnect">onConnect</h4>
+<p>The <code class="prettyprint">onConnect</code> callback is called whenever a successful launch request arrives at the main app url. This callback can be set through the <code class="prettyprint">provider.onConnect()</code> method.</p>
+<p>The callback route will be given a first parameter <code class="prettyprint">token</code>, that is the user's validated <a href="#idtoken">idtoken</a>, and the three Express route parameters (request, response and next).</p>
+<blockquote>
+  <p>The <strong><a href="#idtoken">idtoken</a></strong> can also be found in the <strong>response.locals.token</strong> object.</p>
+</blockquote>
+<pre class="prettyprint linenums"><code class="typescript language-typescript">provider.onConnect(async (token, req, res, next) =&gt; {
+  console.log(token)
+  return res.send('User connected!')
+});
+</code></pre>
+<ul>
+<li>The default method set to this callback simply fowards the request to the next handler, so the usage of <code class="prettyprint">provider.onConnect()</code> is optional, you can simply create a route receiving requests at the <code class="prettyprint">appRoute</code>:</li>
+</ul>
+<pre class="prettyprint linenums"><code class="typescript language-typescript">// Equivalent to onConnect usage above
+provider.app.get(provider.appRoute(), async (req, res, next) =&gt; {
+  console.log(res.locals.token)
+  return res.send('User connected!')
+});
+</code></pre>
+<p>Launches directed at other endpoints are also valid but <strong>are not handled by the <code class="prettyprint">onConnect</code> callback</strong>, instead they must be handled by their own <code class="prettyprint">Express</code> route:</p>
+<pre class="prettyprint linenums"><code class="typescript language-typescript">// This route can handle launches to /endpoint
+provider.app.get('/endpoint', async (req, res, next) =&gt; {
+  console.log(res.locals.token)
+  return res.send('User connected!')
+});
+</code></pre>
+<h4 id="ondeeplinking">onDeepLinking</h4>
+<p>The <code class="prettyprint">onDeepLinking</code> callback is called whenever a successfull deep linking request arrives at the main app url. This callback can be set through the <code class="prettyprint">provider.onDeepLinking()</code> method.</p>
+<p>The callback route will be given a first parameter <code class="prettyprint">token</code>, that is the user's validated <a href="#idtoken">idtoken</a>, and the three Express route parameters (request, response and next).</p>
+<blockquote>
+  <p><em>This callback should be used to display your <strong>LTI&#174; provider's deep linking UI</strong>.</em></p>
+</blockquote>
+<pre class="prettyprint linenums"><code class="typescript language-typescript">provider.onDeepLinking(async (token, req, res, next) =&gt; {
+  return res.send('Deep Linking is working!')
+});
+</code></pre>
+<blockquote>
+  <p>[See more about the Deep Linking Service](./Deep Linking)</p>
+</blockquote>
+<h4 id="oninvalidtoken">onInvalidToken</h4>
+<p>The <code class="prettyprint">onInvalidToken</code> callback is called whenever the idtoken received fails the LTI&#174; validation process. This callback can be set through the <code class="prettyprint">provider.onInvalidToken()</code> method.</p>
+<p>The callback route will be given the three Express route parameters (request, response and next). And will also have <strong>access to a <code class="prettyprint">res.locals.err</code> object</strong>, containing information about the error.</p>
+<blockquote>
+  <p><em>This callback should be used to display your <strong>invalid token error screen</strong>.</em></p>
+</blockquote>
+<pre class="prettyprint linenums"><code class="typescript language-typescript">provider.onInvalidToken(async (req, res, next) =&gt; {
+  return res.status(401).send(res.locals.err)
+});
+</code></pre>
+<ul>
+<li>LTI-TypeScript provides a default method for this callback that returns a 401 error code with the <code class="prettyprint">res.locals.err</code> object:</li>
+</ul>
+<pre class="prettyprint linenums"><code>{ status: 401, error: 'Unauthorized', message: 'ERROR_MESSAGE' }
+</code></pre>
+<h4 id="onsessiontimeout">onSessionTimeout</h4>
+<p>The <code class="prettyprint">onSessionTimeout</code> callback is called whenever no valid session is found during a request validation. This callback can be set through the <code class="prettyprint">provider.onSessionTimeout()</code> method.</p>
+<p>The callback route will be given the three Express route parameters (request, response and next). And will also have <strong>access to a <code class="prettyprint">res.locals.err</code> object</strong>, containing information about the error.</p>
+<blockquote>
+  <p><em>This callback should be used to display your <strong>session timeout error screen</strong>.</em></p>
+</blockquote>
+<pre class="prettyprint linenums"><code class="typescript language-typescript">provider.onSessionTimeout(async (req, res, next) =&gt; {
+  return res.status(401).send(res.locals.err)
+});
+</code></pre>
+<ul>
+<li>LTI-TypeScript provides a default method for this callback that returns a 401 error code with the <code class="prettyprint">res.locals.err</code> object:</li>
+</ul>
+<pre class="prettyprint linenums"><code>{ status: 401, error: 'Unauthorized', message: 'ERROR_MESSAGE' }
+</code></pre>
+<h4 id="onunregisteredplatform">onUnregisteredPlatform</h4>
+<p>The <code class="prettyprint">onUnregisteredPlatform</code> callback is called whenever the Platform attempting to start a LTI launch is not registered.</p>
+<p>The callback route will be given the two Express route parameters (request, response).</p>
+<blockquote>
+  <p><em>This callback should be used to display your <strong>Unregistered Platform error screen</strong>.</em></p>
+</blockquote>
+<pre class="prettyprint linenums"><code class="typescript language-typescript">provider.onUnregisteredPlatform((req, res) =&gt; {
+  return res.status(400).send({ status: 400, error: 'Bad Request', message: 'Unregistered Platform!' })
+})
+</code></pre>
+<ul>
+<li>LTI-TypeScript provides a default method for this callback that returns a 400 error code with the default error object:</li>
+</ul>
+<pre class="prettyprint linenums"><code>{ status: 400, error: 'Bad Request', message: 'UNREGISTERED_PLATFORM' }
+</code></pre>
+<h4 id="oninactiveplatform">onInactivePlatform</h4>
+<p>The <code class="prettyprint">onInactivePlatform</code> callback is called whenever the Platform attempting to start a LTI launch was registered through [Dynamic Registration](./Dynamic Registration) and is not active.</p>
+<p>The callback route will be given the two Express route parameters (request, response).</p>
+<blockquote>
+  <p><em>This callback should be used to display your <strong>Inactive Platform error screen</strong>.</em></p>
+</blockquote>
+<pre class="prettyprint linenums"><code class="typescript language-typescript">provider.onInactivePlatform((req, res) =&gt; {
+  return res.status(401).send({ status: 401, error: 'Unauthorized', message: 'Platform not active!' })
+});
+</code></pre>
+<ul>
+<li>LTI-TypeScript provides a default method for this callback that returns a 401 error code with the default error object:</li>
+</ul>
+<pre class="prettyprint linenums"><code>{ status: 401, error: 'Unauthorized', message: 'PLATFORM_NOT_ACTIVATED' }
+</code></pre>
+<h3 id="deploy">Deploy</h3>
+<p>Deploying the application opens a connection to the configured database and starts the Express server.</p>
+<pre class="prettyprint linenums"><code class="typescript language-typescript">await provider.deploy()
+</code></pre>
+<p>The <code class="prettyprint">provider.deploy()</code> method accepts an <code class="prettyprint">options</code> object with the following fields:</p>
+<ul>
+<li> <code class="prettyprint">port</code>: The port which the underlying HTTP/S server will listen on. Default is <code class="prettyprint">3000</code>.</li>
+<li> <code class="prettyprint">silent</code>: Whether or not the server will emit messages on startup and during activity. Default is <code class="prettyprint">false</code>.</li>
+<li> <code class="prettyprint">serverless</code>: Prevents an HTTP/S server from being deployed. Allows LTI-TypeScript to be used as a middleware in another application. Default is <code class="prettyprint">false</code>.</li>
+</ul>
+<pre class="prettyprint linenums"><code class="typescript language-typescript">await provider.deploy({ port: 3030, silent: false })
+</code></pre>
+<h4 id="deployingltitypescriptaspartofanotherserver">Deploying LTI-TypeScript as part of another server</h4>
+<p>You can use LTI-TypeScript as a middleware by calling the deploy method with the serverless flag set to true.</p>
+<ul>
+<li><em>Theoretically, this also allows you to use LTI-TypeScript with AWS or other similar services.</em></li>
+</ul>
+<pre class="prettyprint linenums"><code class="typescript language-typescript">const app = express()
+const provider = new Provider();
+await provider.setup(...);
+
+// Start LTI provider in serverless mode
+await provider.deploy({ serverless: true })
+
+// Mount LTI-TypeScript express app into preexisting express app with /lti prefix
+app.use('/lti', provider.app)
+</code></pre>
+<h3 id="platform">Platform</h3>
+<p><em>Platform manipulation methods require a connection to the database, so they can only be used after the <code class="prettyprint">provider.deploy()</code> method.</em></p>
+<blockquote>
+  <p><a href="Platform">Check the Platform Class Documentation</a></p>
+</blockquote>
+<h4 id="registeringanewplatform">Registering a new Platform</h4>
+<p>A LTI&#174; tool works in conjunction with an LTI&#174; ready platform, so in order for a platform to display your tool's resource, it needs to first be registered in the tool provider.</p>
+<p>The <code class="prettyprint">provider.registerPlatform()</code> method returns a Promise that resolves the created <a href="Platform">Platform</a> object.</p>
+<pre class="prettyprint linenums"><code class="typescript language-typescript">let plat = await provider.registerPlatform({
+  url: 'https://platform.url',
+  clientId: 'TOOLCLIENTID',
+  name: 'Platform Name',
+  authenticationEndpoint: 'https://platform.url/auth',
+  accesstokenEndpoint: 'https://platform.url/token',
+  authToken: { method: 'JWK_SET', key: 'https://platform.url/keyset' }
+});
+</code></pre>
+<ul>
+<li><p> <code class="prettyprint">platformUrl</code>: the platform's base URL.</p></li>
+<li><p> <code class="prettyprint">clientId</code>: the client ID for the tool provided by the platform.</p></li>
+<li><p> <code class="prettyprint">name</code>: Platform nickname.</p></li>
+<li><p> <code class="prettyprint">authenticationEndpoint</code>: the platform's authentication endpoint.</p></li>
+<li><p> <code class="prettyprint">accesstokenEndpoint</code>: the platform's access token request endpoint.</p></li>
+<li><p> <code class="prettyprint">authToken</code>: the platform's authentication method and key (or keyset URL).</p></li>
+<li><p>e.g., If the platform uses a JWK keyset:</p></li>
+</ul>
+<pre class="prettyprint linenums"><code class="typescript language-typescript">authToken: { method: 'JWK_SET', key: 'https://platform.url/keyset' }
+</code></pre>
+<ul>
+<li>If the platform uses a JWK key:</li>
+</ul>
+<pre class="prettyprint linenums"><code class="typescript language-typescript">authToken: {
+  method: 'JWK_KEY',
+          key: `{"kty":"EC","crv":"P-256","x":"f83OJ3D2xF1Bg8vub9tLe1gHMzV76e8Tus9uPHvRVEU", "y":"x_FEzRu9m36HLN_tue659LNpXW6pCyStikYjKIWI5a0","kid":"keyid"}`,
+}
+</code></pre>
+<ul>
+<li>If the platform uses a RSA key</li>
+</ul>
+<pre class="prettyprint linenums"><code class="typescript language-typescript">authToken: {
+  method: 'RSA_KEY',
+          key: `-----BEGIN PUBLIC KEY-----
+      MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCqGKukO1De7zhZj6+H0qtjTkVxwTCpvKe4eCZ0
+      FPqri0cb2JZfXJ/DgYSF6vUpwmJG8wVQZKjeGcjDOL5UlsuusFncCzWBQ7RKNUSesmQRMSGkVb1/
+      3j+skZ6UtW+5u09lHNsj6tQ51s1SPrCBkedbNf0Tp0GbMJDyR4e9T04ZZwIDAQAB
+      -----END PUBLIC KEY-----`
+}
+</code></pre>
+<p>Platforms can also be registered by utilizing the [Dynamic Registration Service](Dynamic Registration).</p>
+<h4 id="retrievingaplatform">Retrieving a Platform</h4>
+<p>Registered platforms can be retrieved using the following methods:</p>
+<ul>
+<li> <code class="prettyprint">provider.getPlatform(platformUrl: string, clientId: string)</code></li>
+</ul>
+<p>The <code class="prettyprint">provider.getPlatform()</code> method receives two arguments, <code class="prettyprint">platformUrl</code> and <code class="prettyprint">clientId</code>, and returns a Promise that resolves a <a href="Platform">Platform</a> object.</p>
+<pre class="prettyprint linenums"><code class="typescript language-typescript">const platform = await provider.getPlatform('http://platform.url', 'CLIENTID') // Returns Platform object
+</code></pre>
+<ul>
+<li> <code class="prettyprint">provider.getPlatforms(platformUrl: string)</code></li>
+</ul>
+<p>The <code class="prettyprint">provider.getPlatforms()</code> method receives one argument, <code class="prettyprint">platformUrl</code>, and returns a Promise that resolves to an array of <a href="Platform">Platform</a> objects which match the provided URL.</p>
+<pre class="prettyprint linenums"><code class="typescript language-typescript">const platforms = await provider.getPlatforms('http://platform.url'); // Returns Platform array
+</code></pre>
+<ul>
+<li> <code class="prettyprint">provider.getPlatformById(platformId: string)</code></li>
+</ul>
+<p>The <code class="prettyprint">provider.getPlatformById()</code> method receives the <code class="prettyprint">platformId</code> and returns a Promise that resolves a <a href="Platform">Platform</a> object.</p>
+<pre class="prettyprint linenums"><code class="typescript language-typescript">const platform = await provider.getPlatformById('60b1fce753c875193d71'); // Returns Platform object
+</code></pre>
+<p>The platform ID can be found through the <code class="prettyprint">Platform.kid</code> method or in the platformId field of the <code class="prettyprint">idToken</code> object after a successful launch.</p>
+<ul>
+<li> <code class="prettyprint">provider.getAllPlatforms()</code></li>
+</ul>
+<p>The <code class="prettyprint">provider.getAllPlatforms()</code> method returns a Promise that resolves an Array containing every registered <a href="Platform">Platform</a>.</p>
+<pre class="prettyprint linenums"><code class="typescript language-typescript">const platforms = await provider.getAllPlatforms(); // Returns every registered platform
+</code></pre>
+<h4 id="modifyingaplatform">Modifying a Platform</h4>
+<p>After a platform is registered, it's <strong>name</strong>, <strong>authenticationEndpoint</strong>, <strong>accesstokenEndpoint</strong> and <strong>authConfig</strong> parameters can still be modified in two ways:</p>
+<p><strong>Using Platform object:</strong></p>
+<p>The Platform object gives you methods to retrieve and modify platform configuration.</p>
+<blockquote>
+  <p><a href="Platform">Check the Platform Class Documentation</a></p>
+</blockquote>
+<ul>
+<li>Registration Method:</li>
+</ul>
+<p>If the platform is already registered and you pass different values for the parameters when calling the <code class="prettyprint">provider.registerPlatform()</code> method, the configuration of the registered platform will be updated.</p>
+<blockquote>
+  <p>Note that the <code class="prettyprint">platformUrl</code> and <code class="prettyprint">clientId</code> are used to identify collisions, and thus cannot be changed.</p>
+</blockquote>
+<pre class="prettyprint linenums"><code class="typescript language-typescript">const platform = await provider.registerPlatform({
+  platformUrl: 'https://platform.url',
+  clientId: 'TOOLCLIENTID',
+  name: 'Platform Name 2', // Changing the name of already registered platform
+});
+</code></pre>
+<h4 id="deletingaplatform">Deleting a Platform</h4>
+<p>Registered platforms can be deleted using the <code class="prettyprint">provider.deletePlatform()</code> and <code class="prettyprint">provider.deletePlatformById()</code> methods.</p>
+<p>The <code class="prettyprint">provider.deletePlatform(platformUrl: string, clientId: string)</code> method receives two arguments, <code class="prettyprint">platformUrl</code> and <code class="prettyprint">clientId</code>:</p>
+<pre class="prettyprint linenums"><code class="typescript language-typescript">await provider.deletePlatform('http://platform.url', 'CLIENTID') // Deletes a platform
+</code></pre>
+<p>The <code class="prettyprint">provider.deletePlatformById(platformId: string)</code> method receives the argument <code class="prettyprint">platformId</code>:</p>
+<pre class="prettyprint linenums"><code class="typescript language-typescript">await provider.deletePlatformById('60b1fce753c875193d71b') // Deletes a platform
+</code></pre>
+<hr>
+<h2 id="authenticationandrouting">Authentication and Routing</h2>
+<p>The LTI&#174; 1.3 protocol works in such a way that every successful launch from the platform to the tool generates an <strong>IdToken</strong> that the tool uses to retrieve information about the user and the general context of the launch.</p>
+<p>Whenever a successful launch request is received by LTI-TypeScript, the idToken received at the end of the process is validaded according to the <a href="https://www.imsglobal.org/spec/security/v1p0/">LTI&#174; 1.3 security specifications</a>.</p>
+<p>The valid idtoken is then separated into two parts <code class="prettyprint">idtoken</code> and <code class="prettyprint">contexttoken</code>, that are stored in the databased and passed along to the next route handler inside the <code class="prettyprint">response.locals</code> object:</p>
+<h3 id="idtoken">IdToken</h3>
+<p>The <code class="prettyprint">idtoken</code> will contain the platform and user information that is context independent, and will be stored in the <code class="prettyprint">res.locals.token</code> object, or the <code class="prettyprint">token</code> parameter if the <code class="prettyprint">onConnect</code> is being used:</p>
+<pre class="prettyprint linenums"><code class="typescript language-typescript">provider.onConnect(async (token: IdToken, req: express.Request, res: express.Response) =&gt; {
+  // Retrieving idtoken through response object
+  console.log(res.locals.token)
+  // Retrieving idtoken through onConnect token parameter
+  console.log(token)
+})
+</code></pre>
+<p>The <code class="prettyprint">idtoken</code> object is of the type <code class="prettyprint">IdToken</code> and consists of:</p>
+<pre class="prettyprint linenums"><code class="typescript language-typescript">{
+  iss: "http://localhost/moodle",
+          clientId: "CLIENTID",
+          deploymentId: "1",
+          platformId: "60b1fce753c875193d71b611e895f03d",
+          platformContext: ContextProperties,
+          platformInfo: {
+    product_family_code: "moodle",
+            version: "2020042400",
+            guid: "localhost",
+            name: "moodle",
+            description: "Local Moodle"
+  },
+  user: "2",
+          userInfo: {
+    given_name: "Admin",
+            family_name: "User",
+            name: "Admin User",
+            email: "local@moodle.com",
+  },
+}
+</code></pre>
+<h3 id="contexttoken">ContextToken</h3>
+<p>The <code class="prettyprint">contexttoken</code> will contain the context specific information, and will be stored in the <code class="prettyprint">res.locals.context</code> object and as a part of the <code class="prettyprint">idtoken</code> object as the <code class="prettyprint">platformContext</code> field:</p>
+<pre class="prettyprint linenums"><code class="typescript language-typescript">provider.onConnect(async (token, req, res) =&gt; {
+  // Retrieving contexttoken through response object
+  console.log(res.locals.context)
+  // Retrieving contexttoken through idtoken object
+  console.log(token.platformContext)
+})
+</code></pre>
+<p>The <code class="prettyprint">contexttoken</code> object consists of:</p>
+<pre class="prettyprint linenums"><code class="typescript language-typescript">// Example contexttoken for a Moodle platform
+{
+  contextId: "http%3A%2F%2Flocalhost%2FmoodlewTtQU3zWHvVeCUf12_57",
+          path: "/",
+        user: "2",
+        roles: [
+  "http://purl.imsglobal.org/vocab/lis/v2/institution/person#Administrator",
+  "http://purl.imsglobal.org/vocab/lis/v2/membership#Instructor",
+  "http://purl.imsglobal.org/vocab/lis/v2/system/person#Administrator"
+],
+        targetLinkUri: "http://localhost:3000",
+        context: {
+  id: "2",
+          label: "course",
+          title: "Course",
+          type: [
+    "CourseSection"
+  ]
+},
+  resource: {
+    title: "LTI-TypeScript Demo",
+            id: "57"
+  },
+  custom: {
+    "system_setting_url": "http://localhost/moodle/mod/lti/services.php/tool/1/custom",
+            "context_setting_url": "http://localhost/moodle/mod/lti/services.php/CourseSection/2/bindings/tool/1/custom",
+            "link_setting_url": "http://localhost/moodle/mod/lti/services.php/links/{link_id}/custom"
+  },
+  lis: {
+    "person_sourcedid": "",
+            "course_section_sourcedid": ""
+  },
+  endpoint: {
+    scope: [
+      "https://purl.imsglobal.org/spec/lti-ags/scope/lineitem",
+      "https://purl.imsglobal.org/spec/lti-ags/scope/lineitem.readonly",
+      "https://purl.imsglobal.org/spec/lti-ags/scope/result.readonly",
+      "https://purl.imsglobal.org/spec/lti-ags/scope/score"
+    ],
+            lineitems: "http://localhost/moodle/mod/lti/services.php/2/lineitems?type_id=1",
+            lineitem: "http://localhost/moodle/mod/lti/services.php/2/lineitems/26/lineitem?type_id=1"
+  },
+  namesRoles: {
+    context_memberships_url: "http://localhost/moodle/mod/lti/services.php/CourseSection/2/bindings/1/memberships",
+            service_versions: [
+      "1.0",
+      "2.0"
+    ]
+  },
+  launchPresentation: {
+    locale: "en",
+            document_target: "iframe",
+            return_url: "http://localhost/moodle/mod/lti/return.php?course=2&amp;launch_container=3&amp;instanceid=57&amp;sesskey=6b5H1MF8yp"
+  },
+  messageType: "LtiResourceLinkRequest",
+          version: "1.3.0"
+}
+</code></pre>
+<h3 id="authentication">Authentication</h3>
+<p>LTI-TypeScript need as way to retrieve the correct <code class="prettyprint">idtoken</code> and <code class="prettyprint">contexttoken</code> information whenever a tool makes a request. The authentication protocol is based on two items, a <strong>session cookie</strong> and a <strong>ltik</strong> token.</p>
+<h4 id="launches">Launches</h4>
+<p>A platform can launch to <strong>any of the tool's endpoints</strong>, but only launches targeting the specified <code class="prettyprint">appRoute</code> will be sent to the <a href="#onconnect">onConnect callback</a>. <strong>Launches to other endpoints must be handled by their specific <code class="prettyprint">Express</code> routes.</strong></p>
+<p>At the end of a successful launch, LTI-TypeScript redirects the request to the desired endpoint, but it also does two other things:</p>
+<ul>
+<li><p>Sets a <strong>signed session cookie</strong> containing the <code class="prettyprint">platformCode</code> and <code class="prettyprint">userId</code> information;</p></li>
+<li><p>Sends a <strong>ltik</strong> JWT token containing the same platform and user information, with additional context information as a query parameter to the endpoint.</p></li>
+</ul>
+<blockquote>
+  <p><a href="#cookieconfiguration">See more about cookie configuration options</a></p>
+</blockquote>
+<h4 id="requestauthentication">Request Authentication</h4>
+<p>Whenever the tool receives a request <strong>not directed at one of the reserved endpoints</strong> it attempts to validate the request by matching the information received through the <a href="#cookies">session cookie</a> with the information contained in the <strong>ltik</strong> token.</p>
+<p>The <code class="prettyprint">ltik</code> token <strong>MUST</strong> be passed to the provider through either the query parameters, body parameters or an Authorization header (Bearer or LTIK-AUTH-V1).</p>
+<h5 id="examples-7">Examples</h5>
+<ul>
+<li>Query Parameters: <code class="prettyprint">https://tool-url.com?ltik=&lt;ltik&gt;</code></li>
+<li>Body Parameters: passed through JSON request body.</li>
+<li>Authorization Header:<ul>
+<li> <code class="prettyprint">Authorization: Bearer &lt;ltik&gt;</code></li>
+<li> <code class="prettyprint">Authorization: LTIK-AUTH-V1 Token=&lt;ltik&gt;, Additional=&lt;additional authorization, e.g., Bearer token&gt;</code><ul>
+<li>When using the <code class="prettyprint">LTIK-AUTH-V1</code> authorization schema, <code class="prettyprint">req.headers.authorization</code> will only include the <code class="prettyprint">Additional</code> portion of the header. The <code class="prettyprint">ltik</code> token can be found in <code class="prettyprint">req.token</code>.</li></ul></li></ul></li>
+</ul>
+<h5 id="ltikorderofpriority">LTIK order of priority:</h5>
+<ul>
+<li><p><strong>LTI-TypeScript</strong> will look for the <code class="prettyprint">ltik</code> in the following order:</p></li>
+<li><p>LTIK-AUTH-V1 Authorization</p></li>
+<li><p>query</p></li>
+<li><p>body</p></li>
+<li><p>Bearer Authorization</p></li>
+</ul>
+<h5 id="cookies">Cookies</h5>
+<blockquote>
+  <p>In the case of requests coming from different subdomains, usually it is necessary to set <code class="prettyprint">mode: cors</code> and <code class="prettyprint">credentials: 'include'</code> flags to include the cookies in the request.</p>
+  <p>If for some reason the cookies could not be set in your development environment, the usage of the <strong>devMode</strong> flag eliminates the validation step that matches the cookie information, instead using only the information contained in the <strong>ltik</strong> token.</p>
+  <p><a href="#developmentmode">See more about development mode</a></p>
+</blockquote>
+<p>If the validation fails, the request is handled by the <strong>invalidTokenCallback</strong> or the <strong>sessionTimeoutCallback</strong>.</p>
+<h4 id="whitelistingroutes">Whitelisting routes</h4>
+<p>Routes can be whitelisted to bypass the LTI-TypeScript authentication protocol <strong>in case of validation failure</strong>, this means that these routes work normally, but if the request sent to them fails validation they are still reached but don't have access to a <code class="prettyprint">idtoken</code> or <code class="prettyprint">contexttoken</code>.</p>
+<p>A good way to exemplify this behaviour is by using it to create a landing page, that will be accessed if a request to the whitelisted route fails validation:</p>
+<pre class="prettyprint linenums"><code class="typescript language-typescript">// Whitelisting the main app route and /landingpage to create a landing page
+provider.whitelist = [provider.appRoute(), { route: '/landingpage', method: 'get' }];
+
+// When receiving successful LTI&#174; launch redirects to app, otherwise redirects to landing page
+provider.onConnect(async (token, req, res, next) =&gt; {
+  // Checking if received idtoken
+  if (token) return res.sendFile(path.join(__dirname, './public/index.html'));
+  else provider.redirect(res, '/landingpage'); // Redirects to landing page
+});
+</code></pre>
+<p>Whitelisted routes are defined using the <code class="prettyprint">provider.whitelist</code> setter that can receive an array of either <code class="prettyprint">string</code>s or <code class="prettyprint">RouteType</code> object.</p>
+<ul>
+<li><strong>Strings</strong></li>
+</ul>
+<p>Route strings will be whitelisted for <strong>every method</strong>:</p>
+<pre class="prettyprint linenums"><code class="typescript language-typescript">provider.whitelist = ['/route1', '/route2', '/route3'];
+</code></pre>
+<ul>
+<li><strong>RouteType Objects</strong></li>
+</ul>
+<p>RouteType objects allow you to specify <strong>whitelisted methods</strong>:</p>
+<pre class="prettyprint linenums"><code class="typescript language-typescript">provider.whitelist = [{ route: '/route1', method: 'get' }];
+
+// Route objects can also be whitelisted for every method
+provider.whitelist = [{ route: '/route1', method: 'all' }];
+
+// The provider.whitelist setter can receive different types simultaneously.
+provider.whitelist = [{ route: '/route1', method: 'get' }, { route: '/route2', method: 'post' }, '/route3'];
+</code></pre>
+<p>Routes can also be set using Regex which means that you can whitelist a big range of routes:</p>
+<pre class="prettyprint linenums"><code class="typescript language-typescript">// Using Regex
+provider.whitelist = [{ route: new RegExp(/^\/route2/), method: 'get' }];
+</code></pre>
+<p>The <code class="prettyprint">new RegExp(/^\/route1/)</code> regex will whitelistd every route that starts with <code class="prettyprint">/route</code>.</p>
+<blockquote>
+  <p>Be careful when using regex to whitelist routes, you could whitelist routes accidentally and that can have a big impact on your application. It is recommended to use the start-of-string (^) and end-of-string ($) anchors to avoid accidental matches.</p>
+</blockquote>
+<h4 id="redirectingwithltitypescript">Redirecting with LTI-TypeScript</h4>
+<p>The LTI-TypeScript authentication protocol relies on the <code class="prettyprint">ltik</code> token being passed to endpoints as query parameters.</p>
+<p>To make this process seamless, the <code class="prettyprint">provider.redirect()</code> method can be used to redirect to an endpoint passing the <code class="prettyprint">ltik</code> token automatically:</p>
+<pre class="prettyprint linenums"><code class="typescript language-typescript">provider.onConnect(async (token, req, res) =&gt; {
+  return provider.redirect(res, '/route'); // Redirects to /route with the ltik token
+});
+
+provider.get('/route', async (req, res) =&gt; {
+  return provider.redirect(res, '/route/b?test=123'); // Redirects to /route/b with the ltik token and additional query parameters
+});
+</code></pre>
+<p>The <code class="prettyprint">provider.redirect()</code> method requires two parameters:</p>
+<ul>
+<li><p><strong>Response</strong> - The <code class="prettyprint">Express</code> response object, that will be used to perform the redirection and retrieve the <code class="prettyprint">idtoken</code> and <code class="prettyprint">ltik</code>.</p></li>
+<li><p><strong>URL</strong> - The redirection target in the form of a string.</p></li>
+</ul>
+<p>The <code class="prettyprint">url</code> parameter can be an internal route ('/route') or a complete URL ('https://domain.com'), but how the redirection works depends on some conditions:</p>
+<ul>
+<li><p>If the target is on the same domain and subdomain ('https://domain.com', '/route'), it will have access to the <code class="prettyprint">ltik</code> and <code class="prettyprint">session cookie</code> and will pass the LTI-TypeScript authentication protocol.</p></li>
+<li><p>If the complete URL is on the same domain but on a different subdomain ('https://a.domain.com'), it will have access to the <code class="prettyprint">ltik</code> but it might require a cookie domain to be set:</p></li>
+</ul>
+<pre class="prettyprint linenums"><code class="typescript language-typescript">// Setup provider example
+await provider.setup(
+        &lt;encryptionKey&gt;,
+        &lt;databaseOptions&gt;,
+        {
+          ...
+                  cookies: { // Cookie configuration
+  secure: true,
+          sameSite: 'None',
+          domain: '.domain.com'
+},
+...
+},
+);
+</code></pre>
+<p>Setting the domain to <code class="prettyprint">.domain.com</code> allows the <code class="prettyprint">session cookie</code> to be accessed on every domain.com subdomain (a.domain.com, b.domain.com).</p>
+<ul>
+<li>If the complete URL is on a different domain, it will have access to the <code class="prettyprint">ltik</code>, but <strong>it will not have access to a <code class="prettyprint">session cookie</code></strong>, and will only be able to make successful requests to whitelisted routes.</li>
+<li>If the route originating the resource does not have access to an <code class="prettyprint">idtoken</code> (whitelisted route), <code class="prettyprint">provider.redirect()</code> method will still perform the redirection, but the target will not have access to the <code class="prettyprint">ltik</code> nor the <code class="prettyprint">session cookie</code>.</li>
+</ul>
+<p>The <code class="prettyprint">provider.redirect()</code> method also has an <code class="prettyprint">options</code> parameter that accepts two fields:</p>
+<ul>
+<li> <code class="prettyprint">newResource</code>: If this field is set to true, the <code class="prettyprint">contexttoken</code> object has it's <code class="prettyprint">path</code> field changed to reflect the target route. The <code class="prettyprint">path</code> field can be used to keep track of the main resource route even after several redirections.</li>
+</ul>
+<pre class="prettyprint linenums"><code class="typescript language-typescript">provider.onConnect(async (token, req, res) =&gt; {
+  return provider.redirect(res, '/route', { newResource: true })
+});
+</code></pre>
+<ul>
+<li> <code class="prettyprint">query</code>: This field can be used to easely add query parameter to target URL.</li>
+</ul>
+<pre class="prettyprint linenums"><code class="typescript language-typescript">provider.onConnect(async (token, req, res) =&gt; {
+  return provider.redirect(res, '/path', { newResource: true, query: { param: 'value' } })
+  // Redirects to /path?param=value
+});
+</code></pre>
+<blockquote>
+  <p>If for some reason you want to redirect manually, the <code class="prettyprint">ltik</code> token can be retrieved, <strong>after a valid request</strong>, through the <code class="prettyprint">res.locals.ltik</code> variable.</p>
+</blockquote>
+<hr>
+<h2 id="ltiadvantageservices">LTI&#174; Advantage Services</h2>
+<h3 id="deeplinkingservicewithltitypescript">Deep Linking Service with LTI-TypeScript</h3>
+<p>The Deep Linking Service class documentation can be accessed [here](Deep Linking).</p>
+<h3 id="assignmentandgradesservicewithltitypescript">Assignment and Grades Service with LTI-TypeScript</h3>
+<p>The Assignment and Grades Service class documentation can be accessed <a href="Grading">here</a>.</p>
+<h3 id="namesandrolesprovisioningservicewithltitypescript">Names and Roles Provisioning Service with LTI-TypeScript</h3>
+<p>The Names and Roles Provisioning Service class documentation can be accessed [here](Names and Roles).</p>
+<h3 id="dynamicregistrationservicewithltitypescript">Dynamic Registration Service with LTI-TypeScript</h3>
+<p>The Dynamic Registration Service documentation can be accessed [here](Dynamic Registration).</p>
+<hr>
+<h2 id="debugging">Debugging</h2>
+<ul>
+<li>To enable debug messages, specify <code class="prettyprint">{ debug: true }</code> within the Provider options.</li>
+</ul>
+<hr>
+<h2 id="license">License</h2>
+<blockquote>
+  <p><a href="../LICENSE">APACHE2 License</a></p>
+  <p><em>Learning Tools Interoperability&#174; (LTI&#174;) is a trademark of the IMS Global Learning Consortium, Inc. (https://www.imsglobal.org)</em></p>
+  <p><em>This library is a derivative work of <a href="https://github.com/Cvmcosta">CVM Costa</a>'s original <a href="https://github.com/Cvmcosta/ltijs">LTIJS library</a>.</em> </p>
+</blockquote></body></html>

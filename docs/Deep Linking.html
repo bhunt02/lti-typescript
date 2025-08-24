@@ -1,0 +1,414 @@
+<html><head><style>
+html {
+    box-sizing: border-box
+}
+
+body {
+  padding: 2rem;
+}
+
+*,*:before,*:after {
+    box-sizing: inherit
+}
+
+/* Extract from normalize.css by Nicolas Gallagher and Jonathan Neal git.io/normalize */
+html {
+    -ms-text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%
+}
+
+body {
+    margin: 0
+}
+
+article,aside,details,figcaption,figure,footer,header,main,menu,nav,section {
+    display: block
+}
+
+summary {
+    display: list-item
+}
+
+audio,canvas,progress,video {
+    display: inline-block
+}
+
+progress {
+    vertical-align: baseline
+}
+
+audio:not([controls]) {
+    display: none;
+    height: 0
+}
+
+[hidden],template {
+    display: none
+}
+
+a {
+    background-color: transparent
+}
+
+a:active,a:hover {
+    outline-width: 0
+}
+
+abbr[title] {
+    border-bottom: none;
+    text-decoration: underline;
+    text-decoration: underline dotted
+}
+
+b,strong {
+    font-weight: bolder
+}
+
+dfn {
+    font-style: italic
+}
+
+mark {
+    background: #ff0;
+    color: #000
+}
+
+small {
+    font-size: 80%
+}
+
+sub,sup {
+    font-size: 75%;
+    line-height: 0;
+    position: relative;
+    vertical-align: baseline
+}
+
+sub {
+    bottom: -0.25em
+}
+
+sup {
+    top: -0.5em
+}
+
+figure {
+    margin: 1em 40px
+}
+
+img {
+    border-style: none
+}
+
+code,kbd,pre,samp {
+    font-family: monospace,monospace;
+    font-size: 1em
+}
+
+hr {
+    box-sizing: content-box;
+    height: 0;
+    overflow: visible
+}
+
+button,input,select,textarea,optgroup {
+    font: inherit;
+    margin: 0
+}
+
+optgroup {
+    font-weight: bold
+}
+
+button,input {
+    overflow: visible
+}
+
+button,select {
+    text-transform: none
+}
+
+button,[type=button],[type=reset],[type=submit] {
+    -webkit-appearance: button
+}
+
+button::-moz-focus-inner,[type=button]::-moz-focus-inner,[type=reset]::-moz-focus-inner,[type=submit]::-moz-focus-inner {
+    border-style: none;
+    padding: 0
+}
+
+button:-moz-focusring,[type=button]:-moz-focusring,[type=reset]:-moz-focusring,[type=submit]:-moz-focusring {
+    outline: 1px dotted ButtonText
+}
+
+fieldset {
+    border: 1px solid #c0c0c0;
+    margin: 0 2px;
+    padding: .35em .625em .75em
+}
+
+legend {
+    color: inherit;
+    display: table;
+    max-width: 100%;
+    padding: 0;
+    white-space: normal
+}
+
+textarea {
+    overflow: auto
+}
+
+[type=checkbox],[type=radio] {
+    padding: 0
+}
+
+[type=number]::-webkit-inner-spin-button,[type=number]::-webkit-outer-spin-button {
+    height: auto
+}
+
+[type=search] {
+    -webkit-appearance: textfield;
+    outline-offset: -2px
+}
+
+[type=search]::-webkit-search-decoration {
+    -webkit-appearance: none
+}
+
+::-webkit-file-upload-button {
+    -webkit-appearance: button;
+    font: inherit
+}
+
+/* End extract */
+html,body {
+    font-family: Verdana,sans-serif;
+    font-size: 15px;
+    line-height: 1.5
+}
+
+html {
+    overflow-x: hidden
+}
+
+h1 {
+    font-size: 36px
+}
+
+h2 {
+    font-size: 30px
+}
+
+h3 {
+    font-size: 24px
+}
+
+h4 {
+    font-size: 20px
+}
+
+h5 {
+    font-size: 18px
+}
+
+h6 {
+    font-size: 16px
+}
+
+.breadcrumb {
+  padding: 0 0.5rem;
+}
+
+.breadcrumb ol {
+  display: flex;
+  flex-wrap: wrap;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  gap: 1rem;
+  align-items: end;
+}
+</style><title>Deep-Linking Service Class Documentation</title></head><nav aria-label="Breadcrumb" class="breadcrumb"><ol><li><a href="/out/README.html">README</a></li><li><span aria-current="page">Deep Linking</span></li><li><a href="/out/docs/Dynamic Registration.html">Dynamic Registration</a></li><li><a href="/out/docs/Grading.html">Grading</a></li><li><a href="/out/docs/Introduction.html">Introduction</a></li><li><a href="/out/docs/Names and Roles.html">Names and Roles</a></li><li><a href="/out/docs/Platform.html">Platform</a></li><li><a href="/out/docs/Redirection URIs.html">Redirection URIs</a></li><li><a href="/out/docs/Table of Contents.html">Table of Contents</a></li></ol></nav><body><h1 id="deeplinkingserviceclassdocumentation">Deep-Linking Service Class Documentation</h1>
+<h2 id="tableofcontents">Table of Contents</h2>
+<ul>
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#usage">Usage</a></li>
+<li><a href="#documentation">Documentation</a></li>
+<li><a href="#license">License</a></li>
+</ul>
+<hr>
+<h2 id="introduction">Introduction</h2>
+<p>LTI-Typescript implements the <a href="https://www.imsglobal.org/spec/lti-dl/v2p0/">LTI&#174; 1.3 Deep Linking Service Specification</a> in the form of the <strong>DeepLinking Class</strong>.</p>
+<p>Deep Linking consists of using a LTI&#174; launch to select specific resources within a tool to be displayed to the user.</p>
+<p>This class provides two methods for generating the deep linking messages, and a callback method called whenever there is a successfull deep linking launch.</p>
+<p>Following the official specification, the usual working flow is: </p>
+<ul>
+<li>Platform initiates deep linking launch.</li>
+<li>onDeepLinking() callback is called and redirects to the resource selection view.</li>
+<li>In the resource selection view, the user selects one or more resources and makes a POST request with the result.</li>
+<li>The tool then uses the provider.DeepLinking class to generate the self submitting form with the signed JWT message of the deep linking request and returns the form to the client.</li>
+<li>The client then embeds the form in the page, submitting the deep linking request.</li>
+</ul>
+<hr>
+<h2 id="usage">Usage</h2>
+<h3 id="deeplinkingcallback">Deep Linking Callback</h3>
+<p>Whenever a platform makes a successfull deep linking launch to the tool, the deep linking callback is called, so that the tool can display a resource selection view:</p>
+<pre class="prettyprint linenums"><code class="javascript language-javascript">// Deep Linking callback
+lti.onDeepLinking((token, req, res) =&gt; {
+  // Call redirect function to deep linking view
+  lti.redirect(res, '/deeplink')
+})
+
+// Deep Linking route, displays the resource selection view
+lti.app.get('/deeplink', async (req, res) =&gt; {
+  return res.sendFile(path.join(__dirname, '/public/resources.html'))
+})
+</code></pre>
+<blockquote>
+  <p>Deep linking launches uses the same endpoint as regular launches.</p>
+</blockquote>
+<h3 id="deeplinkingmessages">Deep Linking Messages</h3>
+<h4 id="providerdeeplinkingservicecreatedeeplinkingform">provider.DeepLinkingService.createDeepLinkingForm()</h4>
+<p>After resources are selected, the tool can now create a deep linking request message and send to the platform, this can be done through two methods:</p>
+<pre class="prettyprint linenums"><code class="typescript language-typescript">provider.DeepLinkingService.createDeepLinkingForm(
+  idToken: IdToken, 
+  contentItems: BaseContentItem[], 
+  options: { message?: string; errMessage?: string; log?: string; errLog?: string; }
+);
+</code></pre>
+<p>Returns a self submitting Deep Linking form containing the signed JWT message, this form should be embeded in the html of the tool's client in order to finish the deep linking request.</p>
+<pre class="prettyprint linenums"><code class="typescript language-typescript">// Handles deep linking request generation with the selected resource
+provider.app.post('/deeplink', async (req, res) =&gt; {
+    const resource = req.body;
+
+    const items = [
+      {
+        type: 'ltiResourceLink',
+        title: resource.title,
+        url: resource.url,
+        custom: {
+          resourceurl: resource.path,
+          resourcename: resource.title
+        }
+      }
+    ];
+
+    // Creates the deep linking request form
+    const form = await provider.DeepLinking.createDeepLinkingForm(res.locals.token, items, { message: 'Successfully registered resource!' });
+
+    return res.send(form);
+});
+</code></pre>
+<h4 id="providerdeeplinkingservicecreatedeeplinkingmessage">provider.DeepLinkingService.createDeepLinkingMessage()</h4>
+<pre class="prettyprint linenums"><code class="typescript language-typescript">provider.DeepLinkingService.createDeepLinkingMessage(
+  idToken: IdToken, 
+  contentItems: BaseContentItem[], 
+  options: { message?: string; errMessage?: string; log?: string; errLog?: string; }
+);
+</code></pre>
+<p>Returns a signed JWT message, that the client has to submit in a POST form in order to finish the deep linking request.</p>
+<pre class="prettyprint linenums"><code class="typescript language-typescript">// Handles deep linking request generation with the selected resource
+provider.app.post('/deeplink', async (req, res) =&gt; {
+    const resource = req.body;
+
+    const items = [
+      {
+        type: 'ltiResourceLink',
+        title: resource.title,
+        url: resource.url,
+        custom: {
+          resourceurl: resource.path,
+          resourcename: resource.title
+        }
+      }
+    ];
+
+    // Creates the deep linking request JWT message
+    const message = await provider.DeepLinkingService.createDeepLinkingMessage(res.locals.token, items, { message: 'Successfully registered resource!' });
+
+    return res.send(message);
+});
+</code></pre>
+<h4 id="idtokenparameter">ID Token parameter</h4>
+<p>Since most of the information necessary to create a deep linking request is present in the idtoken, it is necessary to pass it along as the first parameter.</p>
+<pre class="prettyprint linenums"><code class="typescript language-typescript">// Retrieves idtoken from the locals variable
+const token = res.locals.token
+const message = await provider.DeepLinkingService.createDeepLinkingMessage(token, items, { message: 'Successfully registered resources!' })
+</code></pre>
+<h4 id="contentitemsparameter">Content Items parameter</h4>
+<p>The Content Items parameter is either an content item object or a array of content item objects, following the <a href="https://www.imsglobal.org/spec/lti-dl/v2p0/#content-item-types">LTI&#174; 1.3 content item specification</a>. </p>
+<p>Passing the parameter <strong>does not guarantee that all content items will be sent in the request</strong>, to avoid errors, LTI-Typescript only sends content items that fit within the platform's accepted item types and allowed quantity.</p>
+<p>If a platform only allows one content item per deep linking request, only the first content item passed in the parameter will actually be sent to the platform.</p>
+<p><strong>Example</strong>: </p>
+<pre class="prettyprint linenums"><code class="typescript language-typescript">const items = [
+  {
+    type: 'ltiResourceLink',
+    title: 'LTI resource',
+    url: 'https://your.ltijs.com?resource=resource1',
+    custom: {
+      resource: 'resource1'
+    }
+  },
+  {
+    type: 'link',
+    title: 'Link',
+    url: 'https://link.com'
+  }
+];
+
+const message = await provider.DeepLinkingService.createDeepLinkingMessage(res.locals.token, items, { message: 'Successfully registered resources!' });
+</code></pre>
+<h4 id="options">Options</h4>
+<p>The <a href="https://www.imsglobal.org/spec/lti-dl/v2p0">Deep Linking specification</a> allows us to set custom messages that should be displayed to the user in case of success or failure:</p>
+<ul>
+<li><p> <code class="prettyprint">options.message</code> e.g., 'Successfully registered the resources!'</p></li>
+<li><p> <code class="prettyprint">options.errMessage</code> e.g., 'Resource registration failed!'</p></li>
+</ul>
+<p>We can also set the messages that the platform will log in their systems in case of success or failure.</p>
+<ul>
+<li><p> <code class="prettyprint">options.log</code> e.g., 'registered<em>lti</em>resource'</p></li>
+<li><p> <code class="prettyprint">options.errLog</code> e.g., 'resource<em>registration</em>failed'</p></li>
+</ul>
+<hr>
+<h3 id="example">Example:</h3>
+<pre class="prettyprint linenums"><code class="typescript language-typescript">// Deep Linking callback
+provider.onDeepLinking((token, req, res) =&gt; {
+  // Displays the resource selection view
+  return res.sendFile(path.join(__dirname, '/public/resources.html'));
+})
+
+// Handles deep linking request generation with the selected resource
+provider.app.post('/deeplink', async (req, res) =&gt; {
+  const resource = req.body;
+
+  const items = [
+    {
+      type: 'ltiResourceLink',
+      title: resource.title,
+      custom: {
+        resourceurl: resource.path,
+        resourcename: resource.title
+      }
+    }
+  ];
+
+  // Creates the deep linking request form
+  const form = await provider.DeepLinkingService.createDeepLinkingForm(res.locals.token, items, { message: 'Successfully registered resource!' });
+
+  return res.send(form);
+});
+</code></pre>
+<hr>
+<h2 id="documentation">Documentation</h2>
+<h4 id="providerdeeplinkingservicecreatedeeplinkingformidtokenidtokencontentitemsbasecontentitemoptionsmessagestringerrmessagestringlogstringerrlogstringpromise60string62">provider.DeepLinkingService.createDeepLinkingForm(idToken: IdToken, contentItems: BaseContentItem[], options: { message?: string; errMessage?: string; log?: string; errLog?: string; }): Promise&lt;string&gt;</h4>
+<p>Creates a self submitting form containing the signed JWT message of the deep linking request.</p>
+<h4 id="providerdeeplinkingservicecreatedeeplinkingmessageidtokenidtokencontentitemsbasecontentitemoptionsmessagestringerrmessagestringlogstringerrlogstringpromise60string62">provider.DeepLinkingService.createDeepLinkingMessage(idToken: IdToken, contentItems: BaseContentItem[], options: { message?: string; errMessage?: string; log?: string; errLog?: string; }): Promise&lt;string&gt;</h4>
+<p>Creates a signed JWT message of the deep linking request.</p>
+<hr>
+<h2 id="license">License</h2>
+<blockquote>
+  <p><a href="../LICENSE">APACHE2 License</a></p>
+  <p><em>Learning Tools Interoperability&#174; (LTI&#174;) is a trademark of the IMS Global Learning Consortium, Inc. (https://www.imsglobal.org)</em></p>
+  <p><em>This library is a derivative work of <a href="https://github.com/Cvmcosta">CVM Costa</a>'s original <a href="https://github.com/Cvmcosta/ltijs">LTIJS library</a>.</em> </p>
+</blockquote></body></html>
