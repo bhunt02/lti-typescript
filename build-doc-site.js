@@ -346,12 +346,6 @@ async function writeHtmlToFile (
     });
   });
 
-  document.querySelectorAll('code').forEach((v) => {
-    if (v.parentNode.textContent == undefined) {
-
-    }
-  });
-
   document.querySelectorAll('a').forEach(aNode => {
     const href = aNode.href;
     if (href.endsWith('.md')) {
@@ -360,7 +354,6 @@ async function writeHtmlToFile (
     if (href.startsWith('about:blank#')) {
       aNode.setAttribute('href', href.substring('about:blank'.length).replace(/-/g,''));
     }
-    console.log(aNode.href);
   });
   fs.writeFileSync(location,dom.serialize().replace(/®/g,'&#174;'), 'utf8');
 }

@@ -30,7 +30,7 @@ jobs:
         env:
           REPO: self
           BRANCH: pages
-          FOLDER: out
+          FOLDER: lti-typescript
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           MESSAGE: "Build: ({sha}) {msg}" # The commit message
 
