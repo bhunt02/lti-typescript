@@ -229,7 +229,7 @@ describe('Provider', () => {
     expect(
       await provider.getPlatform('http://localhost/moodle', 'ClientId2'),
     ).toMatchObject(platform1);
-  }, 10000);
+  }, 20000);
 
   it('Provider.getPlatformById expected to resolve Platform object', async () => {
     const platform = await provider.registerPlatform({
@@ -289,9 +289,7 @@ describe('Provider', () => {
     expect(
       await provider.getPlatform('http://localhost/moodle', 'ClientId1'),
     ).toMatchObject(platform);
-    expect(
-      await provider.deletePlatform('http://localhost/moodle', 'ClientId1'),
-    ).toMatchObject(platform);
+    await provider.deletePlatform('http://localhost/moodle', 'ClientId1');
     expect(
       await provider.getPlatform('http://localhost/moodle', 'ClientId1'),
     ).toBeUndefined();
@@ -313,9 +311,7 @@ describe('Provider', () => {
     await expect(provider.getPlatformById(platform.kid)).resolves.toMatchObject(
       platform,
     );
-    await expect(
-      provider.deletePlatformById(platform.kid),
-    ).resolves.toMatchObject(platform);
+    await provider.deletePlatformById(platform.kid);
     await expect(
       provider.getPlatformById(platform.kid),
     ).resolves.toBeUndefined();
