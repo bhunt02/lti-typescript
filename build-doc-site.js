@@ -224,17 +224,26 @@ h6 {
 }
 
 .breadcrumb {
-  padding: 0 0.5rem;
+  padding: 0 0.1rem;
+  display: flex;
+  flex-direction: column;
 }
 
 .breadcrumb ol {
   display: flex;
+  width: 100%;
   flex-wrap: wrap;
   list-style: none;
   margin: 0;
   padding: 0;
   gap: 1rem;
   align-items: end;
+}
+
+ol > li:has(ol) {
+  width: 100%;
+  flex-basis: 100%;
+  margin-left: 2em;
 }
 `;
 
@@ -281,17 +290,17 @@ const conv = new showdown.Converter({
 function getBreadcrumb(location, document) {
   const segments = location.split('.')[0].split('/');
   const text = segments[segments.length - 1];
-  const title = `${text.substring(0,1).toUpperCase()}${text.substring(1)}`;
 
+  location = location.replace(/.md/g,'.html');
   const nav = document.createElement('nav');
-  const ol = document.createElement('ol');
-  const lis = [];
+  const ols = [];
+  const depths = {}
+
   for (let subPath of outFiles) {
     subPath = subPath.replace(/README.md/g,'index.md');
-
     const li = document.createElement('li');
     const a = document.createElement('a');
-    a.setAttribute('href', '/' + (subPath === 'index.md' ? '' : subPath));
+    a.setAttribute('href', '/' + (subPath === 'index.html' ? '' : subPath));
     const span = document.createElement('span');
     span.setAttribute('aria-current','page');
     const segments = subPath.split('.')[0].split('/');
@@ -313,14 +322,26 @@ function getBreadcrumb(location, document) {
     } else {
       li.appendChild(a);
     }
-    lis.push(li);
+    const depth = subPath.split('.')[0].split('/').length;
+    if (!Array.isArray(depths[depth])) depths[depth] = [];
+    depths[depth].push(li);
   }
-  for (const li of lis) {
-    ol.appendChild(li);
+
+  for (const depth of Object.keys(depths).map(v => parseInt(v)).sort((a,b) => a - b)) {
+    const ol = document.createElement('ol');
+    for (const sub of depths[depth]) {
+      ol.appendChild(sub);
+    }
+    ols.push(ol);
   }
+  for (let i = 0; i < ols.length-1; i++) {
+    const li = document.createElement('li');
+    li.appendChild(ols[i+1]);
+    ols[i].appendChild(li);
+  }
+  nav.appendChild(ols[0]);
   nav.setAttribute('aria-label','Breadcrumb');
   nav.setAttribute('class','breadcrumb');
-  nav.appendChild(ol);
 
   return nav;
 }
