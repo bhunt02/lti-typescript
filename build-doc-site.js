@@ -294,6 +294,14 @@ function getBreadcrumb(path, document) {
     const segments = path.split('.')[0].split('/');
     let text = segments[segments.length - 1];
     text = `${text.substring(0,1).toUpperCase()}${text.substring(1)}`;
+    const uppers = text.matchAll(/[A-Z]+/g);
+    let expanded = 0;
+    for (const upper of uppers) {
+      if (upper.index > 0) {
+        text = text.substring(0, upper.index+expanded) + ' ' + text.substring(upper.index+expanded);
+        expanded++;
+      }
+    }
     a.textContent = text;
     span.textContent = text;
 

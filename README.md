@@ -38,13 +38,13 @@ $ yarn add github:bhunt02/lti-typescript#release # OR https://github.com/bhunt02
 
 ## [1. Introduction](./docs/Introduction)
 ## [2. Platform](./docs/Platform)
-## [3. Dynamic Registration Service](./docs/Dynamic Registration)
-## [4. Names and Roles Service](./docs/Names and Roles)
-## [5. Deep Linking Service](./docs/Deep Linking)
+## [3. Dynamic Registration Service](./docs/DynamicRegistration)
+## [4. Names and Roles Service](./docs/NamesAndRoles)
+## [5. Deep Linking Service](./docs/DeepLinking)
 ## [6. Grades Service](./docs/Grading)
 
 ## Appendix
-### [i. Redirection URIs](./docs/Redirection URIs)
+### [i. Redirection URIs](./docs/RedirectionURIs)
 
 ---
 

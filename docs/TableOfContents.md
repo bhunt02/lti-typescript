@@ -2,13 +2,13 @@
 
 ## [1. Introduction](Introduction)
 ## [2. Platform](Platform)
-## [3. Dynamic Registration Service](Dynamic Registration)
-## [4. Names and Roles Service](Names and Roles)
-## [5. Deep Linking Service](Deep Linking)
+## [3. Dynamic Registration Service](DynamicRegistration)
+## [4. Names and Roles Service](NamesAndRoles)
+## [5. Deep Linking Service](DeepLinking)
 ## [6. Grades Service](Grading)
 
 ## Appendix
-### [i. Redirection URIs](Redirection URIs)
+### [i. Redirection URIs](RedirectionURIs)
 
 ---
 

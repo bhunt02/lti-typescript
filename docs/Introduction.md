@@ -150,12 +150,12 @@ Proxy method used to instantiate a Provider object and call setup(...) with the 
 **Type**: ```GradeService```
 
 #### Provider.DeepLinkingService
-[DeepLinkingService Class](Deep Linking), implementing the Deep Linking service of the LTI® 1.3 protocol.
+[DeepLinkingService Class](DeepLinking), implementing the Deep Linking service of the LTI® 1.3 protocol.
 
 **Type**: ```DeepLinkingService```
 
 #### Provider.NamesAndRolesService
-[NamesAndRolesService Class](Names and Roles), implementing the Names and Roles Provisioning service of the LTI® 1.3 protocol.
+[NamesAndRolesService Class](NamesAndRoles), implementing the Names and Roles Provisioning service of the LTI® 1.3 protocol.
 
 **Type**: ```NamesAndRolesService```
 
@@ -743,7 +743,7 @@ provider.onDeepLinking(async (token, req, res, next) => {
 });
 ```
 
-> [See more about the Deep Linking Service](./Deep Linking)
+> [See more about the Deep Linking Service](./DeepLinking)
 
 #### onInvalidToken
 
@@ -806,7 +806,7 @@ provider.onUnregisteredPlatform((req, res) => {
 
 #### onInactivePlatform
 
-The `onInactivePlatform` callback is called whenever the Platform attempting to start a LTI launch was registered through [Dynamic Registration](./Dynamic Registration) and is not active.
+The `onInactivePlatform` callback is called whenever the Platform attempting to start a LTI launch was registered through [Dynamic Registration](./DynamicRegistration) and is not active.
 
 The callback route will be given the two Express route parameters (request, response).
 
@@ -922,7 +922,7 @@ authToken: {
 }
 ```
 
-Platforms can also be registered by utilizing the [Dynamic Registration Service](Dynamic Registration).
+Platforms can also be registered by utilizing the [Dynamic Registration Service](DynamicRegistration).
 
 #### Retrieving a Platform
 
@@ -1303,7 +1303,7 @@ ___
 
 ### Deep Linking Service with LTI-TypeScript
 
-The Deep Linking Service class documentation can be accessed [here](Deep Linking).
+The Deep Linking Service class documentation can be accessed [here](DeepLinking).
 
 ### Assignment and Grades Service with LTI-TypeScript
 
@@ -1311,11 +1311,11 @@ The Assignment and Grades Service class documentation can be accessed [here](Gra
 
 ### Names and Roles Provisioning Service with LTI-TypeScript
 
-The Names and Roles Provisioning Service class documentation can be accessed [here](Names and Roles).
+The Names and Roles Provisioning Service class documentation can be accessed [here](NamesAndRoles).
 
 ### Dynamic Registration Service with LTI-TypeScript
 
-The Dynamic Registration Service documentation can be accessed [here](Dynamic Registration).
+The Dynamic Registration Service documentation can be accessed [here](DynamicRegistration).
 
 ---
 
