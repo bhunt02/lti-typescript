@@ -1,8 +1,5 @@
 import {PlatformTestApp, setupTest} from './testUtils';
-import {Provider} from '../src/provider/provider';
-import {Platform} from '../src/utils/platform';
-import {AuthConfigType, AuthTokenMethodEnum} from '../src/utils/types';
-import {PlatformModel} from '../src/entities/platform.entity';
+import {AuthConfigType, AuthTokenMethodEnum, Platform, PlatformModel, Provider} from "index";
 
 describe('DynamicRegistration Service', () => {
   const { supertest, getProvider } = setupTest(true);

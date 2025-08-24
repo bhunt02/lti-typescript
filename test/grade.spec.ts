@@ -1,7 +1,5 @@
 import {PlatformTestApp, setupAuthenticatedTest} from './testUtils';
-import {Provider} from '../src/provider/provider';
-import {Platform} from '../src/utils/platform';
-import {ScoreType} from '../src/utils/types';
+import {Platform, Provider, ScoreType} from 'index';
 
 describe('GradeService', () => {
   const { supertest, getProvider, getPlatform, getTokenAndState } =

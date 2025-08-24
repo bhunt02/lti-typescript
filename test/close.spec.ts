@@ -1,8 +1,5 @@
 import {setupTest} from './testUtils';
-import {Provider} from '../src/provider/provider';
-import {AuthTokenMethodEnum} from '../src/utils/types';
-import {Platform} from '../src/utils/platform';
-import {Database} from '../src/utils/database';
+import {AuthTokenMethodEnum, Database, Platform, Provider} from "index";
 
 describe('Close Provider', () => {
   const { getProvider } = setupTest(true);

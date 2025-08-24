@@ -2,17 +2,23 @@ import * as jwt from 'jsonwebtoken';
 import * as supertest from 'supertest';
 import {PostgresConnectionOptions} from 'typeorm/driver/postgres/PostgresConnectionOptions';
 import * as express from 'express';
-import {Database} from '../src/utils/database';
 import * as dotenv from 'dotenv';
-import {Callback, Provider} from '../src/provider/provider';
-import {AuthTokenMethodEnum, IdToken, ProviderOptions, ValidatedToken,} from '../src/utils/types';
 import * as path from 'node:path';
-import {Platform} from '../src/utils/platform';
 import * as http from 'node:http';
 import * as crypto from 'crypto';
 import * as Jwk from 'rasha';
 import * as bodyParser from 'body-parser';
 import * as cookieParser from 'cookie-parser';
+import {
+  AuthTokenMethodEnum,
+  Callback,
+  Database,
+  IdToken,
+  Platform,
+  Provider,
+  ProviderOptions,
+  ValidatedToken
+} from "index";
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 import TestAgent = require('supertest/lib/agent');
 

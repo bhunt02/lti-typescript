@@ -1,9 +1,5 @@
-import {Platform} from '../src/utils/platform';
-import {AuthTokenMethodEnum} from '../src/utils/types';
-import {Provider} from '../src/provider/provider';
-import {setupTest} from './testUtils';
-import {PlatformModel} from '../src/entities/platform.entity';
-import {PrivateKeyModel, PublicKeyModel} from '../src/entities/key.entity';
+import {setupTest} from "./testUtils";
+import {AuthTokenMethodEnum, Platform, PlatformModel, PrivateKeyModel, Provider, PublicKeyModel} from "index";
 
 describe('Platform', () => {
   const { getProvider } = setupTest();

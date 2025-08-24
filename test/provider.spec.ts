@@ -1,7 +1,5 @@
 import {setupTest, TestEncryptionKey, TestProviderOptions, TestTypeOrmConfig,} from './testUtils';
-import {Provider} from '../src/provider/provider';
-import {AuthTokenMethodEnum, DynamicRegistrationOptions,} from '../src/utils/types';
-import {Platform} from '../src/utils/platform';
+import {AuthTokenMethodEnum, DynamicRegistrationOptions, Platform, Provider} from "index";
 
 describe('Provider', () => {
   const { getProvider } = setupTest();

@@ -1,9 +1,7 @@
 import {JwtPayload, verify} from 'jsonwebtoken';
 import * as cheerio from 'cheerio';
-import {Platform} from '../src/utils/platform';
-import {Provider} from '../src/provider/provider';
 import {PlatformTestApp, setupAuthenticatedTest} from './testUtils';
-import {BaseContentItem} from '../src/utils/types';
+import {BaseContentItem, Platform, Provider} from "index";
 
 describe('DeepLinkingService', () => {
   let provider: Provider;
