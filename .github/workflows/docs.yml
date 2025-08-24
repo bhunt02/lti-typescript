@@ -33,3 +33,10 @@ jobs:
           FOLDER: out
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           MESSAGE: "Build: ({sha}) {msg}" # The commit message
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
+        env:
+          REPO: self
+          BRANCH: pages
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
