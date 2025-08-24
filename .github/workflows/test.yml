@@ -33,8 +33,6 @@ jobs:
           PGPASSWORD: mysecretpassword
       - name: Create postgres.env from example
         run: cp postgres.env.example postgres.env
-      - name: Create .env from .env.development.example
-        run: cp .env.development.example .env
       - name: install node v20
         uses: actions/setup-node@v4
         with:
