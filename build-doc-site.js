@@ -358,12 +358,11 @@ async function writeHtmlToFile (
   fs.writeFileSync(location,dom.serialize().replace(/®/g,'&#174;'), 'utf8');
 }
 
-for (const file of files) {
+for (let file of files) {
   let text = fs.readFileSync(file).toString('utf8');
   text = text.replace(/(Promise)(\\<)(.*)(>)/g,'Promise&#60;$3&#62;');
 
-  // text = text.replace(/\\</g,'&#60;');
-  // text = text.replace(/>/g,'&#62;')
+  file = file.replace(/README.md/g,'index.md');
 
   const val = conv.makeHtml(text);
 
