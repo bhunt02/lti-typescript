@@ -11,6 +11,6 @@ export declare class Auth {
     static validateAlg(alg: string): Promise<boolean>;
     static validateMaxAge(token: JwtPayload, maxAge: number): Promise<boolean>;
     static validateNonce(token: JwtPayload): Promise<boolean>;
-    static claimValidation(token: IdToken): Promise<void>;
+    static claimValidation(token: JwtPayload & IdToken): Promise<void>;
     static getAccessToken(scopes: string, platform: Platform): Promise<AccessTokenType>;
 }

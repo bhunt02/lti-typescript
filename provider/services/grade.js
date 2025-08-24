@@ -192,7 +192,11 @@ class GradeService {
             throw new Error('MISSING_SCORE');
         }
         debug_1.Debug.log(this, 'Target platform: ' + idToken.iss);
-        const shouldFetchScoreMaximum = score.scoreGiven !== undefined && score.scoreMaximum === undefined;
+        let newScore = {
+            ...score,
+            timestamp: new Date(Date.now()).toISOString(),
+        };
+        const shouldFetchScoreMaximum = newScore.scoreGiven !== undefined && newScore.scoreMaximum === undefined;
         const scopes = ['https://purl.imsglobal.org/spec/lti-ags/scope/score'];
         if (shouldFetchScoreMaximum) {
             scopes.push('https://purl.imsglobal.org/spec/lti-ags/scope/lineitem');
@@ -210,23 +214,22 @@ class GradeService {
         }
         if (shouldFetchScoreMaximum) {
             const lineItem = await this.getLineItemById(idToken, lineItemId, accessToken);
-            score.scoreMaximum = lineItem.scoreMaximum;
+            newScore.scoreMaximum = lineItem.scoreMaximum;
         }
-        if (score.userId === undefined) {
-            score.userId = idToken.user;
+        if (newScore.userId === undefined) {
+            newScore.userId = idToken.user;
         }
-        score.timestamp = new Date(Date.now()).toISOString();
         debug_1.Debug.log(this, 'Sending score to: ' + scoreUrl);
-        debug_1.Debug.log(this, score);
+        debug_1.Debug.log(this, newScore);
         await platform.api.post(scoreUrl, {
             headers: {
                 Authorization: accessToken.token_type + ' ' + accessToken.access_token,
                 'Content-Type': 'application/vnd.ims.lis.v1.score+json',
             },
-            body: JSON.stringify(score),
+            body: JSON.stringify(newScore),
         });
         debug_1.Debug.log(this, 'Score successfully sent');
-        return score;
+        return newScore;
     }
     async getScores(idToken, lineItemId, options = { userId: false, limit: false, url: false }, accessToken) {
         if (!idToken) {

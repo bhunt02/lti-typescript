@@ -1,4 +1,4 @@
-import { AccessTokenType, AuthConfigType, AuthTokenMethodEnum } from './types';
+import { AccessTokenType, AuthConfigType, AuthTokenMethodEnum, KeyObject, PlatformProperties } from './types';
 import { PlatformModel } from '../entities/platform.entity';
 export declare class Platform {
     private platformModel;
@@ -14,25 +14,17 @@ export declare class Platform {
     get active(): boolean;
     setName(name: string): Promise<void>;
     setActive(active: boolean): Promise<void>;
-    platformPublicKey(): Promise<string>;
-    platformPrivateKey(): Promise<string>;
+    platformPublicKey(): Promise<KeyObject>;
+    platformPrivateKey(): Promise<KeyObject>;
     setAuthConfig(method?: AuthTokenMethodEnum, key?: string): Promise<void>;
     setAuthenticationEndpoint(authenticationEndpoint: string): Promise<void>;
     setAccessTokenEndpoint(accessTokenEndpoint: string): Promise<void>;
     setAuthorizationServer(authorizationServer: string | null): Promise<void>;
     getAccessToken(scopes: string): Promise<AccessTokenType>;
-    platformParams(): Promise<{
-        kid: string;
-        platformUrl: string;
-        clientId: string;
-        name: string;
-        authenticationEndpoint: string;
-        accessTokenEndpoint: string;
-        authToken: AuthConfigType;
-        publicKey: string;
-        active: boolean;
+    platformParams(): Promise<PlatformProperties & {
+        publicKey: KeyObject;
     }>;
-    delete(): Promise<this>;
+    delete(): Promise<void>;
     api: PlatformApi;
 }
 declare class PlatformApi {

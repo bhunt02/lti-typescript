@@ -77,8 +77,8 @@ export declare class Provider {
     getPlatforms(url: string): Promise<Platform[]>;
     getPlatformById(platformId: string): Promise<Platform | undefined>;
     updatePlatformById(platformId: string, platformInfo: Partial<PlatformProperties>): Promise<Platform | undefined>;
-    deletePlatform(url: string, clientId: string): Promise<Platform | undefined>;
-    deletePlatformById(platformId: string): Promise<Platform | undefined>;
+    deletePlatform(url: string, clientId: string): Promise<void>;
+    deletePlatformById(platformId: string): Promise<void>;
     getAllPlatforms(): Promise<Platform[]>;
     redirect(res: ExpressResponse, path: string, options?: {
         newResource?: boolean;

@@ -146,10 +146,8 @@ class Platform {
         await database_1.Database.delete(key_entity_1.PublicKeyModel, { kid: this.kid });
         await database_1.Database.delete(key_entity_1.PrivateKeyModel, { kid: this.kid });
         await database_1.Database.delete(platform_entity_1.PlatformModel, {
-            platformUrl: this.platformUrl,
-            clientId: this.clientId,
+            kid: this.kid,
         });
-        return this;
     }
 }
 exports.Platform = Platform;

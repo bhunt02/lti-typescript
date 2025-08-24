@@ -123,8 +123,6 @@ export type ValidatedToken = JwtPayload & UserInfo & VerifiedToken & {
 };
 export type IdToken = {
     iss: string;
-    sub: string;
-    aud: string;
     clientId: string;
     deploymentId: string;
     platformId: string;
