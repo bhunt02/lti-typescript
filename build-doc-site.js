@@ -278,23 +278,23 @@ const conv = new showdown.Converter({
   extensions: ['prettify'],
 });
 
-function getBreadcrumb(path, document) {
-  const segments = path.split('.')[0].split('/');
+function getBreadcrumb(location, document) {
+  const segments = location.split('.')[0].split('/');
   const text = segments[segments.length - 1];
   const title = `${text.substring(0,1).toUpperCase()}${text.substring(1)}`;
 
   const nav = document.createElement('nav');
   const ol = document.createElement('ol');
   const lis = [];
-  for (let path of outFiles) {
-    path = path.replace(/README.md/g,'index.md');
+  for (let subPath of outFiles) {
+    subPath = subPath.replace(/README.md/g,'index.md');
 
     const li = document.createElement('li');
     const a = document.createElement('a');
-    a.setAttribute('href', '/' + path === 'index.md' ? '' : path);
+    a.setAttribute('href', '/' + (subPath === 'index.md' ? '' : subPath));
     const span = document.createElement('span');
     span.setAttribute('aria-current','page');
-    const segments = path.split('.')[0].split('/');
+    const segments = subPath.split('.')[0].split('/');
     let text = segments[segments.length - 1];
     text = `${text.substring(0,1).toUpperCase()}${text.substring(1)}`;
     const uppers = text.matchAll(/[A-Z]+/g);
@@ -308,7 +308,7 @@ function getBreadcrumb(path, document) {
     a.textContent = text;
     span.textContent = text;
 
-    if (text === title) {
+    if (subPath === location) {
       li.appendChild(span);
     } else {
       li.appendChild(a);
