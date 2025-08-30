@@ -1,4 +1,4 @@
-name: docs.yml
+name: Documention Pages Site
 on:
   push:
     branches:
