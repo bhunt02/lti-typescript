@@ -27,6 +27,7 @@ async function register(encryptionKey, databaseOptions, options) {
 }
 class Provider {
     constructor() {
+        this._prefix = '';
         this._loginRoute = '/login';
         this._appRoute = '/';
         this._keySetRoute = '/keys';
@@ -95,6 +96,12 @@ class Provider {
                 message: 'PLATFORM_NOT_ACTIVATED',
             });
         };
+    }
+    get prefix() {
+        return this._prefix;
+    }
+    set prefix(prefix) {
+        this._prefix = prefix ?? '';
     }
     get loginRoute() {
         return this._loginRoute;
@@ -225,6 +232,7 @@ class Provider {
             this.keySetRoute = options.keySetRoute || options.keySetUrl;
         if (options && (options.dynRegRoute || options.dynRegUrl))
             this.dynRegRoute = options.dynRegRoute || options.dynRegUrl;
+        this.prefix = options.prefix;
         if (options && options.devMode === true)
             this.devMode = true;
         if (options && options.tokenMaxAge !== undefined)
@@ -245,9 +253,9 @@ class Provider {
         this.NamesAndRolesService = new names_and_roles_1.NamesAndRolesService(this);
         if (options && options.dynReg) {
             this.DynamicRegistration = new dynamic_registration_1.DynamicRegistrationService(this, options.dynReg, {
-                appRoute: this.appRoute,
-                loginRoute: this.loginRoute,
-                keySetRoute: this.keySetRoute,
+                appRoute: this.prefix + this.appRoute,
+                loginRoute: this.prefix + this.loginRoute,
+                keySetRoute: this.prefix + this.keySetRoute,
             });
         }
         if (options && options.staticPath)

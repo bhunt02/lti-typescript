@@ -12,6 +12,9 @@ export type Callback = (req: ExpressRequest, res: ExpressResponse, next?: NextFu
 export type CallbackWithToken = (token: IdToken, req: ExpressRequest, res: ExpressResponse, next?: NextFunction) => Promise<void | ExpressResponse> | (void | ExpressResponse);
 export declare function register(encryptionKey: string, databaseOptions: DataSourceOptions, options: ProviderOptions): Promise<Provider>;
 export declare class Provider {
+    private _prefix;
+    get prefix(): string;
+    private set prefix(value);
     private _loginRoute;
     get loginRoute(): string;
     private set loginRoute(value);
