@@ -25,6 +25,7 @@ export type ProviderOptions = {
   debug?: boolean;
   tokenMaxAge?: number;
   dynReg?: DynamicRegistrationOptions;
+  prefix?: string;
 };
 
 export type DynamicRegistrationOptions = {

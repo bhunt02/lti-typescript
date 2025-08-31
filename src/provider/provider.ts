@@ -72,6 +72,20 @@ export async function register(
  */
 export class Provider {
   // Pre-initiated variables
+  private _prefix: string = '';
+
+  /**
+   * @description Gets the prefix, if any, used for the application.
+   * @returns {string}
+   */
+  get prefix(): string {
+    return this._prefix;
+  }
+
+  private set prefix(prefix: string) {
+    this._prefix = prefix ?? '';
+  }
+
   private _loginRoute: string = '/login';
 
   /**
@@ -423,6 +437,8 @@ export class Provider {
     if (options && (options.dynRegRoute || options.dynRegUrl))
       this.dynRegRoute = options.dynRegRoute || options.dynRegUrl;
 
+    this.prefix = options.prefix;
+
     if (options && options.devMode === true) this.devMode = true;
     if (options && options.tokenMaxAge !== undefined)
       this.tokenMaxAge = options.tokenMaxAge;
@@ -474,9 +490,9 @@ export class Provider {
         this,
         options.dynReg,
         {
-          appRoute: this.appRoute,
-          loginRoute: this.loginRoute,
-          keySetRoute: this.keySetRoute,
+          appRoute: this.prefix + this.appRoute,
+          loginRoute: this.prefix + this.loginRoute,
+          keySetRoute: this.prefix + this.keySetRoute,
         },
       );
     }
