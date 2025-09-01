@@ -109,6 +109,7 @@ export class DynamicRegistrationService {
         throw err;
       });
 
+    Debug.log(this, 'OpenID Configuration: ', configuration);
     Debug.log(
       this,
       'Attempting to register Platform with issuer: ',

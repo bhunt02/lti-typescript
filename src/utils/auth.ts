@@ -17,7 +17,7 @@ import {Provider} from '../provider/provider';
 export class Auth {
   /**
    * @description Generates a new keypair for a platform.
-   * @param {string} encryptionKey
+   * @param {string} kid
    * @param {string} platformUrl
    * @param {string} platformClientId
    * @returns {Promise<string>} KID for the keypair.
