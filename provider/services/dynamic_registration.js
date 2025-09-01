@@ -69,7 +69,7 @@ class DynamicRegistrationService {
             }
             throw err;
         });
-        debug_1.Debug.log(this, 'OpenID Configuration: ', configuration);
+        debug_1.Debug.log(this, 'OpenID Configuration: ', JSON.stringify(configuration));
         debug_1.Debug.log(this, 'Attempting to register Platform with issuer: ', configuration.issuer);
         const messages = [{ type: 'LtiResourceLinkRequest' }];
         if (this.useDeepLinking)
