@@ -769,12 +769,6 @@ class Provider {
         return new platform_1.Platform(result);
     }
     async updatePlatformById(platformId, platformInfo) {
-        if (!platformId) {
-            throw new Error('MISSING_PLATFORM_ID');
-        }
-        if (!platformInfo) {
-            throw new Error('MISSING_PLATFORM_INFO');
-        }
         const platform = await this.getPlatformById(platformId);
         if (!platform)
             return undefined;
@@ -786,12 +780,8 @@ class Provider {
             name: platformInfo.name,
             authenticationEndpoint: platformInfo.authenticationEndpoint,
             accessTokenEndpoint: platformInfo.accessTokenEndpoint,
-            authToken: platformInfo.authToken
-                ? {
-                    method: platformInfo.authToken?.method,
-                    key: platformInfo.authToken?.key,
-                }
-                : undefined,
+            authTokenMethod: platformInfo.authToken?.method,
+            authTokenKey: platformInfo.authToken?.key,
         };
         Object.keys(update).forEach((key) => {
             if (update[key] === null || update[key] === undefined) {
