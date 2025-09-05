@@ -53,10 +53,12 @@ export class Database {
    * @desc Initializes connection to the database with TypeORM.
    * @param options Database connection options. Overwrite 'Entities' to use customized entities that are supported by the database of your choosing. Default entities support PostgreSQL database.
    * @param encryptionKey The encryption key used for encrypting/decrypting certain data
+   * @param synchronize Whether to drop tables and recreate schema on startup (default: false)
    */
   static async initializeDatabase(
     options: DataSourceOptions,
     encryptionKey: string,
+    synchronize = false,
   ) {
     if (this.instance) {
       return this.instance;
@@ -80,7 +82,7 @@ export class Database {
       ...options,
     });
     await this._dataSource.initialize();
-    await this._dataSource.synchronize(false);
+    await this._dataSource.synchronize(synchronize);
   }
 
   /**
