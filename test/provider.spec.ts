@@ -273,6 +273,67 @@ describe('Provider', () => {
     }
   }, 20000);
 
+  it('Provider.updatePlatformById expected to throw error if clientid+url exists', async () => {
+    const props = {
+      platformUrl: 'http://localhost/moodle',
+      name: 'Platform Name 1',
+      clientId: 'ClientId1',
+      authenticationEndpoint: 'http://localhost/moodle/AuthorizationUrl1',
+      accessTokenEndpoint: 'http://localhost/moodle/AccessTokenUrl1',
+      authToken: {
+        method: AuthTokenMethodEnum.JWK_SET,
+        key: 'http://localhost/moodle/keyset1',
+      },
+    };
+    const platform0 = await provider.registerPlatform({...props});
+    const platform1 = await provider.registerPlatform({
+      ...props,
+      clientId: 'ClientId2',
+    });
+
+    await expect(provider.updatePlatformById(platform0.kid, { clientId: platform1.clientId }))
+      .rejects
+      .toThrow('URL_CLIENT_ID_COMBINATION_ALREADY_EXISTS');
+  });
+
+  it('Provider.updatePlatformById expected to return updated platform', async () => {
+    const platform = await provider.registerPlatform({
+      platformUrl: 'http://localhost/moodle',
+      name: 'Platform Name 1',
+      clientId: 'ClientId1',
+      authenticationEndpoint: 'http://localhost/moodle/AuthorizationUrl1',
+      accessTokenEndpoint: 'http://localhost/moodle/AccessTokenUrl1',
+      authToken: {
+        method: AuthTokenMethodEnum.JWK_SET,
+        key: 'http://localhost/moodle/keyset1',
+      },
+    });
+
+    const result = await provider.updatePlatformById(platform.kid, {
+      platformUrl: 'http://localhost/moodle1',
+      name: 'Platform Name 1 New',
+      clientId: 'ClientId1New',
+      authenticationEndpoint: 'http://localhost/moodle1/AuthorizationUrl1',
+      accessTokenEndpoint: 'http://localhost/moodle1/AccessTokenUrl1',
+      authToken: {
+        method: AuthTokenMethodEnum.JWK_SET,
+        key: 'http://localhost/moodle1/keyset1',
+      },
+    });
+    expect(
+      result['platformModel'],
+    ).toEqual(expect.objectContaining({
+      kid: platform.kid,
+      platformUrl: 'http://localhost/moodle1',
+      name: 'Platform Name 1 New',
+      clientId: 'ClientId1New',
+      authenticationEndpoint: 'http://localhost/moodle1/AuthorizationUrl1',
+      accessTokenEndpoint: 'http://localhost/moodle1/AccessTokenUrl1',
+      authTokenMethod: AuthTokenMethodEnum.JWK_SET,
+      authTokenKey: 'http://localhost/moodle1/keyset1',
+    }));
+  });
+
   it('Provider.deletePlatform expected to return true and delete the platform', async () => {
     const platform = await provider.registerPlatform({
       platformUrl: 'http://localhost/moodle',

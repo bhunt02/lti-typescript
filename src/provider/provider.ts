@@ -20,6 +20,7 @@ import {CookieOptions, Express, NextFunction, Request as ExpressRequest, Respons
 import {
   AccessTokenType,
   AdditionalContext,
+  AuthTokenMethodEnum,
   ContextProperties,
   IdToken,
   LtiAdvantageLoginArgs,
@@ -1282,31 +1283,20 @@ export class Provider {
     platformId: string,
     platformInfo: Partial<PlatformProperties>,
   ): Promise<Platform | undefined> {
-    if (!platformId) {
-      throw new Error('MISSING_PLATFORM_ID');
-    }
-    if (!platformInfo) {
-      throw new Error('MISSING_PLATFORM_INFO');
-    }
-
     const platform = await this.getPlatformById(platformId);
     if (!platform) return undefined;
 
     const oldURL = platform.platformUrl;
     const oldClientId = platform.clientId;
 
-    const update: Partial<PlatformProperties> = {
+    const update: Partial<PlatformProperties> & { authTokenMethod?: AuthTokenMethodEnum, authTokenKey?: string } = {
       platformUrl: platformInfo.platformUrl,
       clientId: platformInfo.clientId,
       name: platformInfo.name,
       authenticationEndpoint: platformInfo.authenticationEndpoint,
       accessTokenEndpoint: platformInfo.accessTokenEndpoint,
-      authToken: platformInfo.authToken
-        ? {
-            method: platformInfo.authToken?.method,
-            key: platformInfo.authToken?.key,
-          }
-        : undefined,
+      authTokenMethod: platformInfo.authToken?.method,
+      authTokenKey: platformInfo.authToken?.key,
     };
     Object.keys(update).forEach((key) => {
       if (update[key] === null || update[key] === undefined) {
