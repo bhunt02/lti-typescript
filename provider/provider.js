@@ -812,13 +812,13 @@ class Provider {
             }
         }
         try {
+            await database_1.Database.update(platform_entity_1.PlatformModel, update, {
+                kid: platformId,
+            });
             if (alteredUrlClientIdFlag) {
                 await database_1.Database.update(key_entity_1.PublicKeyModel, { platformUrl: update.platformUrl, clientId: update.clientId }, { kid: platformId });
                 await database_1.Database.update(key_entity_1.PrivateKeyModel, { platformUrl: update.platformUrl, clientId: update.clientId }, { kid: platformId });
             }
-            await database_1.Database.update(platform_entity_1.PlatformModel, update, {
-                kid: platformId,
-            });
             return new platform_1.Platform(await platform_entity_1.PlatformModel.findOne({ where: { kid: platformId } }));
         }
         catch (err) {
