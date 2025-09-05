@@ -26,7 +26,7 @@ class Database {
     get encryptionKey() {
         return Database.encryptionKey;
     }
-    static async initializeDatabase(options, encryptionKey) {
+    static async initializeDatabase(options, encryptionKey, synchronize = false) {
         if (this.instance) {
             return this.instance;
         }
@@ -47,7 +47,7 @@ class Database {
             ...options,
         });
         await this._dataSource.initialize();
-        await this._dataSource.synchronize(false);
+        await this._dataSource.synchronize(synchronize);
     }
     static async close() {
         if (this._dataSource.isInitialized) {

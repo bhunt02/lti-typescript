@@ -8,7 +8,7 @@ export declare class Database {
     static get dataSource(): DataSource;
     get dataSource(): DataSource;
     private get encryptionKey();
-    static initializeDatabase(options: DataSourceOptions, encryptionKey: string): Promise<Database>;
+    static initializeDatabase(options: DataSourceOptions, encryptionKey: string, synchronize?: boolean): Promise<Database>;
     static close(): Promise<void>;
     close(): Promise<void>;
     private decryptRecord;
