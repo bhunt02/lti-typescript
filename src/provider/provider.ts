@@ -1334,6 +1334,10 @@ export class Provider {
     }
 
     try {
+      await Database.update(PlatformModel, update, {
+        kid: platformId,
+      });
+
       if (alteredUrlClientIdFlag) {
         await Database.update(
           PublicKeyModel,
@@ -1346,10 +1350,6 @@ export class Provider {
           { kid: platformId },
         );
       }
-
-      await Database.update(PlatformModel, update, {
-        kid: platformId,
-      });
 
       return new Platform(
         await PlatformModel.findOne({ where: { kid: platformId } }),
