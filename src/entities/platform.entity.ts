@@ -51,6 +51,12 @@ export class PlatformModel extends BaseEntity {
   @Column({ type: 'text', nullable: true })
   registrationEndpoint?: string;
 
+  @Column({ type: 'text', nullable: true })
+  productFamilyCode?: string;
+
+  @Column({ type: 'text', array: true, nullable: true })
+  scopesSupported?: string[];
+
   @OneToMany(() => AccessTokenModel, (accessToken) => accessToken.platform)
   accessTokens: AccessTokenModel[];
 

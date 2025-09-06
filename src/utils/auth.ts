@@ -368,21 +368,32 @@ export class Auth {
     });
 
     Debug.log(this, 'Awaiting return from the platform');
-    const access: AccessTokenType = await platform.api.post(
-      platform.accessTokenEndpoint,
-      {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          grant_type: 'client_credentials',
-          client_assertion_type:
-            'urn:ietf:params:oauth:client-assertion-type:jwt-bearer',
-          client_assertion: token,
-          scope: scopes,
-        }),
+    const params = {
+      grant_type: 'client_credentials',
+      client_assertion_type:
+        'urn:ietf:params:oauth:client-assertion-type:jwt-bearer',
+      client_assertion: token,
+      scope: scopes,
+    };
+    const searchParams = new URLSearchParams(params).toString();
+
+    // For LTI platforms that use query params for token routes
+    const url = ['canvas'].includes(platform.productFamilyCode)
+      ? `${platform.accessTokenEndpoint}?${params}`
+      : platform.accessTokenEndpoint;
+
+    const init = {
+      headers: {
+        'Content-Type': 'application/json',
       },
-    );
+      body: JSON.stringify(params),
+    }
+
+    if (platform.platformUrl.toLowerCase().includes('canvas')) {
+      delete init.body;
+    }
+
+    const access: AccessTokenType = await platform.api.post(url, init);
     Debug.log(this, 'Successfully generated new access_token');
 
     await Database.save(AccessTokenModel, {

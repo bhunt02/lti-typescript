@@ -75,9 +75,18 @@ The ```Platform``` class represents an [LTI® Consumer](https://www.imsglobal.or
 
 * Gets whether the platform was dynamically registered or not.
 
+
+#### get Platform.productFamilyCode: string | undefined
+
+* Gets the product family code for the registration.
+
 #### get Platform.registrationEndpoint: string | undefined
 
 * Gets the platform's registration endpoint (if dynamically registered).
+
+#### get Platform.scopesSupported: string | undefined
+
+* Gets the supported scopes for the platform. Determines what access tokens can and cannot be generated.
 
 #### Platform.setPlatformActive(active: boolean): Promise\<void> 
 

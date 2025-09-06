@@ -1019,14 +1019,12 @@ export class Provider {
       // Sets up gracefull shutdown
       process.on('SIGINT', async () => {
         await this.close(options.silent);
-        process.exit();
       });
 
       return true;
     } catch (err) {
-      console.log('Error during deployment: ', err);
+      console.error('Error during deployment: ', err);
       await this.close(options.silent);
-      process.exit();
     }
   }
 

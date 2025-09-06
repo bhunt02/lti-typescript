@@ -105,7 +105,7 @@ The following example is a representation of the default Dynamic Registration fl
 provider.onDynamicRegistration(async (req, res, next) => {
   try {
     if (!req.query.openid_configuration) return res.status(400).send({ status: 400, error: 'Bad Request', details: { message: 'Missing parameter: "openid_configuration".' } });
-    const message = await lti.DynamicRegistrationService.register(req.query.openid_configuration, req.query.registration_token, {
+    const message = await provider.DynamicRegistrationService.register(req.query.openid_configuration, req.query.registration_token, {
       'https://purl.imsglobal.org/spec/lti-tool-configuration': {
         custom_parameters: {
           'custom1': 'value1',
@@ -121,6 +121,19 @@ provider.onDynamicRegistration(async (req, res, next) => {
   }
 });
 ```
+
+#### Getting Existing Registration
+
+Using the `getRegistration(platform: Platform)` method, an existing registration can be retrieved.
+
+* Note: this requires either the 'https://purl.imsglobal.org/spec/lti-reg/scope/registration',
+  'https://purl.imsglobal.org/spec/lti-reg/scope/registration.readonly' scopes. These are not supported by all platforms which implement LTI.
+
+#### Updating Existing Registration
+
+Using the `updateRegistration(platform: Platform, options: DynamicRegistrationSecondaryOptions)` method, an existing registration can be updated.
+
+* Note: this requires the 'https://purl.imsglobal.org/spec/lti-reg/scope/registration' scope. These are not supported by all platforms which implement LTI.
 
 ---
 

@@ -1,6 +1,7 @@
 import {PlatformTestApp, setupTest} from './testUtils';
 import {AuthConfigType, AuthTokenMethodEnum, Platform, PlatformModel, Provider} from "index";
 
+jest.setTimeout(20000);
 describe('DynamicRegistration Service', () => {
   const { supertest, getProvider } = setupTest(true);
   let provider: Provider;
@@ -23,7 +24,9 @@ describe('DynamicRegistration Service', () => {
     },
   } as unknown as PlatformModel);
 
-  const registrationResponse = { client_id: '123456' };
+  const registrationResponse = {
+    client_id: '123456'
+  };
 
   const dynamicRegistrationRequest = {
     openid_configuration: 'http://localhost:2999/openid_configuration',
@@ -46,6 +49,7 @@ describe('DynamicRegistration Service', () => {
       'https://purl.imsglobal.org/spec/lti-ags/scope/result.readonly',
       'https://purl.imsglobal.org/spec/lti-ags/scope/score',
       'https://purl.imsglobal.org/spec/lti-reg/scope/registration',
+      'https://purl.imsglobal.org/spec/lti-reg/scope/registration.readonly',
     ],
     response_types_supported: ['id_token'],
     subject_types_supported: ['public', 'pairwise'],
@@ -298,6 +302,25 @@ describe('DynamicRegistration Service', () => {
       await expect(provider.DynamicRegistration.getRegistration(platform)).rejects.toThrow('MISSING_REGISTRATION_ENDPOINT');
     });
 
+    it('should fail if scope is unsupported', async () => {
+      const platform = await provider.registerPlatform({
+        accessTokenEndpoint: 'http://localhost:2999/token',
+        authToken: {
+          method: AuthTokenMethodEnum.JWK_SET,
+          key: 'http://localhost:2999/token',
+        },
+        authenticationEndpoint: 'http://localhost:2999/moodle/auth',
+        clientId: 'clientid',
+        name: 'moodle',
+        platformUrl: 'http://localhost:2999',
+        active: true,
+        dynamicallyRegistered: true,
+        registrationEndpoint: 'http:/localhost:2999/moodle/register',
+        scopesSupported: [],
+      });
+      await expect(provider.DynamicRegistration.getRegistration(platform)).rejects.toThrow('SCOPE_UNSUPPORTED');
+    });
+
     it('should retrieve registration for platform that was dynamically registered', async () => {
       provider.onDynamicRegistration(async (req, res) => {
         const message = await provider.DynamicRegistration.register(
@@ -360,6 +383,24 @@ describe('DynamicRegistration Service', () => {
       } as any);
 
       await expect(provider.DynamicRegistration.updateRegistration(platform)).rejects.toThrow('MISSING_REGISTRATION_ENDPOINT');
+    });
+
+    it('should fail if scope is unsupported', async () => {
+      const platform = await provider.registerPlatform({
+        accessTokenEndpoint: 'http://localhost:2999/token',
+        authToken: {
+          method: AuthTokenMethodEnum.JWK_SET,
+          key: 'http://localhost:2999/token',
+        },
+        authenticationEndpoint: 'http://localhost:2999/moodle/auth',
+        clientId: 'clientid',
+        name: 'moodle',
+        platformUrl: 'http://localhost:2999',
+        active: true,
+        dynamicallyRegistered: true,
+        scopesSupported: [],
+      });
+      await expect(provider.DynamicRegistration.updateRegistration(platform)).rejects.toThrow('SCOPE_UNSUPPORTED');
     });
 
     it('should call PUT on registration route to update registration', async () => {

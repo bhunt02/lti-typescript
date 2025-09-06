@@ -204,6 +204,8 @@ export type PlatformProperties = {
   active?: boolean;
   dynamicallyRegistered?: boolean;
   registrationEndpoint?: string;
+  productFamilyCode?: string;
+  scopesSupported?: string[];
 };
 
 export type AccessTokenType = {

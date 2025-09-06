@@ -45,8 +45,14 @@ export class Platform {
   get dynamicallyRegistered(): boolean {
     return this.platformModel.dynamicallyRegistered;
   }
+  get productFamilyCode(): string | undefined {
+    return this.platformModel.productFamilyCode;
+  }
   get registrationEndpoint(): string | undefined {
     return this.platformModel.registrationEndpoint;
+  }
+  get scopesSupported(): string[] | undefined {
+    return this.platformModel.scopesSupported;
   }
 
   /**
@@ -185,6 +191,13 @@ export class Platform {
    * @param {String} scopes - String of scopes.
    */
   async getAccessToken(scopes: string): Promise<AccessTokenType> {
+    if (this.scopesSupported) {
+      scopes.split(' ').forEach((scope) => {
+        if (!this.scopesSupported.some(s => s == scope)) {
+          throw new Error('SCOPE_UNSUPPORTED');
+        }
+      });
+    }
     const existingToken = await Database.findOne(AccessTokenModel, {
       where: { platformUrl: this.platformUrl, clientId: this.clientId, scopes },
     });
@@ -264,7 +277,8 @@ class PlatformApi {
     })
       .then(async (res) => {
         if (!res.ok) {
-          throw { status: res.status, message: res.statusText };
+          const json = await res.json().catch(() => undefined);
+          throw { status: res.status, message: (json?.error || json?.error_description) ? `${json?.error}: ${json?.error_description}` : res.statusText };
         }
         if (res.status == 204) {
           if (fullResponse) {
