@@ -42,6 +42,12 @@ export class Platform {
   get active(): boolean {
     return this.platformModel.active;
   }
+  get dynamicallyRegistered(): boolean {
+    return this.platformModel.dynamicallyRegistered;
+  }
+  get registrationEndpoint(): string | undefined {
+    return this.platformModel.registrationEndpoint;
+  }
 
   /**
    * @description Sets/Gets the platform name.

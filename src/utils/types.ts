@@ -202,6 +202,8 @@ export type PlatformProperties = {
   kid: string;
   authToken: AuthConfigType;
   active?: boolean;
+  dynamicallyRegistered?: boolean;
+  registrationEndpoint?: string;
 };
 
 export type AccessTokenType = {

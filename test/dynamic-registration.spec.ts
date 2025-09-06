@@ -94,6 +94,18 @@ describe('DynamicRegistration Service', () => {
       },
       'POST',
     );
+    PlatformTestApp.setRoute(
+      '/token',
+      (req, res) => {
+        return res.status(200).set('Content-Type', 'application/json').json({
+          access_token: 'dkj4985kjaIAJDJ89kl8rkn5',
+          token_type: 'bearer',
+          expires_in: 3600,
+          scope: req.body.scopes,
+        });
+      },
+      'POST',
+    );
   });
 
   afterAll(() => {
@@ -257,5 +269,144 @@ describe('DynamicRegistration Service', () => {
       .get(provider.dynRegRoute)
       .query(dynamicRegistrationRequest)
       .expect(200);
+  });
+
+  describe('DynamicRegistration.getRegistration', () => {
+    it('should fail if platform is not dynamically registered or missing registration endpoint', async () => {
+      let platform = await provider.registerPlatform({
+        accessTokenEndpoint: 'http://localhost:2999/moodle/token',
+        authToken: {
+          method: AuthTokenMethodEnum.JWK_SET,
+          key: 'http://localhost:2999/moodle/token',
+        },
+        authenticationEndpoint: 'http://localhost:2999/moodle/auth',
+        clientId: 'clientid',
+        name: 'moodle',
+        platformUrl: 'http://localhost:2999',
+        active: true,
+      });
+
+      await expect(provider.DynamicRegistration.getRegistration(platform)).rejects.toThrow('PLATFORM_REGISTRATION_STATIC');
+
+      platform = await provider.registerPlatform({
+        clientId: 'clientid',
+        platformUrl: 'http://localhost:2999',
+        active: true,
+        dynamicallyRegistered: true,
+      } as any);
+
+      await expect(provider.DynamicRegistration.getRegistration(platform)).rejects.toThrow('MISSING_REGISTRATION_ENDPOINT');
+    });
+
+    it('should retrieve registration for platform that was dynamically registered', async () => {
+      provider.onDynamicRegistration(async (req, res) => {
+        const message = await provider.DynamicRegistration.register(
+          req.query.openid_configuration as string,
+          req.query.registration_token as string,
+        );
+        res.setHeader('Content-type', 'text/html');
+        res.send(message);
+      });
+
+      PlatformTestApp.setRoute(
+        '/register',
+        (req, res) => {
+          return res.status(200).send(registrationResponse);
+        },
+        'POST',
+      );
+
+      PlatformTestApp.setRoute(
+        '/register',
+        (req, res) => {
+          expect(req.headers['authorization']).toBeDefined();
+          return res.status(200).send(registrationResponse);
+        },
+        'GET',
+      );
+
+      await supertest()
+        .get(provider.dynRegRoute)
+        .query(dynamicRegistrationRequest)
+        .expect(200);
+
+      const platform = await provider.getPlatform(configurationInformation.issuer,registrationResponse.client_id);
+      const registration = await provider.DynamicRegistration.getRegistration(platform);
+      expect(registration).toEqual(registrationResponse);
+    });
+  });
+
+  describe('DynamicRegistration.updateRegistration', () => {
+    it('should fail if platform is not dynamically registered or missing registration endpoint', async () => {
+      let platform = await provider.registerPlatform({
+        accessTokenEndpoint: 'http://localhost:2999/token',
+        authToken: {
+          method: AuthTokenMethodEnum.JWK_SET,
+          key: 'http://localhost:2999/token',
+        },
+        authenticationEndpoint: 'http://localhost:2999/moodle/auth',
+        clientId: 'clientid',
+        name: 'moodle',
+        platformUrl: 'http://localhost:2999',
+        active: true,
+      });
+
+      await expect(provider.DynamicRegistration.updateRegistration(platform)).rejects.toThrow('PLATFORM_REGISTRATION_STATIC');
+
+      platform = await provider.registerPlatform({
+        clientId: 'clientid',
+        platformUrl: 'http://localhost:2999',
+        dynamicallyRegistered: true,
+      } as any);
+
+      await expect(provider.DynamicRegistration.updateRegistration(platform)).rejects.toThrow('MISSING_REGISTRATION_ENDPOINT');
+    });
+
+    it('should call PUT on registration route to update registration', async () => {
+      provider.onDynamicRegistration(async (req, res) => {
+        const message = await provider.DynamicRegistration.register(
+          req.query.openid_configuration as string,
+          req.query.registration_token as string,
+        );
+        res.setHeader('Content-type', 'text/html');
+        res.send(message);
+      });
+
+      PlatformTestApp.setRoute(
+        '/register',
+        (req, res) => {
+          return res.status(200).send(registrationResponse);
+        },
+        'POST',
+      );
+
+
+      PlatformTestApp.setRoute(
+        '/register',
+        (req, res) => {
+          expect(req.headers['authorization']).toBeDefined();
+          return res.status(200).send(registrationResponse);
+        },
+        'PUT',
+      );
+
+      PlatformTestApp.setRoute(
+        '/register',
+        (req, res) => {
+          expect(req.headers['authorization']).toBeDefined();
+          return res.status(200).send(registrationResponse);
+        },
+        'GET',
+      );
+
+      await supertest()
+        .get(provider.dynRegRoute)
+        .query(dynamicRegistrationRequest)
+        .expect(200);
+
+      const platform = await provider.getPlatform(configurationInformation.issuer,registrationResponse.client_id);
+      const registration = await provider.DynamicRegistration.updateRegistration(platform);
+      expect(registration).toEqual(registrationResponse);
+    });
   });
 });

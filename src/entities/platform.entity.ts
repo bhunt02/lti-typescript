@@ -45,6 +45,12 @@ export class PlatformModel extends BaseEntity {
   @Column({ type: 'boolean', default: false })
   active: boolean;
 
+  @Column({ type: 'boolean', default: false })
+  dynamicallyRegistered: boolean;
+
+  @Column({ type: 'text', nullable: true })
+  registrationEndpoint?: string;
+
   @OneToMany(() => AccessTokenModel, (accessToken) => accessToken.platform)
   accessTokens: AccessTokenModel[];
 

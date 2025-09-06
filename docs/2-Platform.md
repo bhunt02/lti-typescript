@@ -71,6 +71,14 @@ The ```Platform``` class represents an [LTI® Consumer](https://www.imsglobal.or
 
 * Gets the platform's activation status.
 
+#### get Platform.dynamicallyRegistered: boolean
+
+* Gets whether the platform was dynamically registered or not.
+
+#### get Platform.registrationEndpoint: string | undefined
+
+* Gets the platform's registration endpoint (if dynamically registered).
+
 #### Platform.setPlatformActive(active: boolean): Promise\<void> 
 
 * Sets the platform's activation status.
