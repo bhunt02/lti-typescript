@@ -12,6 +12,8 @@ export declare class Platform {
     get kid(): string;
     get authToken(): AuthConfigType;
     get active(): boolean;
+    get dynamicallyRegistered(): boolean;
+    get registrationEndpoint(): string | undefined;
     setName(name: string): Promise<void>;
     setActive(active: boolean): Promise<void>;
     platformPublicKey(): Promise<KeyObject>;

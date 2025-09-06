@@ -4,8 +4,6 @@ exports.DynamicRegistrationService = void 0;
 const crypto = require("crypto");
 const Url = require("fast-url-parser");
 const objects_1 = require("../../utils/objects");
-const database_1 = require("../../utils/database");
-const platform_entity_1 = require("../../entities/platform.entity");
 const debug_1 = require("../../utils/debug");
 const types_1 = require("../../utils/types");
 class DynamicRegistrationService {
@@ -132,7 +130,7 @@ class DynamicRegistrationService {
         if (await this.provider.getPlatform(configuration.issuer, registrationResponse.client_id))
             throw new Error('PLATFORM_ALREADY_REGISTERED');
         debug_1.Debug.log(this, 'Registering Platform');
-        const registered = await this.provider.registerPlatform({
+        await this.provider.registerPlatform({
             platformUrl: configuration.issuer,
             name: platformName,
             clientId: registrationResponse.client_id,
@@ -144,9 +142,74 @@ class DynamicRegistrationService {
                 key: configuration.jwks_uri,
             },
             active: this.autoActivate,
+            dynamicallyRegistered: true,
+            registrationEndpoint: configuration.registration_endpoint,
         });
-        await database_1.Database.update(platform_entity_1.PlatformModel, { active: this.autoActivate }, { kid: registered.kid });
         return '<script>(window.opener || window.parent).postMessage({subject:"org.imsglobal.lti.close"}, "*");</script>';
+    }
+    async getRegistration(platform, accessToken) {
+        if (!platform.dynamicallyRegistered) {
+            throw new Error('PLATFORM_REGISTRATION_STATIC');
+        }
+        if (!platform.registrationEndpoint) {
+            throw new Error('MISSING_REGISTRATION_ENDPOINT');
+        }
+        accessToken ?? (accessToken = await platform.getAccessToken('https://purl.imsglobal.org/spec/lti-reg/scope/registration.readonly'));
+        return await platform.api.get(platform.registrationEndpoint, {
+            headers: {
+                Authorization: `${accessToken.token_type} ${accessToken.access_token}`
+            }
+        });
+    }
+    async updateRegistration(platform, options) {
+        const accessToken = await platform.getAccessToken('https://purl.imsglobal.org/spec/lti-reg/scope/registration');
+        const originalRegistration = await this.getRegistration(platform, accessToken);
+        const registration = (0, objects_1.deepMergeObjects)(originalRegistration, {
+            application_type: 'web',
+            response_types: ['id_token'],
+            grant_types: ['client_credentials', 'implicit'],
+            initiate_login_uri: this.loginUrl,
+            redirect_uris: [...this.redirectUris, this.appUrl],
+            client_name: this.name,
+            jwks_uri: this.keysetUrl,
+            logo_uri: this.logo,
+            token_endpoint_auth_method: 'private_key_jwt',
+            scope: [
+                'https://purl.imsglobal.org/spec/lti-ags/scope/lineitem.readonly',
+                'https://purl.imsglobal.org/spec/lti-ags/scope/lineitem',
+                'https://purl.imsglobal.org/spec/lti-ags/scope/score',
+                'https://purl.imsglobal.org/spec/lti-ags/scope/result.readonly',
+                'https://purl.imsglobal.org/spec/lti-nrps/scope/contextmembership.readonly',
+            ].join(' '),
+            'https://purl.imsglobal.org/spec/lti-tool-configuration': {
+                domain: this.hostname,
+                description: this.description,
+                target_link_uri: this.appUrl,
+                custom_parameters: this.customParameters,
+            },
+        }, options);
+        debug_1.Debug.log(this, `Tool registration update: ${JSON.stringify(registration)}`);
+        debug_1.Debug.log(this, 'Sending Tool registration update');
+        return await fetch(platform.registrationEndpoint, {
+            method: 'PUT',
+            body: JSON.stringify(registration),
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `${accessToken.token_type} ${accessToken.access_token}`,
+            },
+        })
+            .then((response) => {
+            if (!response.ok) {
+                throw { status: response.status, message: response.statusText };
+            }
+            return response.json();
+        })
+            .catch((err) => {
+            if ('status' in err) {
+                throw new Error(`${err.status}: ${err.message}`);
+            }
+            throw err;
+        });
     }
 }
 exports.DynamicRegistrationService = DynamicRegistrationService;

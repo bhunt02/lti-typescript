@@ -15,6 +15,8 @@ export declare class PlatformModel extends BaseEntity {
     authTokenKey: string;
     authToken(): AuthConfigType;
     active: boolean;
+    dynamicallyRegistered: boolean;
+    registrationEndpoint?: string;
     accessTokens: AccessTokenModel[];
     idTokens: IdTokenModel[];
     publicKey: PublicKeyModel;

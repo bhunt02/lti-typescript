@@ -65,6 +65,14 @@ __decorate([
     __metadata("design:type", Boolean)
 ], PlatformModel.prototype, "active", void 0);
 __decorate([
+    (0, typeorm_1.Column)({ type: 'boolean', default: false }),
+    __metadata("design:type", Boolean)
+], PlatformModel.prototype, "dynamicallyRegistered", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'text', nullable: true }),
+    __metadata("design:type", String)
+], PlatformModel.prototype, "registrationEndpoint", void 0);
+__decorate([
     (0, typeorm_1.OneToMany)(() => access_token_entity_1.AccessTokenModel, (accessToken) => accessToken.platform),
     __metadata("design:type", Array)
 ], PlatformModel.prototype, "accessTokens", void 0);

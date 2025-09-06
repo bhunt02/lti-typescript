@@ -1,5 +1,6 @@
 import { Provider } from '../provider';
-import { DynamicRegistrationOptions, DynamicRegistrationSecondaryOptions } from '../../utils/types';
+import { AccessTokenType, DynamicRegistrationOptions, DynamicRegistrationSecondaryOptions } from '../../utils/types';
+import { Platform } from "../../utils/platform";
 export declare class DynamicRegistrationService {
     private provider;
     private readonly name;
@@ -21,4 +22,6 @@ export declare class DynamicRegistrationService {
     private buildUrl;
     private getHostname;
     register(openIdConfiguration: string, registrationToken: string, options?: DynamicRegistrationSecondaryOptions): Promise<string>;
+    getRegistration(platform: Platform, accessToken?: AccessTokenType): Promise<any>;
+    updateRegistration(platform: Platform, options?: DynamicRegistrationSecondaryOptions): Promise<any>;
 }

@@ -709,6 +709,7 @@ class Provider {
                     ...platform,
                     ...tempAuth,
                     active: platform.active == undefined ? true : platform.active,
+                    dynamicallyRegistered: platform.dynamicallyRegistered == undefined ? false : platform.dynamicallyRegistered,
                     kid,
                 });
                 await auth_1.Auth.generatePlatformKeyPair(kid, platform.platformUrl, platform.clientId);
@@ -740,6 +741,10 @@ class Provider {
                 authTokenMethod: platform.authToken?.method || _platform.authToken.method,
                 authTokenKey: platform.authToken?.key || _platform.authToken.key,
                 active: platform.active != undefined ? !!platform.active : _platform.active,
+                dynamicallyRegistered: platform.dynamicallyRegistered != undefined
+                    ? !!platform.dynamicallyRegistered
+                    : _platform.dynamicallyRegistered,
+                registrationEndpoint: platform.registrationEndpoint || _platform.registrationEndpoint,
             }, {
                 platformUrl: platform.platformUrl,
                 clientId: platform.clientId,

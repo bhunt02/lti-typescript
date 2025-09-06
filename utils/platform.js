@@ -40,6 +40,12 @@ class Platform {
     get active() {
         return this.platformModel.active;
     }
+    get dynamicallyRegistered() {
+        return this.platformModel.dynamicallyRegistered;
+    }
+    get registrationEndpoint() {
+        return this.platformModel.registrationEndpoint;
+    }
     async setName(name) {
         await database_1.Database.update(platform_entity_1.PlatformModel, {
             name,
