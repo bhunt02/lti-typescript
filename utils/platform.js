@@ -43,8 +43,14 @@ class Platform {
     get dynamicallyRegistered() {
         return this.platformModel.dynamicallyRegistered;
     }
+    get productFamilyCode() {
+        return this.platformModel.productFamilyCode;
+    }
     get registrationEndpoint() {
         return this.platformModel.registrationEndpoint;
+    }
+    get scopesSupported() {
+        return this.platformModel.scopesSupported;
     }
     async setName(name) {
         await database_1.Database.update(platform_entity_1.PlatformModel, {
@@ -114,6 +120,13 @@ class Platform {
         await this.platformModel.reload();
     }
     async getAccessToken(scopes) {
+        if (this.scopesSupported) {
+            scopes.split(' ').forEach((scope) => {
+                if (!this.scopesSupported.some(s => s == scope)) {
+                    throw new Error('SCOPE_UNSUPPORTED');
+                }
+            });
+        }
         const existingToken = await database_1.Database.findOne(access_token_entity_1.AccessTokenModel, {
             where: { platformUrl: this.platformUrl, clientId: this.clientId, scopes },
         });
@@ -165,7 +178,8 @@ class PlatformApi {
         })
             .then(async (res) => {
             if (!res.ok) {
-                throw { status: res.status, message: res.statusText };
+                const json = await res.json().catch(() => undefined);
+                throw { status: res.status, message: (json?.error || json?.error_description) ? `${json?.error}: ${json?.error_description}` : res.statusText };
             }
             if (res.status == 204) {
                 if (fullResponse) {

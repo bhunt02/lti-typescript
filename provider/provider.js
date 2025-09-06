@@ -619,14 +619,12 @@ class Provider {
                 console.log('\nStarting in Dev Mode, state validation and session cookies will not be required. THIS SHOULD NOT BE USED IN A PRODUCTION ENVIRONMENT!');
             process.on('SIGINT', async () => {
                 await this.close(options.silent);
-                process.exit();
             });
             return true;
         }
         catch (err) {
-            console.log('Error during deployment: ', err);
+            console.error('Error during deployment: ', err);
             await this.close(options.silent);
-            process.exit();
         }
     }
     async close(silent = true) {

@@ -73,6 +73,14 @@ __decorate([
     __metadata("design:type", String)
 ], PlatformModel.prototype, "registrationEndpoint", void 0);
 __decorate([
+    (0, typeorm_1.Column)({ type: 'text', nullable: true }),
+    __metadata("design:type", String)
+], PlatformModel.prototype, "productFamilyCode", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'text', array: true, nullable: true }),
+    __metadata("design:type", Array)
+], PlatformModel.prototype, "scopesSupported", void 0);
+__decorate([
     (0, typeorm_1.OneToMany)(() => access_token_entity_1.AccessTokenModel, (accessToken) => accessToken.platform),
     __metadata("design:type", Array)
 ], PlatformModel.prototype, "accessTokens", void 0);

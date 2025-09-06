@@ -69,6 +69,7 @@ class DynamicRegistrationService {
         });
         debug_1.Debug.log(this, 'OpenID Configuration: ', JSON.stringify(configuration));
         debug_1.Debug.log(this, 'Attempting to register Platform with issuer: ', configuration.issuer);
+        configuration.scopes_supported;
         const messages = [{ type: 'LtiResourceLinkRequest' }];
         if (this.useDeepLinking)
             messages.push({ type: 'LtiDeepLinkingRequest' });
@@ -88,6 +89,8 @@ class DynamicRegistrationService {
                 'https://purl.imsglobal.org/spec/lti-ags/scope/score',
                 'https://purl.imsglobal.org/spec/lti-ags/scope/result.readonly',
                 'https://purl.imsglobal.org/spec/lti-nrps/scope/contextmembership.readonly',
+                'https://purl.imsglobal.org/spec/lti-reg/scope/registration',
+                'https://purl.imsglobal.org/spec/lti-reg/scope/registration.readonly',
             ].join(' '),
             'https://purl.imsglobal.org/spec/lti-tool-configuration': {
                 domain: this.hostname,
@@ -98,6 +101,10 @@ class DynamicRegistrationService {
                 messages,
             },
         }, options);
+        registration.scope = registration.scope
+            .split(' ')
+            .filter((v0) => configuration.scopes_supported.some(v1 => v1 == v0))
+            .join(' ');
         debug_1.Debug.log(this, `Tool registration request: ${JSON.stringify(registration)}`);
         debug_1.Debug.log(this, 'Sending Tool registration request');
         const registrationResponse = await fetch(configuration.registration_endpoint, {
@@ -144,6 +151,10 @@ class DynamicRegistrationService {
             active: this.autoActivate,
             dynamicallyRegistered: true,
             registrationEndpoint: configuration.registration_endpoint,
+            scopesSupported: registration.scope.split(' '),
+            productFamilyCode: configuration['https://purl.imsglobal.org/spec/lti-platform-configuration']
+                ? configuration["https://purl.imsglobal.org/spec/lti-platform-configuration"].product_family_code
+                : undefined,
         });
         return '<script>(window.opener || window.parent).postMessage({subject:"org.imsglobal.lti.close"}, "*");</script>';
     }
@@ -174,13 +185,7 @@ class DynamicRegistrationService {
             jwks_uri: this.keysetUrl,
             logo_uri: this.logo,
             token_endpoint_auth_method: 'private_key_jwt',
-            scope: [
-                'https://purl.imsglobal.org/spec/lti-ags/scope/lineitem.readonly',
-                'https://purl.imsglobal.org/spec/lti-ags/scope/lineitem',
-                'https://purl.imsglobal.org/spec/lti-ags/scope/score',
-                'https://purl.imsglobal.org/spec/lti-ags/scope/result.readonly',
-                'https://purl.imsglobal.org/spec/lti-nrps/scope/contextmembership.readonly',
-            ].join(' '),
+            scope: platform.scopesSupported.join(' '),
             'https://purl.imsglobal.org/spec/lti-tool-configuration': {
                 domain: this.hostname,
                 description: this.description,

@@ -13,7 +13,9 @@ export declare class Platform {
     get authToken(): AuthConfigType;
     get active(): boolean;
     get dynamicallyRegistered(): boolean;
+    get productFamilyCode(): string | undefined;
     get registrationEndpoint(): string | undefined;
+    get scopesSupported(): string[] | undefined;
     setName(name: string): Promise<void>;
     setActive(active: boolean): Promise<void>;
     platformPublicKey(): Promise<KeyObject>;
