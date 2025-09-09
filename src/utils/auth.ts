@@ -379,7 +379,7 @@ export class Auth {
 
     // For LTI platforms that use query params for token routes
     const url = ['canvas'].includes(platform.productFamilyCode)
-      ? `${platform.accessTokenEndpoint}?${params}`
+      ? `${platform.accessTokenEndpoint}?${searchParams}`
       : platform.accessTokenEndpoint;
 
     const init = {
