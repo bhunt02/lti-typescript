@@ -246,7 +246,7 @@ class Auth {
         };
         const searchParams = new URLSearchParams(params).toString();
         const url = ['canvas'].includes(platform.productFamilyCode)
-            ? `${platform.accessTokenEndpoint}?${params}`
+            ? `${platform.accessTokenEndpoint}?${searchParams}`
             : platform.accessTokenEndpoint;
         const init = {
             headers: {
