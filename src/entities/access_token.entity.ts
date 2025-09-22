@@ -1,6 +1,6 @@
-import {Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryColumn,} from 'typeorm';
-import {EncryptedEntity} from '../utils/types';
-import {PlatformModel} from './platform.entity';
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
+import { EncryptedEntity } from '../utils/types';
+import { PlatformModel } from './platform.entity';
 
 @Entity('access_token_model')
 export class AccessTokenModel extends EncryptedEntity {

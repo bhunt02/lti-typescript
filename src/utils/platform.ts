@@ -1,10 +1,11 @@
-import {AccessTokenType, AuthConfigType, AuthTokenMethodEnum, KeyObject, PlatformProperties} from './types';
-import {PlatformModel} from '../entities/platform.entity';
-import {Database} from './database';
-import {PrivateKeyModel, PublicKeyModel} from '../entities/key.entity';
-import {AccessTokenModel} from '../entities/access_token.entity';
-import {Auth} from './auth';
-import {Debug} from './debug';
+import { AccessTokenType, AuthConfigType, AuthTokenMethodEnum, KeyObject, PlatformProperties } from './types';
+import { PlatformModel } from '../entities/platform.entity';
+import { Database } from './database';
+import { PrivateKeyModel, PublicKeyModel } from '../entities/key.entity';
+import { AccessTokenModel } from '../entities/access_token.entity';
+import { Auth } from './auth';
+import { Debug } from './debug';
+import axios, { AxiosRequestConfig } from 'axios';
 
 /**
  * @description Class representing a registered platform.
@@ -117,7 +118,10 @@ export class Platform {
    * @param {string} method Method of authorization "RSA_KEY" or "JWK_KEY" or "JWK_SET".
    * @param {string} key Either the RSA public key provided by the platform, or the JWK key, or the JWK keyset address.
    */
-  async setAuthConfig(method?: AuthTokenMethodEnum, key?: string): Promise<void> {
+  async setAuthConfig(
+    method?: AuthTokenMethodEnum,
+    key?: string,
+  ): Promise<void> {
     await Database.update(
       PlatformModel,
       {
@@ -136,7 +140,9 @@ export class Platform {
    * @description Sets the platform authorization endpoint used to perform the OIDC login.
    * @param {string} authenticationEndpoint Platform authentication endpoint.
    */
-  async setAuthenticationEndpoint(authenticationEndpoint: string): Promise<void> {
+  async setAuthenticationEndpoint(
+    authenticationEndpoint: string,
+  ): Promise<void> {
     await Database.update(
       PlatformModel,
       {
@@ -172,7 +178,9 @@ export class Platform {
    * @description Sets the platform authorization server endpoint used to authenticate messages to the platform.
    * @param {string} authorizationServer Platform authorization server endpoint.
    */
-  async setAuthorizationServer(authorizationServer: string | null): Promise<void> {
+  async setAuthorizationServer(
+    authorizationServer: string | null,
+  ): Promise<void> {
     await Database.update(
       PlatformModel,
       {
@@ -193,7 +201,7 @@ export class Platform {
   async getAccessToken(scopes: string): Promise<AccessTokenType> {
     if (this.scopesSupported) {
       scopes.split(' ').forEach((scope) => {
-        if (!this.scopesSupported.some(s => s == scope)) {
+        if (!this.scopesSupported.some((s) => s == scope)) {
           throw new Error('SCOPE_UNSUPPORTED');
         }
       });
@@ -229,7 +237,9 @@ export class Platform {
   /**
    * @description Retrieves the platform information as a JSON object.
    */
-  async platformParams(): Promise<PlatformProperties & { publicKey: KeyObject }> {
+  async platformParams(): Promise<
+    PlatformProperties & { publicKey: KeyObject }
+  > {
     return {
       kid: this.kid,
       platformUrl: this.platformUrl,
@@ -268,17 +278,25 @@ class PlatformApi {
   async request(
     url: string,
     method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE',
-    request?: Omit<RequestInit, 'method'>,
+    request?: Omit<AxiosRequestConfig, 'method' | 'url'>,
     fullResponse = false,
   ): Promise<any | [any, Response]> {
-    return await fetch(url, {
-      ...request,
-      method,
-    })
+    return await axios
+      .request({
+        ...request,
+        url,
+        method,
+      })
       .then(async (res) => {
-        if (!res.ok) {
-          const json = await res.json().catch(() => undefined);
-          throw { status: res.status, message: (json?.error || json?.error_description) ? `${json?.error}: ${json?.error_description}` : res.statusText };
+        if (res.status < 200 || res.status > 300) {
+          const data = res.data;
+          throw {
+            status: res.status,
+            message:
+              data?.error || data?.error_description
+                ? `${data?.error}: ${data?.error_description}`
+                : res.statusText,
+          };
         }
         if (res.status == 204) {
           if (fullResponse) {
@@ -287,9 +305,9 @@ class PlatformApi {
           return;
         }
         if (fullResponse) {
-          return [await res.json(), res];
+          return [await res.data, res];
         }
-        return await res.json();
+        return await res.data;
       })
       .catch((err) => {
         if ('status' in err) {
@@ -307,7 +325,7 @@ class PlatformApi {
    */
   async get(
     url: string,
-    request?: Omit<RequestInit, 'method'>,
+    request?: Omit<AxiosRequestConfig, 'method' | 'url'>,
     fullResponse = false,
   ) {
     return await this.request(url, 'GET', request, fullResponse);
@@ -321,7 +339,7 @@ class PlatformApi {
    */
   async post(
     url: string,
-    request?: Omit<RequestInit, 'method'>,
+    request?: Omit<AxiosRequestConfig, 'method' | 'url'>,
     fullResponse = false,
   ) {
     return await this.request(url, 'POST', request, fullResponse);
@@ -335,7 +353,7 @@ class PlatformApi {
    */
   async put(
     url: string,
-    request?: Omit<RequestInit, 'method'>,
+    request?: Omit<AxiosRequestConfig, 'method' | 'url'>,
     fullResponse = false,
   ) {
     return await this.request(url, 'PUT', request, fullResponse);
@@ -349,7 +367,7 @@ class PlatformApi {
    */
   async patch(
     url: string,
-    request?: Omit<RequestInit, 'method'>,
+    request?: Omit<AxiosRequestConfig, 'method' | 'url'>,
     fullResponse = false,
   ) {
     return await this.request(url, 'PATCH', request, fullResponse);
@@ -363,7 +381,7 @@ class PlatformApi {
    */
   async delete(
     url: string,
-    request?: Omit<RequestInit, 'method'>,
+    request?: Omit<AxiosRequestConfig, 'method' | 'url'>,
     fullResponse = false,
   ) {
     return await this.request(url, 'DELETE', request, fullResponse);

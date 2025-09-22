@@ -11,15 +11,15 @@ import {
   UpdateResult,
 } from 'typeorm';
 import * as crypto from 'crypto';
-import {PlatformModel} from '../entities/platform.entity';
-import {AccessTokenModel} from '../entities/access_token.entity';
-import {ContextTokenModel} from '../entities/context_token.entity';
-import {IdTokenModel} from '../entities/id_token.entity';
-import {PrivateKeyModel, PublicKeyModel} from '../entities/key.entity';
-import {NonceModel} from '../entities/nonce.entity';
-import {StateModel} from '../entities/state.entity';
-import {EncryptedEntity} from './types';
-import {QueryDeepPartialEntity} from 'typeorm/query-builder/QueryPartialEntity';
+import { PlatformModel } from '../entities/platform.entity';
+import { AccessTokenModel } from '../entities/access_token.entity';
+import { ContextTokenModel } from '../entities/context_token.entity';
+import { IdTokenModel } from '../entities/id_token.entity';
+import { PrivateKeyModel, PublicKeyModel } from '../entities/key.entity';
+import { NonceModel } from '../entities/nonce.entity';
+import { StateModel } from '../entities/state.entity';
+import { EncryptedEntity } from './types';
+import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 
 export class Database {
   protected constructor() {

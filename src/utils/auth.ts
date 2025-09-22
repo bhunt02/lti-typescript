@@ -1,15 +1,15 @@
-import {Database} from './database';
-import {PrivateKeyModel, PublicKeyModel} from '../entities/key.entity';
+import { Database } from './database';
+import { PrivateKeyModel, PublicKeyModel } from '../entities/key.entity';
 import * as crypto from 'crypto';
 import * as Jwk from 'rasha';
 import * as jwt from 'jsonwebtoken';
-import {JwtPayload} from 'jsonwebtoken';
-import {Debug} from './debug';
-import {Platform} from './platform';
-import {AccessTokenModel} from '../entities/access_token.entity';
-import {AccessTokenType, IdToken, KeyObject, ValidatedToken,} from './types';
-import {NonceModel} from '../entities/nonce.entity';
-import {Provider} from '../provider/provider';
+import { JwtPayload } from 'jsonwebtoken';
+import { Debug } from './debug';
+import { Platform } from './platform';
+import { AccessTokenModel } from '../entities/access_token.entity';
+import { AccessTokenType, IdToken, KeyObject, ValidatedToken } from './types';
+import { NonceModel } from '../entities/nonce.entity';
+import { Provider } from '../provider/provider';
 
 /**
  * @description Authentication class manages RSA keys and validation of tokens.
@@ -386,11 +386,11 @@ export class Auth {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(params),
-    }
+      data: params,
+    };
 
     if (platform.platformUrl.toLowerCase().includes('canvas')) {
-      delete init.body;
+      delete init.data;
     }
 
     const access: AccessTokenType = await platform.api.post(url, init);

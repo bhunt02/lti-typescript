@@ -1,6 +1,6 @@
-import {PlatformTestApp, setupAuthenticatedTest,} from './testUtils';
-import * as supertest from "supertest";
-import {KeyObject, Keyset, Platform, Provider, StateModel} from "index";
+import { PlatformTestApp, setupAuthenticatedTest } from './testUtils';
+import * as supertest from 'supertest';
+import { KeyObject, Keyset, Platform, Provider, StateModel } from 'index';
 
 describe('Provider Integration Tests', () => {
   const { supertest, getProvider, getPlatform, loginFlow } =

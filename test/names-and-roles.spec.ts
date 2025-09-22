@@ -1,5 +1,5 @@
-import {PlatformTestApp, setupAuthenticatedTest} from './testUtils';
-import {Platform, Provider} from "index";
+import { PlatformTestApp, setupAuthenticatedTest } from './testUtils';
+import { Platform, Provider } from 'index';
 
 describe('Names And Roles Service', function () {
   const { supertest, getProvider, getPlatform, getTokenAndState } =

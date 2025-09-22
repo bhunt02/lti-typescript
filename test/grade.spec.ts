@@ -1,5 +1,5 @@
-import {PlatformTestApp, setupAuthenticatedTest} from './testUtils';
-import {Platform, Provider, ScoreType} from 'index';
+import { PlatformTestApp, setupAuthenticatedTest } from './testUtils';
+import { Platform, Provider, ScoreType } from 'index';
 
 describe('GradeService', () => {
   const { supertest, getProvider, getPlatform, getTokenAndState } =
@@ -90,17 +90,15 @@ describe('GradeService', () => {
     it('Expected to return valid lineitem list', async () => {
       provider.onConnect(async (token, _, res) => {
         try {
-          return res
-            .status(200)
-            .send(
-              await provider.GradeService.getLineItems(token, {
-                tag: 'tag',
-                resourceId: true,
-                resourceLinkId: true,
-                limit: 5,
-                id: '1',
-              }),
-            );
+          return res.status(200).send(
+            await provider.GradeService.getLineItems(token, {
+              tag: 'tag',
+              resourceId: true,
+              resourceLinkId: true,
+              limit: 5,
+              id: '1',
+            }),
+          );
         } catch (err) {
           console.error(err);
           res.sendStatus(500);
@@ -135,14 +133,12 @@ describe('GradeService', () => {
 
       provider.onConnect(async (token, _, res) => {
         try {
-          return res
-            .status(200)
-            .send(
-              await provider.GradeService.getLineItems(token, {
-                tag: 'tag',
-                url: `${platform.platformUrl}/custom_lineitems`,
-              }),
-            );
+          return res.status(200).send(
+            await provider.GradeService.getLineItems(token, {
+              tag: 'tag',
+              url: `${platform.platformUrl}/custom_lineitems`,
+            }),
+          );
         } catch (err) {
           console.error(err);
           res.sendStatus(500);

@@ -1,6 +1,6 @@
-import {Column, Entity, JoinColumn, OneToOne, PrimaryColumn,} from 'typeorm';
-import {EncryptedEntity} from '../utils/types';
-import {PlatformModel} from './platform.entity';
+import { Column, Entity, JoinColumn, OneToOne, PrimaryColumn } from 'typeorm';
+import { EncryptedEntity } from '../utils/types';
+import { PlatformModel } from './platform.entity';
 
 @Entity('key_model')
 export class KeyModel extends EncryptedEntity {

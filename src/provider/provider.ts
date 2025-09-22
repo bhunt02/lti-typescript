@@ -1,22 +1,22 @@
 /* Main class for the Provider functionalities */
 
-import {Server} from '../utils/server';
-import {Platform} from '../utils/platform';
-import {Auth} from '../utils/auth';
-import {Database} from '../utils/database';
-import {Keyset} from '../utils/keyset';
+import { Server } from '../utils/server';
+import { Platform } from '../utils/platform';
+import { Auth } from '../utils/auth';
+import { Database } from '../utils/database';
+import { Keyset } from '../utils/keyset';
 
-import {GradeService} from './services/grade';
-import {DeepLinkingService} from './services/deep_linking';
-import {NamesAndRolesService} from './services/names_and_roles';
-import {DynamicRegistrationService} from './services/dynamic_registration';
+import { GradeService } from './services/grade';
+import { DeepLinkingService } from './services/deep_linking';
+import { NamesAndRolesService } from './services/names_and_roles';
+import { DynamicRegistrationService } from './services/dynamic_registration';
 
-import {Server as HttpServer} from 'http';
-import {Server as HttpsServer} from 'https';
+import { Server as HttpServer } from 'http';
+import { Server as HttpsServer } from 'https';
 import * as Url from 'fast-url-parser';
 import * as jwt from 'jsonwebtoken';
 import * as crypto from 'crypto';
-import {CookieOptions, Express, NextFunction, Request as ExpressRequest, Response as ExpressResponse,} from 'express';
+import { CookieOptions, Express, NextFunction, Request as ExpressRequest, Response as ExpressResponse } from 'express';
 import {
   AccessTokenType,
   AdditionalContext,
@@ -31,13 +31,13 @@ import {
   RouteType,
   ValidatedToken,
 } from '../utils/types';
-import {Debug} from '../utils/debug';
-import {StateModel} from '../entities/state.entity';
-import {DataSourceOptions} from 'typeorm';
-import {ContextTokenModel} from '../entities/context_token.entity';
-import {IdTokenModel} from '../entities/id_token.entity';
-import {PlatformModel} from '../entities/platform.entity';
-import {PrivateKeyModel, PublicKeyModel} from '../entities/key.entity';
+import { Debug } from '../utils/debug';
+import { StateModel } from '../entities/state.entity';
+import { DataSourceOptions } from 'typeorm';
+import { ContextTokenModel } from '../entities/context_token.entity';
+import { IdTokenModel } from '../entities/id_token.entity';
+import { PlatformModel } from '../entities/platform.entity';
+import { PrivateKeyModel, PublicKeyModel } from '../entities/key.entity';
 
 export type Callback = (
   req: ExpressRequest,
@@ -1175,7 +1175,10 @@ export class Provider {
           ...platform,
           ...tempAuth,
           active: platform.active == undefined ? true : platform.active,
-          dynamicallyRegistered: platform.dynamicallyRegistered == undefined ? false : platform.dynamicallyRegistered,
+          dynamicallyRegistered:
+            platform.dynamicallyRegistered == undefined
+              ? false
+              : platform.dynamicallyRegistered,
           kid,
         });
 
@@ -1219,10 +1222,12 @@ export class Provider {
           authTokenKey: platform.authToken?.key || _platform.authToken.key,
           active:
             platform.active != undefined ? !!platform.active : _platform.active,
-          dynamicallyRegistered: platform.dynamicallyRegistered != undefined
-            ? !!platform.dynamicallyRegistered
-            : _platform.dynamicallyRegistered,
-          registrationEndpoint: platform.registrationEndpoint || _platform.registrationEndpoint,
+          dynamicallyRegistered:
+            platform.dynamicallyRegistered != undefined
+              ? !!platform.dynamicallyRegistered
+              : _platform.dynamicallyRegistered,
+          registrationEndpoint:
+            platform.registrationEndpoint || _platform.registrationEndpoint,
         },
         {
           platformUrl: platform.platformUrl,
@@ -1292,7 +1297,10 @@ export class Provider {
     const oldURL = platform.platformUrl;
     const oldClientId = platform.clientId;
 
-    const update: Partial<PlatformProperties> & { authTokenMethod?: AuthTokenMethodEnum, authTokenKey?: string } = {
+    const update: Partial<PlatformProperties> & {
+      authTokenMethod?: AuthTokenMethodEnum;
+      authTokenKey?: string;
+    } = {
       platformUrl: platformInfo.platformUrl,
       clientId: platformInfo.clientId,
       name: platformInfo.name,
@@ -1371,10 +1379,7 @@ export class Provider {
    * @param {String} clientId - Tool clientId.
    * @returns {Promise<Platform | undefined>}
    */
-  async deletePlatform(
-    url: string,
-    clientId: string,
-  ): Promise<void> {
+  async deletePlatform(url: string, clientId: string): Promise<void> {
     const platform = await this.getPlatform(url, clientId);
     return await platform?.delete();
   }

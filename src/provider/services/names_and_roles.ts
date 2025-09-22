@@ -1,9 +1,9 @@
 /* Names and Roles Provisioning Service */
 
 import * as parseLink from 'parse-link-header';
-import {Debug} from '../../utils/debug';
-import {Provider} from '../provider';
-import {IdToken} from '../../utils/types';
+import { Debug } from '../../utils/debug';
+import { Provider } from '../provider';
+import { IdToken } from '../../utils/types';
 
 type MemberReturnType = {
   differences: string;

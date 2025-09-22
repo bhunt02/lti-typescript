@@ -1,8 +1,8 @@
-import {BaseEntity, Column, Entity, OneToMany, OneToOne, PrimaryColumn, Unique,} from 'typeorm';
-import {AuthConfigType, AuthTokenMethodEnum} from '../utils/types';
-import {AccessTokenModel} from './access_token.entity';
-import {IdTokenModel} from './id_token.entity';
-import {PrivateKeyModel, PublicKeyModel} from './key.entity';
+import { BaseEntity, Column, Entity, OneToMany, OneToOne, PrimaryColumn, Unique } from 'typeorm';
+import { AuthConfigType, AuthTokenMethodEnum } from '../utils/types';
+import { AccessTokenModel } from './access_token.entity';
+import { IdTokenModel } from './id_token.entity';
+import { PrivateKeyModel, PublicKeyModel } from './key.entity';
 
 @Entity('platform_model')
 @Unique(['platformUrl', 'clientId'])

@@ -1,6 +1,6 @@
-import {BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryColumn,} from 'typeorm';
-import {PlatformInfoType, UserInfoType} from '../utils/types';
-import {PlatformModel} from './platform.entity';
+import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
+import { PlatformInfoType, UserInfoType } from '../utils/types';
+import { PlatformModel } from './platform.entity';
 
 @Entity('id_token_model')
 export class IdTokenModel extends BaseEntity {

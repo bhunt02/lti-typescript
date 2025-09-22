@@ -1,6 +1,6 @@
 import * as jwt from 'jsonwebtoken';
 import * as supertest from 'supertest';
-import {PostgresConnectionOptions} from 'typeorm/driver/postgres/PostgresConnectionOptions';
+import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
 import * as express from 'express';
 import * as dotenv from 'dotenv';
 import * as path from 'node:path';
@@ -17,8 +17,8 @@ import {
   Platform,
   Provider,
   ProviderOptions,
-  ValidatedToken
-} from "index";
+  ValidatedToken,
+} from 'index';
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 import TestAgent = require('supertest/lib/agent');
 

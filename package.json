@@ -39,6 +39,7 @@
     "url": "https://github.com/bhunt02/ltijs/issues"
   },
   "dependencies": {
+    "axios": "^1.12.2",
     "body-parser": "^1.20.2",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
@@ -82,8 +83,8 @@
     "jest": "^30.0.5",
     "jsdom": "^26.1.0",
     "lint-staged": "^16.1.5",
-    "showdown": "^2.1.0",
     "prettier": "^3.6.2",
+    "showdown": "^2.1.0",
     "standard": "^17.1.0",
     "supertest": "^4.0.2",
     "ts-jest": "^29.4.1",

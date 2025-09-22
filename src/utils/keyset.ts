@@ -1,9 +1,9 @@
 /* Handle jwk keyset generation */
-import {Database} from './database';
-import {PublicKeyModel} from '../entities/key.entity';
-import {Debug} from './debug';
+import { Database } from './database';
+import { PublicKeyModel } from '../entities/key.entity';
+import { Debug } from './debug';
 import * as Jwk from 'rasha';
-import {KeyObject} from './types';
+import { KeyObject } from './types';
 
 export class Keyset {
   /**

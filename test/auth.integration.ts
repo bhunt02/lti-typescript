@@ -1,5 +1,5 @@
-import {setupAuthenticatedTest} from './testUtils';
-import {Platform, Provider} from 'index';
+import { setupAuthenticatedTest } from './testUtils';
+import { Platform, Provider } from 'index';
 
 describe('Authentication Integration Test', () => {
   const { supertest, getProvider, getPlatform, getTokenAndState } =

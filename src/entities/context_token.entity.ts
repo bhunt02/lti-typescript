@@ -1,4 +1,4 @@
-import {BaseEntity, Column, CreateDateColumn, Entity, PrimaryColumn,} from 'typeorm';
+import { BaseEntity, Column, CreateDateColumn, Entity, PrimaryColumn } from 'typeorm';
 import {
   DeepLinkingSettings,
   IMSContext,

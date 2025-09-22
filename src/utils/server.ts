@@ -1,12 +1,12 @@
 // Express server
 import * as express from 'express';
-import {createServer, Server as HttpsServer} from 'https';
-import {Server as HttpServer} from 'http';
+import { createServer, Server as HttpsServer } from 'https';
+import { Server as HttpServer } from 'http';
 import helmet from 'helmet';
 import * as cookieParser from 'cookie-parser';
 import * as bodyParser from 'body-parser';
 import * as cors from 'cors';
-import {Debug} from './debug';
+import { Debug } from './debug';
 
 export type SSLType = { key: string; cert: string };
 

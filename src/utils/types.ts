@@ -1,6 +1,6 @@
-import {CookieOptions} from 'express';
-import {BaseEntity} from 'typeorm';
-import {JwtPayload} from 'jsonwebtoken';
+import { CookieOptions } from 'express';
+import { BaseEntity } from 'typeorm';
+import { JwtPayload } from 'jsonwebtoken';
 
 export type ProviderOptions = {
   appUrl?: string;

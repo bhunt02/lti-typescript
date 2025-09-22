@@ -1,9 +1,9 @@
 /* Provider Deep Linking Service */
 
 import * as jwt from 'jsonwebtoken';
-import {Debug} from '../../utils/debug';
-import {BaseContentItem, IdToken} from '../../utils/types';
-import {Provider} from '../provider';
+import { Debug } from '../../utils/debug';
+import { BaseContentItem, IdToken } from '../../utils/types';
+import { Provider } from '../provider';
 
 export class DeepLinkingService {
   constructor(private provider: Provider) {}

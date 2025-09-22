@@ -1,5 +1,5 @@
-import {PlatformTestApp, setupTest} from './testUtils';
-import {AuthConfigType, AuthTokenMethodEnum, Platform, PlatformModel, Provider} from "index";
+import { PlatformTestApp, setupTest } from './testUtils';
+import { AuthConfigType, AuthTokenMethodEnum, Platform, PlatformModel, Provider } from 'index';
 
 jest.setTimeout(20000);
 describe('DynamicRegistration Service', () => {
@@ -25,7 +25,7 @@ describe('DynamicRegistration Service', () => {
   } as unknown as PlatformModel);
 
   const registrationResponse = {
-    client_id: '123456'
+    client_id: '123456',
   };
 
   const dynamicRegistrationRequest = {
@@ -86,7 +86,6 @@ describe('DynamicRegistration Service', () => {
     PlatformTestApp.setRoute(
       '/openid_configuration',
       (req, res) => {
-        console.log('received');
         return res.status(200).send(configurationInformation);
       },
       'ALL',
@@ -290,7 +289,9 @@ describe('DynamicRegistration Service', () => {
         active: true,
       });
 
-      await expect(provider.DynamicRegistration.getRegistration(platform)).rejects.toThrow('PLATFORM_REGISTRATION_STATIC');
+      await expect(
+        provider.DynamicRegistration.getRegistration(platform),
+      ).rejects.toThrow('PLATFORM_REGISTRATION_STATIC');
 
       platform = await provider.registerPlatform({
         clientId: 'clientid',
@@ -299,7 +300,9 @@ describe('DynamicRegistration Service', () => {
         dynamicallyRegistered: true,
       } as any);
 
-      await expect(provider.DynamicRegistration.getRegistration(platform)).rejects.toThrow('MISSING_REGISTRATION_ENDPOINT');
+      await expect(
+        provider.DynamicRegistration.getRegistration(platform),
+      ).rejects.toThrow('MISSING_REGISTRATION_ENDPOINT');
     });
 
     it('should fail if scope is unsupported', async () => {
@@ -318,7 +321,9 @@ describe('DynamicRegistration Service', () => {
         registrationEndpoint: 'http:/localhost:2999/moodle/register',
         scopesSupported: [],
       });
-      await expect(provider.DynamicRegistration.getRegistration(platform)).rejects.toThrow('SCOPE_UNSUPPORTED');
+      await expect(
+        provider.DynamicRegistration.getRegistration(platform),
+      ).rejects.toThrow('SCOPE_UNSUPPORTED');
     });
 
     it('should retrieve registration for platform that was dynamically registered', async () => {
@@ -353,8 +358,12 @@ describe('DynamicRegistration Service', () => {
         .query(dynamicRegistrationRequest)
         .expect(200);
 
-      const platform = await provider.getPlatform(configurationInformation.issuer,registrationResponse.client_id);
-      const registration = await provider.DynamicRegistration.getRegistration(platform);
+      const platform = await provider.getPlatform(
+        configurationInformation.issuer,
+        registrationResponse.client_id,
+      );
+      const registration =
+        await provider.DynamicRegistration.getRegistration(platform);
       expect(registration).toEqual(registrationResponse);
     });
   });
@@ -374,7 +383,9 @@ describe('DynamicRegistration Service', () => {
         active: true,
       });
 
-      await expect(provider.DynamicRegistration.updateRegistration(platform)).rejects.toThrow('PLATFORM_REGISTRATION_STATIC');
+      await expect(
+        provider.DynamicRegistration.updateRegistration(platform),
+      ).rejects.toThrow('PLATFORM_REGISTRATION_STATIC');
 
       platform = await provider.registerPlatform({
         clientId: 'clientid',
@@ -382,7 +393,9 @@ describe('DynamicRegistration Service', () => {
         dynamicallyRegistered: true,
       } as any);
 
-      await expect(provider.DynamicRegistration.updateRegistration(platform)).rejects.toThrow('MISSING_REGISTRATION_ENDPOINT');
+      await expect(
+        provider.DynamicRegistration.updateRegistration(platform),
+      ).rejects.toThrow('MISSING_REGISTRATION_ENDPOINT');
     });
 
     it('should fail if scope is unsupported', async () => {
@@ -400,7 +413,9 @@ describe('DynamicRegistration Service', () => {
         dynamicallyRegistered: true,
         scopesSupported: [],
       });
-      await expect(provider.DynamicRegistration.updateRegistration(platform)).rejects.toThrow('SCOPE_UNSUPPORTED');
+      await expect(
+        provider.DynamicRegistration.updateRegistration(platform),
+      ).rejects.toThrow('SCOPE_UNSUPPORTED');
     });
 
     it('should call PUT on registration route to update registration', async () => {
@@ -420,7 +435,6 @@ describe('DynamicRegistration Service', () => {
         },
         'POST',
       );
-
 
       PlatformTestApp.setRoute(
         '/register',
@@ -445,8 +459,12 @@ describe('DynamicRegistration Service', () => {
         .query(dynamicRegistrationRequest)
         .expect(200);
 
-      const platform = await provider.getPlatform(configurationInformation.issuer,registrationResponse.client_id);
-      const registration = await provider.DynamicRegistration.updateRegistration(platform);
+      const platform = await provider.getPlatform(
+        configurationInformation.issuer,
+        registrationResponse.client_id,
+      );
+      const registration =
+        await provider.DynamicRegistration.updateRegistration(platform);
       expect(registration).toEqual(registrationResponse);
     });
   });

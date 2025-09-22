@@ -1,9 +1,9 @@
 /* Provider Assignment and Grade Service */
 
 import * as parseLink from 'parse-link-header';
-import {Debug} from '../../utils/debug';
-import {Provider} from '../provider';
-import {AccessTokenType, CreateLineItem, getLineItemOptions, IdToken, LineItem, ScoreType,} from '../../utils/types';
+import { Debug } from '../../utils/debug';
+import { Provider } from '../provider';
+import { AccessTokenType, CreateLineItem, getLineItemOptions, IdToken, LineItem, ScoreType } from '../../utils/types';
 
 export type LinkType = { url: string };
 export type ParsedLinkType = {
@@ -190,7 +190,7 @@ export class GradeService {
         Authorization: accessToken.token_type + ' ' + accessToken.access_token,
         'Content-Type': 'application/vnd.ims.lis.v2.lineitem+json',
       },
-      body: JSON.stringify(lineItem),
+      data: lineItem,
     });
 
     Debug.log(this, 'Line item successfully created');
@@ -275,7 +275,7 @@ export class GradeService {
     const lineitemUrl = lineItemId;
     Debug.log(this, 'Updating: ' + lineitemUrl);
     const response = await platform.api.put(lineitemUrl, {
-      body: JSON.stringify(lineItem),
+      data: lineItem,
       headers: {
         Authorization: accessToken.token_type + ' ' + accessToken.access_token,
         'Content-Type': 'application/vnd.ims.lis.v2.lineitem+json',
@@ -335,7 +335,7 @@ export class GradeService {
   async submitScore(
     idToken: IdToken,
     lineItemId: string,
-    score: Omit<ScoreType,'timestamp'>,
+    score: Omit<ScoreType, 'timestamp'>,
     accessToken?: AccessTokenType,
   ): Promise<ScoreType> {
     if (!idToken) {
@@ -352,7 +352,7 @@ export class GradeService {
     }
     Debug.log(this, 'Target platform: ' + idToken.iss);
 
-    let newScore: ScoreType = {
+    const newScore: ScoreType = {
       ...score,
       timestamp: new Date(Date.now()).toISOString(),
     };
@@ -408,7 +408,7 @@ export class GradeService {
         Authorization: accessToken.token_type + ' ' + accessToken.access_token,
         'Content-Type': 'application/vnd.ims.lis.v1.score+json',
       },
-      body: JSON.stringify(newScore),
+      data: newScore,
     });
     Debug.log(this, 'Score successfully sent');
     return newScore;
