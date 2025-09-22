@@ -1,6 +1,6 @@
 import { Provider } from '../provider';
 import { AccessTokenType, DynamicRegistrationOptions, DynamicRegistrationSecondaryOptions } from '../../utils/types';
-import { Platform } from "../../utils/platform";
+import { Platform } from '../../utils/platform';
 export declare class DynamicRegistrationService {
     private provider;
     private readonly name;

@@ -252,10 +252,10 @@ class Auth {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(params),
+            data: params,
         };
         if (platform.platformUrl.toLowerCase().includes('canvas')) {
-            delete init.body;
+            delete init.data;
         }
         const access = await platform.api.post(url, init);
         debug_1.Debug.log(this, 'Successfully generated new access_token');

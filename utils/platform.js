@@ -7,6 +7,7 @@ const key_entity_1 = require("../entities/key.entity");
 const access_token_entity_1 = require("../entities/access_token.entity");
 const auth_1 = require("./auth");
 const debug_1 = require("./debug");
+const axios_1 = require("axios");
 class Platform {
     constructor(platformModel) {
         this.platformModel = platformModel;
@@ -122,7 +123,7 @@ class Platform {
     async getAccessToken(scopes) {
         if (this.scopesSupported) {
             scopes.split(' ').forEach((scope) => {
-                if (!this.scopesSupported.some(s => s == scope)) {
+                if (!this.scopesSupported.some((s) => s == scope)) {
                     throw new Error('SCOPE_UNSUPPORTED');
                 }
             });
@@ -172,14 +173,21 @@ class Platform {
 exports.Platform = Platform;
 class PlatformApi {
     async request(url, method, request, fullResponse = false) {
-        return await fetch(url, {
+        return await axios_1.default
+            .request({
             ...request,
+            url,
             method,
         })
             .then(async (res) => {
-            if (!res.ok) {
-                const json = await res.json().catch(() => undefined);
-                throw { status: res.status, message: (json?.error || json?.error_description) ? `${json?.error}: ${json?.error_description}` : res.statusText };
+            if (res.status < 200 || res.status > 300) {
+                const data = res.data;
+                throw {
+                    status: res.status,
+                    message: data?.error || data?.error_description
+                        ? `${data?.error}: ${data?.error_description}`
+                        : res.statusText,
+                };
             }
             if (res.status == 204) {
                 if (fullResponse) {
@@ -188,9 +196,9 @@ class PlatformApi {
                 return;
             }
             if (fullResponse) {
-                return [await res.json(), res];
+                return [await res.data, res];
             }
-            return await res.json();
+            return await res.data;
         })
             .catch((err) => {
             if ('status' in err) {

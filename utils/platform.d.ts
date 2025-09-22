@@ -1,5 +1,6 @@
 import { AccessTokenType, AuthConfigType, AuthTokenMethodEnum, KeyObject, PlatformProperties } from './types';
 import { PlatformModel } from '../entities/platform.entity';
+import { AxiosRequestConfig } from 'axios';
 export declare class Platform {
     private platformModel;
     constructor(platformModel: PlatformModel);
@@ -32,11 +33,11 @@ export declare class Platform {
     api: PlatformApi;
 }
 declare class PlatformApi {
-    request(url: string, method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE', request?: Omit<RequestInit, 'method'>, fullResponse?: boolean): Promise<any | [any, Response]>;
-    get(url: string, request?: Omit<RequestInit, 'method'>, fullResponse?: boolean): Promise<any>;
-    post(url: string, request?: Omit<RequestInit, 'method'>, fullResponse?: boolean): Promise<any>;
-    put(url: string, request?: Omit<RequestInit, 'method'>, fullResponse?: boolean): Promise<any>;
-    patch(url: string, request?: Omit<RequestInit, 'method'>, fullResponse?: boolean): Promise<any>;
-    delete(url: string, request?: Omit<RequestInit, 'method'>, fullResponse?: boolean): Promise<any>;
+    request(url: string, method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE', request?: Omit<AxiosRequestConfig, 'method' | 'url'>, fullResponse?: boolean): Promise<any | [any, Response]>;
+    get(url: string, request?: Omit<AxiosRequestConfig, 'method' | 'url'>, fullResponse?: boolean): Promise<any>;
+    post(url: string, request?: Omit<AxiosRequestConfig, 'method' | 'url'>, fullResponse?: boolean): Promise<any>;
+    put(url: string, request?: Omit<AxiosRequestConfig, 'method' | 'url'>, fullResponse?: boolean): Promise<any>;
+    patch(url: string, request?: Omit<AxiosRequestConfig, 'method' | 'url'>, fullResponse?: boolean): Promise<any>;
+    delete(url: string, request?: Omit<AxiosRequestConfig, 'method' | 'url'>, fullResponse?: boolean): Promise<any>;
 }
 export {};

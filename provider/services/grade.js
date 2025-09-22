@@ -101,7 +101,7 @@ class GradeService {
                 Authorization: accessToken.token_type + ' ' + accessToken.access_token,
                 'Content-Type': 'application/vnd.ims.lis.v2.lineitem+json',
             },
-            body: JSON.stringify(lineItem),
+            data: lineItem,
         });
         debug_1.Debug.log(this, 'Line item successfully created');
         return newLineItem;
@@ -147,7 +147,7 @@ class GradeService {
         const lineitemUrl = lineItemId;
         debug_1.Debug.log(this, 'Updating: ' + lineitemUrl);
         const response = await platform.api.put(lineitemUrl, {
-            body: JSON.stringify(lineItem),
+            data: lineItem,
             headers: {
                 Authorization: accessToken.token_type + ' ' + accessToken.access_token,
                 'Content-Type': 'application/vnd.ims.lis.v2.lineitem+json',
@@ -192,7 +192,7 @@ class GradeService {
             throw new Error('MISSING_SCORE');
         }
         debug_1.Debug.log(this, 'Target platform: ' + idToken.iss);
-        let newScore = {
+        const newScore = {
             ...score,
             timestamp: new Date(Date.now()).toISOString(),
         };
@@ -226,7 +226,7 @@ class GradeService {
                 Authorization: accessToken.token_type + ' ' + accessToken.access_token,
                 'Content-Type': 'application/vnd.ims.lis.v1.score+json',
             },
-            body: JSON.stringify(newScore),
+            data: newScore,
         });
         debug_1.Debug.log(this, 'Score successfully sent');
         return newScore;

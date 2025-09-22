@@ -6,6 +6,7 @@ const Url = require("fast-url-parser");
 const objects_1 = require("../../utils/objects");
 const debug_1 = require("../../utils/debug");
 const types_1 = require("../../utils/types");
+const axios_1 = require("axios");
 class DynamicRegistrationService {
     constructor(provider, options, routes) {
         this.provider = provider;
@@ -52,24 +53,25 @@ class DynamicRegistrationService {
         if (!openIdConfiguration)
             throw new Error('MISSING_OPENID_CONFIGURATION');
         debug_1.Debug.log(this, 'Starting dynamic registration process');
-        const configuration = await fetch(openIdConfiguration, {
+        const configuration = await axios_1.default
+            .request({
+            url: openIdConfiguration,
             method: 'GET',
+            headers: {
+                Authorization: 'Bearer ' + registrationToken,
+            },
         })
             .then((response) => {
-            if (!response.ok) {
-                throw { status: response.status, message: response.statusText };
-            }
-            return response.json();
+            return response.data;
         })
             .catch((err) => {
-            if ('status' in err) {
-                throw new Error(`${err.status}: ${err.message}`);
-            }
-            throw err;
+            return err;
         });
+        if (configuration instanceof axios_1.AxiosError) {
+            throw new Error(`${configuration.status}: ${configuration.response.data}`);
+        }
         debug_1.Debug.log(this, 'OpenID Configuration: ', JSON.stringify(configuration));
         debug_1.Debug.log(this, 'Attempting to register Platform with issuer: ', configuration.issuer);
-        configuration.scopes_supported;
         const messages = [{ type: 'LtiResourceLinkRequest' }];
         if (this.useDeepLinking)
             messages.push({ type: 'LtiDeepLinkingRequest' });
@@ -103,13 +105,15 @@ class DynamicRegistrationService {
         }, options);
         registration.scope = registration.scope
             .split(' ')
-            .filter((v0) => configuration.scopes_supported.some(v1 => v1 == v0))
+            .filter((v0) => configuration.scopes_supported.some((v1) => v1 == v0))
             .join(' ');
         debug_1.Debug.log(this, `Tool registration request: ${JSON.stringify(registration)}`);
         debug_1.Debug.log(this, 'Sending Tool registration request');
-        const registrationResponse = await fetch(configuration.registration_endpoint, {
+        const registrationResponse = await axios_1.default
+            .request({
             method: 'POST',
-            body: JSON.stringify(registration),
+            url: configuration.registration_endpoint,
+            data: registration,
             headers: {
                 'Content-Type': 'application/json',
                 ...(registrationToken
@@ -118,17 +122,14 @@ class DynamicRegistrationService {
             },
         })
             .then((response) => {
-            if (!response.ok) {
-                throw { status: response.status, message: response.statusText };
-            }
-            return response.json();
+            return response.data;
         })
             .catch((err) => {
-            if ('status' in err) {
-                throw new Error(`${err.status}: ${err.message}`);
-            }
-            throw err;
+            return err;
         });
+        if (registrationResponse instanceof axios_1.AxiosError) {
+            throw new Error(`${registrationResponse.status}: ${registrationResponse.response.data}`);
+        }
         const platformName = (configuration['https://purl.imsglobal.org/spec/lti-platform-configuration']
             ? configuration['https://purl.imsglobal.org/spec/lti-platform-configuration'].product_family_code
             : 'Platform') +
@@ -153,7 +154,7 @@ class DynamicRegistrationService {
             registrationEndpoint: configuration.registration_endpoint,
             scopesSupported: registration.scope.split(' '),
             productFamilyCode: configuration['https://purl.imsglobal.org/spec/lti-platform-configuration']
-                ? configuration["https://purl.imsglobal.org/spec/lti-platform-configuration"].product_family_code
+                ? configuration['https://purl.imsglobal.org/spec/lti-platform-configuration'].product_family_code
                 : undefined,
         });
         return '<script>(window.opener || window.parent).postMessage({subject:"org.imsglobal.lti.close"}, "*");</script>';
@@ -168,8 +169,8 @@ class DynamicRegistrationService {
         accessToken ?? (accessToken = await platform.getAccessToken('https://purl.imsglobal.org/spec/lti-reg/scope/registration.readonly'));
         return await platform.api.get(platform.registrationEndpoint, {
             headers: {
-                Authorization: `${accessToken.token_type} ${accessToken.access_token}`
-            }
+                Authorization: `${accessToken.token_type} ${accessToken.access_token}`,
+            },
         });
     }
     async updateRegistration(platform, options) {
@@ -195,25 +196,12 @@ class DynamicRegistrationService {
         }, options);
         debug_1.Debug.log(this, `Tool registration update: ${JSON.stringify(registration)}`);
         debug_1.Debug.log(this, 'Sending Tool registration update');
-        return await fetch(platform.registrationEndpoint, {
-            method: 'PUT',
-            body: JSON.stringify(registration),
+        return await platform.api.put(platform.registrationEndpoint, {
+            data: registration,
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: `${accessToken.token_type} ${accessToken.access_token}`,
             },
-        })
-            .then((response) => {
-            if (!response.ok) {
-                throw { status: response.status, message: response.statusText };
-            }
-            return response.json();
-        })
-            .catch((err) => {
-            if ('status' in err) {
-                throw new Error(`${err.status}: ${err.message}`);
-            }
-            throw err;
         });
     }
 }

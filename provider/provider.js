@@ -707,7 +707,9 @@ class Provider {
                     ...platform,
                     ...tempAuth,
                     active: platform.active == undefined ? true : platform.active,
-                    dynamicallyRegistered: platform.dynamicallyRegistered == undefined ? false : platform.dynamicallyRegistered,
+                    dynamicallyRegistered: platform.dynamicallyRegistered == undefined
+                        ? false
+                        : platform.dynamicallyRegistered,
                     kid,
                 });
                 await auth_1.Auth.generatePlatformKeyPair(kid, platform.platformUrl, platform.clientId);
