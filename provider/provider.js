@@ -745,6 +745,7 @@ class Provider {
                     ? !!platform.dynamicallyRegistered
                     : _platform.dynamicallyRegistered,
                 registrationEndpoint: platform.registrationEndpoint || _platform.registrationEndpoint,
+                authorizationServer: platform.authorizationServer || _platform.authorizationServer,
             }, {
                 platformUrl: platform.platformUrl,
                 clientId: platform.clientId,
@@ -784,6 +785,7 @@ class Provider {
             clientId: platformInfo.clientId,
             name: platformInfo.name,
             authenticationEndpoint: platformInfo.authenticationEndpoint,
+            authorizationServer: platformInfo.authorizationServer,
             accessTokenEndpoint: platformInfo.accessTokenEndpoint,
             authTokenMethod: platformInfo.authToken?.method,
             authTokenKey: platformInfo.authToken?.key,
