@@ -28,6 +28,10 @@ This library is a fork of the original work by [CVM Costa](https://github.com/Cv
 
 ### Installing the Package
 
+Install with your preferred package manager from the NPM package registry for: `@bhunt02/lti-typescript`.
+
+You can also install the package by running the following using yarn, or adding a corresponding entry in your 
+package.json:
 ```shell
 $ yarn add github:bhunt02/lti-typescript#release # OR https://github.com/bhunt02/lti-typescript.git#release
 ```
