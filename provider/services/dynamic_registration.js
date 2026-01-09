@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DynamicRegistrationService = void 0;
+/* Provider Dynamic Registration Service */
 const crypto = require("crypto");
 const Url = require("fast-url-parser");
 const objects_1 = require("../../utils/objects");
@@ -23,6 +24,7 @@ class DynamicRegistrationService {
         this.loginUrl = this.buildUrl(options.url, routes.loginRoute);
         this.keysetUrl = this.buildUrl(options.url, routes.keySetRoute);
     }
+    // Helper method to build URLs
     buildUrl(url, path) {
         if (path === '/')
             return url;
@@ -42,6 +44,7 @@ class DynamicRegistrationService {
             search: pathParts.search,
         });
     }
+    // Helper method to get the url hostname
     getHostname(url) {
         const pathParts = Url.parse(url);
         let hostname = pathParts.hostname;
@@ -49,10 +52,17 @@ class DynamicRegistrationService {
             hostname += ':' + pathParts.port;
         return hostname;
     }
+    /**
+     * @description Performs dynamic registration flow.
+     * @param {String} openIdConfiguration - OpenID configuration URL. Retrieved from req.query.openid_configuration.
+     * @param {String} registrationToken - Registration Token. Retrieved from req.query.registration_token.
+     * @param {DynamicRegistrationSecondaryOptions} [options] - Replacements or extensions to default registration options.
+     */
     async register(openIdConfiguration, registrationToken, options) {
         if (!openIdConfiguration)
             throw new Error('MISSING_OPENID_CONFIGURATION');
         debug_1.Debug.log(this, 'Starting dynamic registration process');
+        // Get Platform registration configurations
         const configuration = await axios_1.default
             .request({
             url: openIdConfiguration,
@@ -72,6 +82,7 @@ class DynamicRegistrationService {
         }
         debug_1.Debug.log(this, 'OpenID Configuration: ', JSON.stringify(configuration));
         debug_1.Debug.log(this, 'Attempting to register Platform with issuer: ', configuration.issuer);
+        // Building registration object
         const messages = [{ type: 'LtiResourceLinkRequest' }];
         if (this.useDeepLinking)
             messages.push({ type: 'LtiDeepLinkingRequest' });
@@ -130,6 +141,7 @@ class DynamicRegistrationService {
         if (registrationResponse instanceof axios_1.AxiosError) {
             throw new Error(`${registrationResponse.status}: ${registrationResponse.response.data}`);
         }
+        // Registering Platform
         const platformName = (configuration['https://purl.imsglobal.org/spec/lti-platform-configuration']
             ? configuration['https://purl.imsglobal.org/spec/lti-platform-configuration'].product_family_code
             : 'Platform') +
@@ -157,8 +169,14 @@ class DynamicRegistrationService {
                 ? configuration['https://purl.imsglobal.org/spec/lti-platform-configuration'].product_family_code
                 : undefined,
         });
+        // Returing message indicating the end of registration flow
         return '<script>(window.opener || window.parent).postMessage({subject:"org.imsglobal.lti.close"}, "*");</script>';
     }
+    /**
+     * @description Attempts to retrieve an existing dynamic registration.
+     * @param {Platform} platform The platform for which to retrieve a dynamic registration.
+     * @param {AccessTokenType} accessToken Optionally passed access token to be used in fetching information.
+     */
     async getRegistration(platform, accessToken) {
         if (!platform.dynamicallyRegistered) {
             throw new Error('PLATFORM_REGISTRATION_STATIC');
@@ -173,6 +191,11 @@ class DynamicRegistrationService {
             },
         });
     }
+    /**
+     * @description Performs a dynamic registration update.
+     * @param platform The platform to be updated.
+     * @param {DynamicRegistrationSecondaryOptions} [options] - Replacements or extensions to default registration options.
+     */
     async updateRegistration(platform, options) {
         const accessToken = await platform.getAccessToken('https://purl.imsglobal.org/spec/lti-reg/scope/registration');
         const originalRegistration = await this.getRegistration(platform, accessToken);

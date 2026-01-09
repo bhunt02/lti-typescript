@@ -1,4 +1,5 @@
 "use strict";
+/* Main class for the Provider functionalities */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Provider = void 0;
 exports.register = register;
@@ -25,8 +26,12 @@ async function register(encryptionKey, databaseOptions, options) {
     await provider.setup(encryptionKey, databaseOptions, options);
     return provider;
 }
+/**
+ * @descripttion LTI Provider Class that implements the LTI 1.3 protocol and services.
+ */
 class Provider {
     constructor() {
+        // Pre-initiated variables
         this._prefix = '';
         this._loginRoute = '/login';
         this._appRoute = '/';
@@ -97,39 +102,67 @@ class Provider {
             });
         };
     }
+    /**
+     * @description Gets the prefix, if any, used for the application.
+     * @returns {string}
+     */
     get prefix() {
         return this._prefix;
     }
     set prefix(prefix) {
         this._prefix = prefix ?? '';
     }
+    /**
+     * @description Gets the login route responsible for dealing with the OIDC login flow.
+     * @returns {String}
+     */
     get loginRoute() {
         return this._loginRoute;
     }
     set loginRoute(route) {
         this._loginRoute = route;
     }
+    /**
+     * @description Gets the main application route that will receive the final decoded Idtoken at the end of a successful launch.
+     * @returns {String}
+     */
     get appRoute() {
         return this._appRoute;
     }
     set appRoute(route) {
         this._appRoute = route;
     }
+    /**
+     * @description Gets the keyset route that will be used to retrieve a public jwk keyset.
+     * @returns {String}
+     */
     get keySetRoute() {
         return this._keySetRoute;
     }
     set keySetRoute(route) {
         this._keySetRoute = route;
     }
+    /**
+     * @description Gets the dynamic registration route that will be used to register platforms dynamically.
+     * @returns {String}
+     */
     get dynRegRoute() {
         return this._dynRegRoute;
     }
     set dynRegRoute(route) {
         this._dynRegRoute = route;
     }
+    /**
+     * @description List of routes which will bypass the Ltijs authentication protocol. If validation fails, these routes are still accessed but aren't given an idToken.
+     * @return Array<RouteType>
+     */
     get whitelist() {
         return this.whitelistedRoutes;
     }
+    /**
+     * @description Whitelists routes to bypass the Ltijs authentication protocol. If validation fails, these routes are still accessed but aren't given an idToken.
+     * @param {Array<string | RouteType[]>} routes - Routes to be whitelisted
+     */
     set whitelist(routes) {
         const formattedRoutes = [];
         for (const route of routes) {
@@ -143,7 +176,7 @@ class Provider {
                 });
             }
             else {
-                formattedRoutes.push({ route, method: 'ALL' });
+                formattedRoutes.push({ route: route, method: 'ALL' });
             }
         }
         this.whitelistedRoutes = [...formattedRoutes];
@@ -181,6 +214,7 @@ class Provider {
     getServer() {
         return this.server.server;
     }
+    // Assembles and sends keyset
     async keyset(_req, res) {
         try {
             const keyset = await keyset_1.Keyset.build();
@@ -208,6 +242,38 @@ class Provider {
             }
         }
     }
+    /**
+     * @description Provider configuration method.
+     * @param {String} encryptionKey - Secret used to sign cookies and encrypt other info.
+     * @param {DataSourceOptions} databaseOptions Database options
+     * @param {Object} [options] - Lti Provider options.
+     * @param {String} [options.appRoute = '/'] - Lti Provider main route. If no option is set '/' is used.
+     * @param {String} [options.loginRoute = '/login'] - Lti Provider login route. If no option is set '/login' is used.
+     * @param {String} [options.keysetRoute = '/keys'] - Lti Provider public jwk keyset route. If no option is set '/keys' is used.
+     * @param {String} [options.dynRegRoute = '/register'] - Dynamic registration route.
+     * @param {Boolean} [options.https = false] - Set this as true in development if you are not using any web server to redirect to your tool (like Nginx) as https and are planning to configure ssl through Express.
+     * @param {Object} [options.ssl] - SSL certificate and key if https is enabled.
+     * @param {String} [options.ssl.key] - SSL key.
+     * @param {String} [options.ssl.cert] - SSL certificate.
+     * @param {String} [options.staticPath] - The path for the static files your application might serve (Ex: _dirname+"/public")
+     * @param {Boolean} [options.cors = true] - If set to false, disables cors.
+     * @param {Function} [options.serverAddon] - Allows the execution of a method inside of the server contructor. Can be used to register middlewares.
+     * @param {Object} [options.cookies] - Cookie configuration. Allows you to configure, sameSite and secure parameters.
+     * @param {Boolean} [options.cookies.secure = false] - Cookie secure parameter. If true, only allows cookies to be passed over https.
+     * @param {String} [options.cookies.sameSite = 'Lax'] - Cookie sameSite parameter. If cookies are going to be set across domains, set this parameter to 'None'.
+     * @param {String} [options.cookies.domain] - Cookie domain parameter. This parameter can be used to specify a domain so that the cookies set by Ltijs can be shared between subdomains.
+     * @param {Boolean} [options.devMode = false] - If true, does not require state and session cookies to be present (If present, they are still validated). This allows ltijs to work on development environments where cookies cannot be set. THIS SHOULD NOT BE USED IN A PRODUCTION ENVIRONMENT.
+     * @param {Number} [options.tokenMaxAge = 10] - Sets the idToken max age allowed in seconds. Defaults to 10 seconds. If false, disables max age validation.
+     * @param {Object} [options.dynReg] - Setup for the Dynamic Registration Service.
+     * @param {String} [options.dynReg.url] - Tool Provider main URL. (Ex: 'https://tool.example.com')
+     * @param {String} [options.dynReg.name] - Tool Provider name. (Ex: 'Tool Provider')
+     * @param {String} [options.dynReg.logo] - Tool Provider logo. (Ex: 'https://client.example.org/logo.png')
+     * @param {String} [options.dynReg.description] - Tool Provider description. (Ex: 'Tool description')
+     * @param {Array<String>} [options.dynReg.redirectUris] - Additional redirect URIs. (Ex: ['https://tool.example.com/launch'])
+     * @param {Object} [options.dynReg.customParameters] - Custom parameters object. (Ex: { key: 'value' })
+     * @param {Boolean} [options.dynReg.autoActivate = false] - Platform auto activation flag. If true, every Platform registered dynamically is immediately activated. Defaults to false.
+     * @param {Boolean} [options.dynReg.useDeepLinking = true] - Deep Linking usage flag. If true, sets up deep linking in the platform. Defaults to true.
+     */
     async setup(encryptionKey, databaseOptions, options) {
         if (this.isSetup)
             throw new Error('PROVIDER_ALREADY_SETUP');
@@ -237,6 +303,7 @@ class Provider {
             this.devMode = true;
         if (options && options.tokenMaxAge !== undefined)
             this.tokenMaxAge = options.tokenMaxAge;
+        // Cookie options
         if (options && options.cookies) {
             if (options.cookies.secure === true)
                 this.cookieOptions.secure = true;
@@ -247,11 +314,26 @@ class Provider {
         }
         this.encryptionKey = encryptionKey;
         this.server = new server_1.Server(this.encryptionKey, options?.https, options?.cors, options?.ssl, options?.serverAddon);
+        /**
+         * @description Express server object.
+         */
         this.app = this.server.app;
+        /**
+         * @description Grading service.
+         */
         this.GradeService = new grade_1.GradeService(this);
+        /**
+         * @description Deep Linking service.
+         */
         this.DeepLinkingService = new deep_linking_1.DeepLinkingService(this);
+        /**
+         * @description Names and Roles service.
+         */
         this.NamesAndRolesService = new names_and_roles_1.NamesAndRolesService(this);
         if (options && options.dynReg) {
+            /**
+             * @description Dynamic Registration service.
+             */
             this.DynamicRegistration = new dynamic_registration_1.DynamicRegistrationService(this, options.dynReg, {
                 appRoute: this.prefix + this.appRoute,
                 loginRoute: this.prefix + this.loginRoute,
@@ -260,8 +342,10 @@ class Provider {
         }
         if (options && options.staticPath)
             this.server.setStaticPath(options.staticPath);
+        // Registers main athentication and routing middleware
         const sessionValidator = async (req, res, next) => {
             debug_1.Debug.log(this, 'Receiving request at path: ' + req.baseUrl + req.path);
+            // Ckeck if request is attempting to initiate oidc login flow or access reserved routes
             if (req.path === this.loginRoute ||
                 req.path === this.keySetRoute ||
                 req.path === this.dynRegRoute) {
@@ -269,14 +353,19 @@ class Provider {
             }
             debug_1.Debug.log(this, 'Path does not match reserved endpoints');
             try {
+                // Retrieving ltik token
                 const ltik = req['token'];
+                // Retrieving cookies
                 const cookies = req.signedCookies;
                 debug_1.Debug.log(this, `Cookies received: ${JSON.stringify(cookies)}`);
                 if (!ltik) {
                     const idToken = req.body.id_token ?? req.query.id_token;
                     if (idToken) {
+                        // No ltik found but request contains an idtoken
                         debug_1.Debug.log(this, 'Received idtoken for validation');
+                        // Retrieves state
                         const state = req.body.state ?? req.params.state;
+                        // Retrieving validation parameters from cookies
                         debug_1.Debug.log(this, 'Response state: ' + state);
                         const validationCookie = cookies['state' + state];
                         const validationParameters = {
@@ -284,9 +373,11 @@ class Provider {
                             maxAge: this.tokenMaxAge,
                         };
                         const valid = await auth_1.Auth.validateToken(this, idToken, this.devMode, validationParameters);
+                        // Retrieve State object from Database
                         const savedState = await database_1.Database.findOne(state_entity_1.StateModel, {
                             where: { state },
                         });
+                        // Deletes state validation cookie and Database entry
                         res.clearCookie('state' + state, this.cookieOptions);
                         if (savedState)
                             await database_1.Database.delete(state_entity_1.StateModel, { state });
@@ -313,6 +404,7 @@ class Provider {
                             .createHash('sha256')
                             .update(JSON.stringify(additionalContextProperties))
                             .digest('hex');
+                        // Appending hashOfContextProperties is a temporary fix to prevent overwriting existing database entries in some scenarios. See: https://github.com/Cvmcosta/ltijs/issues/181
                         const contextId = encodeURIComponent(valid.iss +
                             clientId +
                             deploymentId +
@@ -323,6 +415,7 @@ class Provider {
                             hashOfAdditionalContextProperties);
                         const platformCode = encodeURIComponent('lti' +
                             Buffer.from(valid.iss + clientId + deploymentId).toString('base64'));
+                        // Mount platform token
                         const platformToken = {
                             iss: valid.iss,
                             user: valid.sub,
@@ -348,7 +441,9 @@ class Provider {
                             lis: valid['https://purl.imsglobal.org/spec/lti/claim/lis'],
                             ...additionalContextProperties,
                         };
+                        // Store idToken in database
                         await database_1.Database.save(id_token_entity_1.IdTokenModel, platformToken);
+                        // Store contextToken in database
                         await database_1.Database.save(context_token_entity_1.ContextTokenModel, contextToken);
                         res.cookie(platformCode, valid.sub, this.cookieOptions);
                         debug_1.Debug.log(this, 'Generating ltik');
@@ -359,9 +454,11 @@ class Provider {
                             platformCode,
                             contextId,
                             user: valid.sub,
-                            s: state,
+                            s: state, // Added state to make unique ltiks
                         };
+                        // Signing context token
                         const newLtik = jwt.sign(newLtikObj, this.encryptionKey);
+                        // Appending query parameters
                         const query = new URLSearchParams(req.query);
                         if (savedState) {
                             for (const [key, value] of Object.entries(savedState[0].query)) {
@@ -435,18 +532,21 @@ class Provider {
                 }
                 if (user) {
                     debug_1.Debug.log(this, 'Valid session found');
+                    // Gets corresponding id token from database
                     const idTokenRes = await database_1.Database.findOne(id_token_entity_1.IdTokenModel, {
                         where: { iss: platformUrl, clientId, deploymentId, user },
                     });
                     if (!idTokenRes)
                         throw new Error('IDTOKEN_NOT_FOUND_DB');
                     const idToken = JSON.parse(JSON.stringify(idTokenRes));
+                    // Gets correspondent context token from database
                     const contextToken = await database_1.Database.findOne(context_token_entity_1.ContextTokenModel, {
                         where: { contextId, user },
                     });
                     if (!contextToken)
                         throw new Error('CONTEXTTOKEN_NOT_FOUND_DB');
                     idToken.platformContext = JSON.parse(JSON.stringify(contextToken));
+                    // Creating local variables
                     res.locals.context = idToken.platformContext;
                     res.locals.token = idToken;
                     res.locals.ltik = ltik;
@@ -502,14 +602,19 @@ class Provider {
                     if (!platform.active)
                         return this.inactivePlatformCallback(req, res);
                     debug_1.Debug.log(this, 'Redirecting to platform authentication endpoint');
+                    // Create state parameter used to validade authentication response
                     let state = encodeURIComponent(crypto.randomBytes(25).toString('hex'));
                     debug_1.Debug.log(this, 'Target Link URI: ', params.target_link_uri);
+                    // Cleaning up target link uri and retrieving query parameters
                     if (params.target_link_uri.includes('?')) {
+                        // Retrieve raw queries
                         const rawQueries = new URLSearchParams('?' + params.target_link_uri.split('?')[1]);
+                        // Check if state is unique
                         while (await database_1.Database.findOne(state_entity_1.StateModel, { where: { state } })) {
                             state = encodeURIComponent(crypto.randomBytes(25).toString('hex'));
                             debug_1.Debug.log(this, 'Generated state: ', state);
                         }
+                        // Assemble queries object
                         const queries = {};
                         for (const [key, value] of rawQueries) {
                             queries[key] = value;
@@ -517,14 +622,17 @@ class Provider {
                         params.target_link_uri = params.target_link_uri.split('?')[0];
                         debug_1.Debug.log(this, 'Query parameters found: ', queries);
                         debug_1.Debug.log(this, 'Final Redirect URI: ', params.target_link_uri);
+                        // Store state and query parameters on database
                         await database_1.Database.save(state_entity_1.StateModel, {
                             state,
                             query: queries,
                         });
                     }
+                    // Setting up validation info
                     const cookieOptions = JSON.parse(JSON.stringify(this.cookieOptions));
-                    cookieOptions.maxAge = 60 * 1000;
+                    cookieOptions.maxAge = 60 * 1000; // Adding max age to state cookie = 1min
                     res.cookie('state' + state, iss, cookieOptions);
+                    // Redirect to authentication endpoint
                     const query = await this.ltiAdvantageLogin(params, platform, state);
                     debug_1.Debug.log(this, `Login request: ${platform.authenticationEndpoint}, ${JSON.stringify(query)}`);
                     res.redirect(Url.format({
@@ -561,6 +669,7 @@ class Provider {
                 message: 'Dynamic registration is disabled.',
             });
         });
+        // Main app
         this.app.all(this.appRoute, async (req, res, next) => {
             if (res.locals.context &&
                 res.locals.context.messageType === 'LtiDeepLinkingRequest') {
@@ -571,6 +680,14 @@ class Provider {
         this.isSetup = true;
         return this;
     }
+    /**
+     * @description Starts listening to a given port for LTI requests and opens connection to the database.
+     * @param {Object} [options] - Deployment options.
+     * @param {Number} [options.port] - Deployment port. 3000 by default.
+     * @param {Boolean} [options.silent] - If true, disables initial startup message.
+     * @param {Boolean} [options.serverless] - If true, Ltijs does not start an Express server instance. This allows usage as a middleware and with services like AWS. Ignores 'port' parameter.
+     * @returns {Promise<true>}
+     */
     async deploy(options = {}) {
         Object.keys(options).forEach((k) => {
             if (options[k] === null || options[k] === undefined) {
@@ -594,6 +711,7 @@ class Provider {
             else {
                 await this.server.listen(options.port);
                 debug_1.Debug.log(this, 'Ltijs started listening on port: ', options.port);
+                // Startup message
                 const message = 'LTI Provider is listening on port ' +
                     options.port +
                     '!\n\n LTI provider config: \n >App Route: ' +
@@ -617,6 +735,7 @@ class Provider {
             }
             if (this.devMode && !options.silent)
                 console.log('\nStarting in Dev Mode, state validation and session cookies will not be required. THIS SHOULD NOT BE USED IN A PRODUCTION ENVIRONMENT!');
+            // Sets up gracefull shutdown
             process.on('SIGINT', async () => {
                 await this.close(options.silent);
             });
@@ -627,6 +746,11 @@ class Provider {
             await this.close(options.silent);
         }
     }
+    /**
+     * @description Closes connection to database and stops server.
+     * @param {Boolean} silent Whether or not to log messages during closure
+     * @returns {Promise<void>}
+     */
     async close(silent = true) {
         if (!silent)
             console.log('\nClosing server...');
@@ -637,6 +761,12 @@ class Provider {
         if (!silent)
             console.log('Shutdown complete.');
     }
+    /**
+     * @description Sets the callback function called whenever there's a sucessfull lti 1.3 launch, exposing a "token" object containing the idtoken information.
+     * @param {CallbackWithToken} connectCallback - Callback function called everytime a platform sucessfully launches to the provider.
+     * @example .onConnect((token, request, response)=>{response.send('OK')})
+     * @returns {void}
+     */
     onConnect(connectCallback) {
         if (connectCallback) {
             this.connectCallback = connectCallback;
@@ -644,6 +774,12 @@ class Provider {
         }
         throw new Error('MISSING_CALLBACK');
     }
+    /**
+     * @description Sets the callback function called whenever there's a sucessfull deep linking launch, exposing a "token" object containing the idtoken information.
+     * @param {CallbackWithToken} deepLinkingCallback - Callback function called everytime a platform sucessfully launches a deep linking request.
+     * @example .onDeepLinking((token, request, response)=>{response.send('OK')})
+     * @returns {void}
+     */
     onDeepLinking(deepLinkingCallback) {
         if (deepLinkingCallback) {
             this.deepLinkingCallback = deepLinkingCallback;
@@ -651,6 +787,11 @@ class Provider {
         }
         throw new Error('MISSING_CALLBACK');
     }
+    /**
+     * @description Sets the callback function called whenever there's a sucessfull dynamic registration request, allowing the registration flow to be customized.
+     * @param {Callback} dynamicRegistrationCallback - Callback function called everytime the LTI Provider receives a dynamic registration request.
+     * @returns {void}
+     */
     onDynamicRegistration(dynamicRegistrationCallback) {
         if (dynamicRegistrationCallback) {
             this.dynamicRegistrationCallback = dynamicRegistrationCallback;
@@ -658,6 +799,12 @@ class Provider {
         }
         throw new Error('MISSING_CALLBACK');
     }
+    /**
+     * @description Sets the callback function called when no valid session is found during a request validation.
+     * @param {Callback} sessionTimeoutCallback - Callback method.
+     * @example .onSessionTimeout((request, response)=>{response.send('Session timeout')})
+     * @returns {void}
+     */
     onSessionTimeout(sessionTimeoutCallback) {
         if (sessionTimeoutCallback) {
             this.sessionTimeoutCallback = sessionTimeoutCallback;
@@ -665,6 +812,12 @@ class Provider {
         }
         throw new Error('MISSING_CALLBACK');
     }
+    /**
+     * @description Sets the callback function called when the token received fails to be validated.
+     * @param {Callback} invalidTokenCallback - Callback method.
+     * @example .onInvalidToken((request, response)=>{response.send('Invalid token')})
+     * @returns {void}
+     */
     onInvalidToken(invalidTokenCallback) {
         if (invalidTokenCallback) {
             this.invalidTokenCallback = invalidTokenCallback;
@@ -672,6 +825,12 @@ class Provider {
         }
         throw new Error('MISSING_CALLBACK');
     }
+    /**
+     * @description Sets the callback function called when the Platform attempting to login is not registered.
+     * @param {Callback} unregisteredPlatformCallback - Callback method.
+     * @example .onUnregisteredPlatform((request, response)=>{response.send('Unregistered Platform')})
+     * @returns {void}
+     */
     onUnregisteredPlatform(unregisteredPlatformCallback) {
         if (unregisteredPlatformCallback) {
             this.unregisteredPlatformCallback = unregisteredPlatformCallback;
@@ -679,6 +838,12 @@ class Provider {
         }
         throw new Error('MISSING_CALLBACK');
     }
+    /**
+     * @description Sets the callback function called when the Platform attempting to login is not activated.
+     * @param {Callback} inactivePlatformCallback - Callback method.
+     * @example .onInactivePlatform((request, response)=>{response.send('Platform not activated')})
+     * @returns {void}
+     */
     onInactivePlatform(inactivePlatformCallback) {
         if (inactivePlatformCallback) {
             this.inactivePlatformCallback = inactivePlatformCallback;
@@ -686,6 +851,11 @@ class Provider {
         }
         throw new Error('MISSING_CALLBACK');
     }
+    /**
+     * @description Registers a platform.
+     * @param {Omit<PlatformProperties,'kid'>} platform
+     * @returns {Promise<Platform>}
+     */
     async registerPlatform(platform) {
         let kid = '';
         const _platform = await this.getPlatform(platform.platformUrl, platform.clientId);
@@ -695,6 +865,7 @@ class Provider {
                 while ((await database_1.Database.find(platform_entity_1.PlatformModel, { where: { kid } })).length > 0) {
                     kid = crypto.randomBytes(16).toString('hex');
                 }
+                // Save platform to db
                 debug_1.Debug.log(this, 'Registering new platform');
                 debug_1.Debug.log(this, 'Platform Url: ' + platform.platformUrl);
                 debug_1.Debug.log(this, 'Platform ClientId: ' + platform.clientId);
@@ -753,6 +924,12 @@ class Provider {
             return await this.getPlatform(platform.platformUrl, platform.clientId);
         }
     }
+    /**
+     * @description Gets a platform.
+     * @param {string} url - Platform url.
+     * @param {string} [clientId] - Tool clientId.
+     * @returns {Promise<Platform | undefined>}
+     */
     async getPlatform(url, clientId) {
         const result = await database_1.Database.findOne(platform_entity_1.PlatformModel, {
             where: { platformUrl: url, clientId },
@@ -761,9 +938,19 @@ class Provider {
             return undefined;
         return new platform_1.Platform(result);
     }
+    /**
+     * @description Gets all platforms matching the passed URL.
+     * @param {string} url - Platform url.
+     * @returns {Promise<Platform[]>}
+     */
     async getPlatforms(url) {
         return (await database_1.Database.find(platform_entity_1.PlatformModel, { where: { platformUrl: url } })).map((plat) => new platform_1.Platform(plat));
     }
+    /**
+     * @description Gets a platform by the platformId.
+     * @param {String} platformId - Platform Id.
+     * @returns {Promise<Platform | undefined>}
+     */
     async getPlatformById(platformId) {
         if (!platformId)
             throw new Error('MISSING_PLATFORM_ID');
@@ -774,6 +961,12 @@ class Provider {
             return undefined;
         return new platform_1.Platform(result);
     }
+    /**
+     * @description Updates a platform by the platformId.
+     * @param {String} platformId - Platform Id.
+     * @param {PlatformProperties} platformInfo - Update Information.
+     * @returns {Promise<Platform | undefined>}
+     */
     async updatePlatformById(platformId, platformInfo) {
         const platform = await this.getPlatformById(platformId);
         if (!platform)
@@ -827,26 +1020,51 @@ class Provider {
             throw err;
         }
     }
+    /**
+     * @description Deletes a platform.
+     * @param {string} url - Platform url.
+     * @param {String} clientId - Tool clientId.
+     * @returns {Promise<Platform | undefined>}
+     */
     async deletePlatform(url, clientId) {
         const platform = await this.getPlatform(url, clientId);
         return await platform?.delete();
     }
+    /**
+     * @description Deletes a platform by the platform Id.
+     * @param {string} platformId - Platform Id.
+     * @returns {Promise<Platform | undefined>}
+     */
     async deletePlatformById(platformId) {
         const platform = await this.getPlatformById(platformId);
         return await platform?.delete();
     }
+    /**
+     * @description Gets all platforms.
+     * @returns {Promise<Platform[]>}
+     */
     async getAllPlatforms() {
         return (await database_1.Database.find(platform_entity_1.PlatformModel, {})).map((result) => new platform_1.Platform(result));
     }
+    /**
+     * @description Redirects to a new location. Passes Ltik if present.
+     * @param {Object} res - Express response object.
+     * @param {String} path - Redirect path.
+     * @param {Object} [options] - Redirection options.
+     * @param {Boolean} [options.newResource = false] - If true, changes the path variable on the context token.
+     * @param {Object} [options.query] - Query parameters that will be added to the URL.
+     * @example lti.redirect(response, '/path', { newResource: true })
+     */
     async redirect(res, path, options = { newResource: false, query: undefined }) {
         if (!res || !path)
             throw new Error('MISSING_ARGUMENT');
         if (!res.locals.token)
-            return res.redirect(path);
+            return res.redirect(path); // If no token is present, just redirects
         debug_1.Debug.log(this, 'Redirecting to: ', path);
         const token = res.locals.token;
         const pathParts = Url.parse(path);
         const additionalQueries = options && options.query ? options.query : {};
+        // Updates path variable if this is a new resource
         if (options && (options.newResource || options.isNewResource)) {
             debug_1.Debug.log(this, 'Changing context token path to: ' + path);
             await database_1.Database.save(context_token_entity_1.ContextTokenModel, {
@@ -855,11 +1073,13 @@ class Provider {
                 path,
             });
         }
+        // Formatting path with queries
         const params = new URLSearchParams(pathParts.search);
         const queries = {};
         for (const [key, value] of params) {
             queries[key] = value;
         }
+        // Fixing fast-url-parser bug where port gets assigned to pathname if there's no path
         const portMatch = pathParts.pathname.match(/:[0-9]*/);
         if (portMatch) {
             pathParts.port = portMatch[0].split(':')[1];
@@ -878,12 +1098,20 @@ class Provider {
                 ltik: res.locals.ltik,
             },
         });
+        // Redirects to path with queries
         return res.redirect(formattedPath);
     }
+    /**
+     * Issues an access token for the given scope given the ID token. If the optionally passed access token is valid for the scope, it is used instead.
+     * @param {IdToken} idToken Id token representing the caller
+     * @param {string} scope The scope(s) desired in a space-delimited string.
+     * @param {AccessTokenType} accessToken (Optional) An access token that may be used for the request instead of generating a new one.
+     * @return {Promise<AccessTokenType>}
+     */
     async checkAccessToken(idToken, scope, accessToken) {
         if (accessToken)
             return accessToken;
-        const platform = await this.getPlatform(idToken.iss, idToken.clientId);
+        const platform = await this.getPlatform(idToken.iss, idToken.clientId); // Remove and use DB instead
         if (!platform) {
             debug_1.Debug.log(this, 'Platform not found');
             throw new Error('PLATFORM_NOT_FOUND');
@@ -898,6 +1126,12 @@ class Provider {
             return token;
         });
     }
+    /**
+     * @description Handles the Lti 1.3 initial login flow (OIDC protocol).
+     * @param {LtiAdvantageLoginParams} request - Login request object sent by consumer.
+     * @param {Platform} platform - Platform Object.
+     * @param {String} state - State parameter, used to validate the response.
+     */
     async ltiAdvantageLogin(request, platform, state) {
         const query = {
             response_type: 'id_token',

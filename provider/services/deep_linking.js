@@ -1,4 +1,5 @@
 "use strict";
+/* Provider Deep Linking Service */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DeepLinkingService = void 0;
 const jwt = require("jsonwebtoken");
@@ -7,6 +8,16 @@ class DeepLinkingService {
     constructor(provider) {
         this.provider = provider;
     }
+    /**
+     * @description Creates an auto submitting form containing the DeepLinking Message.
+     * @param {IdToken} idToken - Idtoken for the user.
+     * @param {BaseContentItem | BaseContentItem[]} contentItems - Array of contentItems to be linked.
+     * @param {Object} options - Object containing extra options that mus be sent along the content items.
+     * @param {String} options.message - Message the platform may show to the end user upon return to the platform.
+     * @param {String} options.errMessage - Message the platform may show to the end user upon return to the platform if some error has occurred.
+     * @param {String} options.log - Message the platform may log in it's system upon return to the platform.
+     * @param {String} options.errLog - Message the platform may log in it's system upon return to the platform if some error has occurred.
+     */
     async createDeepLinkingForm(idToken, contentItems, options) {
         const message = await this.createDeepLinkingMessage(idToken, contentItems, options);
         return `
@@ -18,6 +29,16 @@ class DeepLinkingService {
       </script>
     `;
     }
+    /**
+     * @description Creates a DeepLinking signed message.
+     * @param {Object} idToken - Idtoken for the user.
+     * @param {Array} contentItems - Array of contentItems to be linked.
+     * @param {Object} options - Object containing extra options that mus be sent along the content items.
+     * @param {String} options.message - Message the platform may show to the end user upon return to the platform.
+     * @param {String} options.errMessage - Message the platform may show to the end user upon return to the platform if some error has occurred.
+     * @param {String} options.log - Message the platform may log in it's system upon return to the platform.
+     * @param {String} options.errLog - Message the platform may log in it's system upon return to the platform if some error has occurred.
+     */
     async createDeepLinkingMessage(idToken, contentItems, options) {
         debug_1.Debug.log(this, 'Starting deep linking process');
         if (!idToken) {
@@ -32,8 +53,10 @@ class DeepLinkingService {
             debug_1.Debug.log(this, 'No content item passed.');
             throw new Error('MISSING_CONTENT_ITEMS');
         }
+        // If it's not an array, turns it into an array
         if (!Array.isArray(contentItems))
             contentItems = [contentItems];
+        // Gets platform
         const platform = await this.provider.getPlatform(idToken.iss, idToken.clientId);
         if (!platform) {
             debug_1.Debug.log(this, 'Platform not found');
@@ -42,6 +65,7 @@ class DeepLinkingService {
         if (!platform.active)
             throw new Error('PLATFORM_NOT_ACTIVATED');
         debug_1.Debug.log(this, 'Building basic JWT body');
+        // Builds basic jwt body
         const jwtBody = {
             iss: platform.clientId,
             aud: idToken.iss,
@@ -52,6 +76,7 @@ class DeepLinkingService {
             'https://purl.imsglobal.org/spec/lti/claim/message_type': 'LtiDeepLinkingResponse',
             'https://purl.imsglobal.org/spec/lti/claim/version': '1.3.0',
         };
+        // Adding messaging options
         if (options) {
             if (options.message)
                 jwtBody['https://purl.imsglobal.org/spec/lti-dl/claim/msg'] =
@@ -66,6 +91,7 @@ class DeepLinkingService {
                 jwtBody['https://purl.imsglobal.org/spec/lti-dl/claim/errorlog'] =
                     options.errLog;
         }
+        // Adding Data claim if it exists in initial request
         if (idToken.platformContext.deepLinkingSettings.data)
             jwtBody['https://purl.imsglobal.org/spec/lti-dl/claim/data'] =
                 idToken.platformContext.deepLinkingSettings.data;

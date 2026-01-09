@@ -9,7 +9,17 @@ const jwt = require("jsonwebtoken");
 const debug_1 = require("./debug");
 const access_token_entity_1 = require("../entities/access_token.entity");
 const nonce_entity_1 = require("../entities/nonce.entity");
+/**
+ * @description Authentication class manages RSA keys and validation of tokens.
+ */
 class Auth {
+    /**
+     * @description Generates a new keypair for a platform.
+     * @param {string} kid
+     * @param {string} platformUrl
+     * @param {string} platformClientId
+     * @returns {Promise<string>} KID for the keypair.
+     */
     static async generatePlatformKeyPair(kid, platformUrl, platformClientId) {
         const keys = crypto.generateKeyPairSync('rsa', {
             modulusLength: 4096,
@@ -45,6 +55,13 @@ class Auth {
         });
         return kid;
     }
+    /**
+     * @description Resolves a promisse if the token is valid following LTI 1.3 standards.
+     * @param {Provider} provider
+     * @param {string} token - JWT token to be verified.
+     * @param {Boolean} devMode - DevMode option.
+     * @param {Object} validationParameters - Stored validation parameters retrieved from database.
+     */
     static async validateToken(provider, token, devMode, validationParameters) {
         const decoded = jwt.decode(token, { complete: true });
         if (!decoded)
@@ -83,6 +100,7 @@ class Auth {
         if (!platform.active)
             throw new Error('PLATFORM_NOT_ACTIVATED');
         const authConfig = platform.authToken;
+        /* istanbul ignore next */
         switch (authConfig.method) {
             case 'JWK_SET': {
                 debug_1.Debug.log(this, 'Retrieving key from jwk_set');
@@ -126,6 +144,13 @@ class Auth {
             }
         }
     }
+    /**
+     * @description Verifies a token.
+     * @param {string} token - Token to be verified.
+     * @param {string} key - Key to verify the token.
+     * @param {Object} validationParameters - Validation Parameters.
+     * @param {Platform} platform - Issuer platform.
+     */
     static async verifyToken(token, key, validationParameters, platform) {
         debug_1.Debug.log(this, 'Attempting to verify JWT with the given key');
         const verified = jwt.verify(token, key, {
@@ -134,10 +159,17 @@ class Auth {
         });
         await this.oidcValidation(verified, platform, validationParameters);
         await this.claimValidation(verified);
+        // Adding clientId and platformId information to token
         verified.clientId = platform.clientId;
         verified.platformId = platform.kid;
         return verified;
     }
+    /**
+     * @description Validates de token based on the OIDC specifications.
+     * @param {JwtPayload} token - Id token you wish to validate.
+     * @param {Platform} platform - Platform object.
+     * @param {Object} validationParameters - Validation parameters.
+     */
     static async oidcValidation(token, platform, validationParameters) {
         debug_1.Debug.log(this, 'Token signature verified');
         debug_1.Debug.log(this, 'Initiating OIDC aditional validation steps');
@@ -147,6 +179,11 @@ class Auth {
         const nonce = this.validateNonce(token);
         return Promise.all([aud, alg, maxAge, nonce]);
     }
+    /**
+     * @description Validates Aud.
+     * @param {JwtPayload} token - Id token you wish to validate.
+     * @param {Platform} platform - Platform object.
+     */
     static async validateAud(token, platform) {
         debug_1.Debug.log(this, "Validating if aud (Audience) claim matches the value of the tool's clientId given by the platform");
         debug_1.Debug.log(this, 'Aud claim: ' + token.aud);
@@ -160,12 +197,21 @@ class Auth {
             return token.aud === platform.clientId;
         }
     }
+    /**
+     * @description Validates Aug.
+     * @param {String} alg - Algorithm used.
+     */
     static async validateAlg(alg) {
         debug_1.Debug.log(this, 'Checking alg claim. Alg: ' + alg);
         if (alg !== 'RS256')
             throw new Error('ALG_NOT_RS256');
         return true;
     }
+    /**
+     * @description Validates token max age.
+     * @param {JwtPayload} token - Id token you wish to validate.
+     * @param {number} maxAge - Max age allowed for the token.
+     */
     static async validateMaxAge(token, maxAge) {
         debug_1.Debug.log(this, 'Max age parameter: ', maxAge);
         if (!maxAge)
@@ -181,6 +227,10 @@ class Auth {
             throw new Error('TOKEN_TOO_OLD');
         return true;
     }
+    /**
+     * @description Validates Nonce.
+     * @param {JwtPayload} token - Id token you wish to validate.
+     */
     static async validateNonce(token) {
         debug_1.Debug.log(this, 'Validating nonce');
         debug_1.Debug.log(this, 'Nonce: ' + token.nonce);
@@ -190,6 +240,10 @@ class Auth {
         await database_1.Database.save(nonce_entity_1.NonceModel, { nonce: token.nonce });
         return true;
     }
+    /**
+     * @description Validates de token based on the LTI 1.3 core claims specifications.
+     * @param {JwtPayload & IdToken} token - Id token you wish to validate.
+     */
     static async claimValidation(token) {
         debug_1.Debug.log(this, 'Initiating LTI 1.3 core claims validation');
         debug_1.Debug.log(this, 'Checking Message type claim');
@@ -223,6 +277,11 @@ class Auth {
         if (!token['https://purl.imsglobal.org/spec/lti/claim/roles'])
             throw new Error('NO_ROLES_CLAIM');
     }
+    /**
+     * @description Gets a new access token from the platform.
+     * @param {String} scopes - Request scopes
+     * @param {Platform} platform - Platform object of the platform you want to access.
+     */
     static async getAccessToken(scopes, platform) {
         const confjwt = {
             sub: platform.clientId,
@@ -245,6 +304,7 @@ class Auth {
             scope: scopes,
         };
         const searchParams = new URLSearchParams(params).toString();
+        // For LTI platforms that use query params for token routes
         const url = ['canvas'].includes(platform.productFamilyCode)
             ? `${platform.accessTokenEndpoint}?${searchParams}`
             : platform.accessTokenEndpoint;

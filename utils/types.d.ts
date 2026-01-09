@@ -144,6 +144,12 @@ export type UserInfo = {
     name: string;
     email: string;
 };
+/**
+ * @name RouteType
+ * @description A type that describes a route based on the pathname and method
+ * @property route RegExp property which represents the pathname of the route
+ * @property method String property which maps to an HTTP/S method
+ */
 export type RouteType = {
     route: RegExp | string;
     method: string;

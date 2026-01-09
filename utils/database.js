@@ -20,12 +20,21 @@ class Database {
             throw new Error('DataSource is uninitialized');
         return this._dataSource;
     }
+    /**
+     * @desc Returns the active DataSource object which represents the connection to the database
+     */
     get dataSource() {
         return Database.dataSource;
     }
     get encryptionKey() {
         return Database.encryptionKey;
     }
+    /**
+     * @desc Initializes connection to the database with TypeORM.
+     * @param options Database connection options. Overwrite 'Entities' to use customized entities that are supported by the database of your choosing. Default entities support PostgreSQL database.
+     * @param encryptionKey The encryption key used for encrypting/decrypting certain data
+     * @param synchronize Whether to drop tables and recreate schema on startup (default: false)
+     */
     static async initializeDatabase(options, encryptionKey, synchronize = false) {
         if (this.instance) {
             return this.instance;
@@ -43,17 +52,23 @@ class Database {
         this.encryptionKey = encryptionKey;
         this.instance = new Database();
         this._dataSource = new typeorm_1.DataSource({
-            entities,
+            entities, // Allows overwrite of entities
             ...options,
         });
         await this._dataSource.initialize();
         await this._dataSource.synchronize(synchronize);
     }
+    /**
+     * @description Closes connection with the database.
+     */
     static async close() {
         if (this._dataSource.isInitialized) {
             await this._dataSource.destroy();
         }
     }
+    /**
+     * @description Closes connection with the database.
+     */
     async close() {
         await this.dataSource.destroy();
     }
@@ -63,9 +78,19 @@ class Database {
             data: JSON.parse(await this.decrypt(record.data, record.iv)),
         };
     }
+    /**
+     * @desc Finds entities of the defined type that match given find options.
+     * @param type The Entity class type
+     * @param options Find options
+     */
     static async find(type, options) {
         return await this.instance.find(type, options);
     }
+    /**
+     * @desc Finds entities of the defined type that match given find options.
+     * @param type The Entity class type
+     * @param options Find options
+     */
     async find(type, options) {
         const result = await this.dataSource.getRepository(type).find(options);
         return await Promise.all(result.map(async (record) => {
@@ -77,9 +102,19 @@ class Database {
             }
         }));
     }
+    /**
+     * @desc Finds first entity of the defined type by a given find options. If entity was not found in the database - returns null.
+     * @param type The Entity class type
+     * @param options Find options
+     */
     static async findOne(type, options) {
         return await this.instance.findOne(type, options);
     }
+    /**
+     * @desc Finds first entity of the defined type by a given find options. If entity was not found in the database - returns null.
+     * @param type The Entity class type
+     * @param options Find options
+     */
     async findOne(type, options) {
         const result = await this.dataSource.getRepository(type).findOne(options);
         if (!result) {
@@ -90,9 +125,19 @@ class Database {
         }
         return result;
     }
+    /**
+     * @desc Saves a given entity of the provided type in the database. If entity does not exist in the database then inserts, otherwise updates.
+     * @param type The Entity class type
+     * @param params The parameters of the entity to save
+     */
     static async save(type, params) {
         return await this.instance.save(type, params);
     }
+    /**
+     * @desc Saves a given entity of the provided type in the database. If entity does not exist in the database then inserts, otherwise updates.
+     * @param type The Entity class type
+     * @param params The parameters of the entity to save
+     */
     async save(type, params) {
         if ('data' in params) {
             const encrypted = await this.encrypt(JSON.stringify(params.data));
@@ -104,9 +149,21 @@ class Database {
         }
         return await this.dataSource.getRepository(type).save(params);
     }
+    /**
+     * @desc Updates entity of given type partially. Entity can be found by a given conditions. Unlike save method executes a primitive operation without cascades, relations and other operations included. Executes fast and efficient UPDATE query. Does not check if entity exist in the database.
+     * @param type The Entity class type
+     * @param params The parameters of the entity to update
+     * @param where Options to filter which entities are updated
+     */
     static async update(type, params, where) {
         return await this.instance.update(type, params, where);
     }
+    /**
+     * @desc Updates entity of given type partially. Entity can be found by a given conditions. Unlike save method executes a primitive operation without cascades, relations and other operations included. Executes fast and efficient UPDATE query. Does not check if entity exist in the database.
+     * @param type The Entity class type
+     * @param params The parameters of the entity to update
+     * @param where Options to filter which entities are updated
+     */
     async update(type, params, where) {
         if ('data' in params) {
             const encrypted = await this.encrypt(JSON.stringify(params.data));
@@ -118,12 +175,26 @@ class Database {
         }
         return await this.dataSource.getRepository(type).update(where, params);
     }
+    /**
+     * @desc Deletes entities of the provided type by a given criteria. Unlike save method executes a primitive operation without cascades, relations and other operations included. Executes fast and efficient DELETE query. Does not check if entity exist in the database.
+     * @param type The Entity class type
+     * @param options Filter options for determining which entities to delete
+     */
     static async delete(type, options) {
         return await this.instance.delete(type, options);
     }
+    /**
+     * @desc Deletes entities of the provided type by a given criteria. Unlike save method executes a primitive operation without cascades, relations and other operations included. Executes fast and efficient DELETE query. Does not check if entity exist in the database.
+     * @param type The Entity class type
+     * @param options Filter options for determining which entities to delete
+     */
     async delete(type, options) {
         return await this.dataSource.getRepository(type).delete(options);
     }
+    /**
+     * @description Encrypts data.
+     * @param {String} data - Data to be encrypted
+     */
     async encrypt(data) {
         const hash = crypto.createHash('sha256');
         hash.update(this.encryptionKey);
@@ -134,6 +205,11 @@ class Database {
         encrypted = Buffer.concat([encrypted, cipher.final()]);
         return { iv: iv.toString('hex'), data: encrypted.toString('hex') };
     }
+    /**
+     * @description Decrypts data.
+     * @param {String} data - Data to be decrypted
+     * @param {String} iv - Encryption iv
+     */
     async decrypt(data, iv) {
         const hash = crypto.createHash('sha256');
         hash.update(this.encryptionKey);

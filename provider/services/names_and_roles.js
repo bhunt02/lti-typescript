@@ -1,4 +1,5 @@
 "use strict";
+/* Names and Roles Provisioning Service */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.NamesAndRolesService = void 0;
 const parseLink = require("parse-link-header");
@@ -7,6 +8,16 @@ class NamesAndRolesService {
     constructor(provider) {
         this.provider = provider;
     }
+    /**
+     * @description Retrieves members from platform.
+     * @param {Object} idToken - Idtoken for the user.
+     * @param {Object} options - Request options.
+     * @param {String} [options.role] - Filters based on the User role.
+     * @param {Number} [options.limit] - Sets a maximum number of memberships to be returned per page.
+     * @param {Number} [options.pages = 1] - Sets a maximum number of pages to be returned. Defaults to 1. If set to undefined retrieves every available page.
+     * @param {String} [options.url] - Retrieve memberships from a specific URL. Usually retrieved from the `next` link header of a previous request.
+     * @param {Boolean} [options.resourceLinkId = false] - If set to true, retrieves resource Link level memberships.
+     */
     async getMembers(idToken, options = { pages: 1, resourceLinkId: false }) {
         if (!idToken) {
             debug_1.Debug.log(this, 'Missing IdToken object.');
@@ -16,7 +27,7 @@ class NamesAndRolesService {
         debug_1.Debug.log(this, 'Target platform: ' + idToken.iss);
         const accessToken = await this.provider.checkAccessToken(idToken, 'https://purl.imsglobal.org/spec/lti-nrps/scope/contextmembership.readonly');
         const platform = await this.provider.getPlatformById(idToken.platformId);
-        let pages = 1;
+        let pages = 1; // Page limit
         let query = new URLSearchParams();
         let next = idToken.platformContext.namesRoles.context_memberships_url;
         if (options) {
@@ -86,9 +97,11 @@ class NamesAndRolesService {
             const parsedLinks = response[1].headers?.get('link')
                 ? parseLink(response[1].headers.get('link'))
                 : undefined;
+            // Trying to find "rel=differences" header
             if (parsedLinks && parsedLinks.differences) {
                 differences = parsedLinks.differences.url;
             }
+            // Trying to find "rel=next" header, indicating additional pages
             if (parsedLinks && parsedLinks.next) {
                 next = parsedLinks.next.url;
             }

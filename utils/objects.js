@@ -5,6 +5,11 @@ exports.deepMergeObjects = deepMergeObjects;
 function isObject(item) {
     return item && typeof item === 'object' && !Array.isArray(item);
 }
+/**
+ * Deep merge two or more objects. taken from https://stackoverflow.com/a/34749873
+ * @param {Object} target
+ * @param {Object[]} sources
+ */
 function deepMergeObjects(target, ...sources) {
     if (!sources.length)
         return target;

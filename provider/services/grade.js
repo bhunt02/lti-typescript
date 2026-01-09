@@ -1,4 +1,5 @@
 "use strict";
+/* Provider Assignment and Grade Service */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.GradeService = void 0;
 const parseLink = require("parse-link-header");
@@ -17,6 +18,19 @@ class GradeService {
             scores,
         };
     }
+    /**
+     * @description Gets lineitems from a given platform
+     * @param {Object} idToken - Idtoken for the user
+     * @param {Object} [options] - Options object
+     * @param {Boolean} [options.resourceLinkId = false] - Filters line items based on the resourceLinkId of the resource that originated the request
+     * @param {String} [options.resourceId = false] - Filters line items based on the resourceId
+     * @param {String} [options.tag = false] - Filters line items based on the tag
+     * @param {Number} [options.limit = false] - Sets a maximum number of line items to be returned
+     * @param {String} [options.id = false] - Filters line items based on the id
+     * @param {String} [options.label = false] - Filters line items based on the label
+     * @param {String} [options.url = false] - Retrieves line items from a specific URL. Usually retrieved from the `next` link header of a previous request.
+     * @param {AccessTokenType} accessToken
+     */
     async getLineItems(idToken, options, accessToken) {
         if (!idToken) {
             debug_1.Debug.log(this, 'Missing IdToken object.');
@@ -61,9 +75,11 @@ class GradeService {
             }, true);
         }
         let lineItems = JSON.parse(JSON.stringify(response[0]));
+        // Parsing link headers
         const parsedLinks = response[1].headers?.get('link') !== undefined
             ? parseLink(response[1].headers.get('link'))
             : {};
+        // Applying special filters
         if (options && options.id)
             lineItems = lineItems.filter((lineitem) => {
                 return lineitem.id === options.id;
@@ -79,7 +95,16 @@ class GradeService {
             lineItems = lineItems.slice(0, options.limit);
         return this.formatResult(parsedLinks, lineItems);
     }
+    /**
+     * @description Creates a new lineItem for the given context
+     * @param {IdToken} idToken - Idtoken for the user
+     * @param {LineItem} lineItem - LineItem Object, following the application/vnd.ims.lis.v2.lineitem+json specification
+     * @param {Object} [options] - Aditional configuration for the lineItem
+     * @param {Boolean} [options.resourceLinkId = false] - If set to true, binds the created lineItem to the resource that originated the request
+     * @param {AccessTokenType} accessToken
+     */
     async createLineItem(idToken, lineItem, options = { resourceLinkId: false }, accessToken) {
+        // Validating lineItem
         if (!idToken) {
             debug_1.Debug.log(this, 'Missing IdToken object.');
             throw new Error('MISSING_ID_TOKEN');
@@ -106,6 +131,12 @@ class GradeService {
         debug_1.Debug.log(this, 'Line item successfully created');
         return newLineItem;
     }
+    /**
+     * @description Gets LineItem by the ID
+     * @param {Object} idToken - Idtoken for the user
+     * @param {String} lineItemId - LineItem ID.
+     * @param {AccessTokenType} accessToken Optionally passed access token if already acquired
+     */
     async getLineItemById(idToken, lineItemId, accessToken) {
         if (!idToken) {
             debug_1.Debug.log(this, 'Missing IdToken object.');
@@ -128,6 +159,13 @@ class GradeService {
         debug_1.Debug.log(this, 'LineItem sucessfully retrieved');
         return response;
     }
+    /**
+     * @description Updates LineItem by the ID
+     * @param {Object} idToken - Idtoken for the user
+     * @param {String} lineItemId - LineItem ID.
+     * @param {Object} lineItem - Updated fields.
+     * @param {AccessTokenType} accessToken Optionally passed access token if already acquired
+     */
     async updateLineItemById(idToken, lineItemId, lineItem, accessToken) {
         if (!idToken) {
             debug_1.Debug.log(this, 'Missing IdToken object.');
@@ -156,6 +194,12 @@ class GradeService {
         debug_1.Debug.log(this, 'LineItem sucessfully updated');
         return response;
     }
+    /**
+     * @description Deletes LineItem by the ID
+     * @param {Object} idToken - Idtoken for the user
+     * @param {String} lineItemId - LineItem ID.
+     * @param {AccessTokenType} accessToken Optionally passed access token if already acquired
+     */
     async deleteLineItemById(idToken, lineItemId, accessToken) {
         if (!idToken) {
             debug_1.Debug.log(this, 'Missing IdToken object.');
@@ -178,6 +222,13 @@ class GradeService {
         debug_1.Debug.log(this, 'LineItem sucessfully deleted');
         return true;
     }
+    /**
+     * @description Publishes a score or grade to a lineItem. Represents the Score Publish service described in the lti 1.3 specification.
+     * @param {IdToken} idToken - Idtoken for the user.
+     * @param {String} lineItemId - LineItem ID.
+     * @param {Omit<ScoreType,'timestamp'>} score - Score/Grade following the LTI Standard application/vnd.ims.lis.v1.score+json.
+     * @param {AccessTokenType} accessToken Optionally passed access token if already acquired
+     */
     async submitScore(idToken, lineItemId, score, accessToken) {
         if (!idToken) {
             debug_1.Debug.log(this, 'Missing IdToken object.');
@@ -205,6 +256,7 @@ class GradeService {
         accessToken = await this.provider.checkAccessToken(idToken, scopes.join(' '), accessToken);
         debug_1.Debug.log(this, 'Access_token retrieved for [' + idToken.iss + ']');
         const platform = await this.provider.getPlatformById(idToken.platformId);
+        // Creating scores URL
         const lineitemUrl = lineItemId;
         let scoreUrl = lineitemUrl + '/scores';
         if (lineitemUrl.indexOf('?') !== -1) {
@@ -212,10 +264,12 @@ class GradeService {
             const url = lineitemUrl.split('\?')[0];
             scoreUrl = url + '/scores?' + query;
         }
+        // Creating scoreMaximum if it is not present and scoreGiven exists
         if (shouldFetchScoreMaximum) {
             const lineItem = await this.getLineItemById(idToken, lineItemId, accessToken);
             newScore.scoreMaximum = lineItem.scoreMaximum;
         }
+        // If no user is specified, sends the score to the user that originated request
         if (newScore.userId === undefined) {
             newScore.userId = idToken.user;
         }
@@ -231,6 +285,16 @@ class GradeService {
         debug_1.Debug.log(this, 'Score successfully sent');
         return newScore;
     }
+    /**
+     * @description Retrieves scores from a lineItem. Represents the Result service described in the lti 1.3 specification.
+     * @param {IdToken} idToken - Idtoken for the user.
+     * @param {String} lineItemId - LineItem ID.
+     * @param {Object} [options] - Options object.
+     * @param {String} [options.userId = false] - Filters based on the userId.
+     * @param {Number} [options.limit = false] - Sets a maximum number of scores to be returned.
+     * @param {String} [options.url = false] - Retrieves scores from a specific URL. Usually retrieved from the `next` link header of a previous request.
+     * @param {AccessTokenType} accessToken Optionally passed access token if already acquired
+     */
     async getScores(idToken, lineItemId, options = { userId: false, limit: false, url: false }, accessToken) {
         if (!idToken) {
             debug_1.Debug.log(this, 'Missing IdToken object.');
@@ -257,6 +321,7 @@ class GradeService {
             }, true);
         }
         else {
+            // Creating results URL
             const lineitemUrl = lineItemId;
             let query = new URLSearchParams();
             let resultsUrl = lineitemUrl + '/results';
@@ -279,6 +344,7 @@ class GradeService {
                 },
             }, true);
         }
+        // Parsing link headers
         const parsedLinks = response[1].headers?.get('link') !== undefined
             ? parseLink(response[1].headers.get('link'))
             : {};
