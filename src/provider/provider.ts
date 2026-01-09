@@ -83,7 +83,7 @@ export class Provider {
     return this._prefix;
   }
 
-  private set prefix(prefix: string) {
+  set prefix(prefix: string) {
     this._prefix = prefix ?? '';
   }
 
@@ -97,7 +97,7 @@ export class Provider {
     return this._loginRoute;
   }
 
-  private set loginRoute(route: string) {
+  set loginRoute(route: string) {
     this._loginRoute = route;
   }
 
@@ -111,7 +111,7 @@ export class Provider {
     return this._appRoute;
   }
 
-  private set appRoute(route: string) {
+  set appRoute(route: string) {
     this._appRoute = route;
   }
 
@@ -125,7 +125,7 @@ export class Provider {
     return this._keySetRoute;
   }
 
-  private set keySetRoute(route: string) {
+  set keySetRoute(route: string) {
     this._keySetRoute = route;
   }
 
@@ -139,7 +139,7 @@ export class Provider {
     return this._dynRegRoute;
   }
 
-  private set dynRegRoute(route: string) {
+  set dynRegRoute(route: string) {
     this._dynRegRoute = route;
   }
 
@@ -162,16 +162,16 @@ export class Provider {
     for (const route of routes) {
       const isObject = typeof route === 'object';
       if (isObject) {
-        if (!route.route || !route.method)
+        if (!(route as RouteType).route || !(route as RouteType).method)
           throw new Error(
             'WRONG_FORMAT. Details: Expects string ("/route") or object ({ route: "/route", method: "POST" })',
           );
         formattedRoutes.push({
-          route: route.route,
-          method: route.method.toUpperCase(),
+          route: (route as RouteType).route,
+          method: (route as RouteType).method.toUpperCase(),
         });
       } else {
-        formattedRoutes.push({ route, method: 'ALL' });
+        formattedRoutes.push({ route: route as string, method: 'ALL' });
       }
     }
     this.whitelistedRoutes = [...formattedRoutes];
@@ -200,7 +200,7 @@ export class Provider {
     return this._app;
   }
 
-  private set app(app: Express) {
+  set app(app: Express) {
     this._app = app;
   }
 
@@ -210,7 +210,7 @@ export class Provider {
     return this._DynamicRegistration;
   }
 
-  private set DynamicRegistration(
+  set DynamicRegistration(
     dynamicRegistration: DynamicRegistrationService,
   ) {
     this._DynamicRegistration = dynamicRegistration;
@@ -222,7 +222,7 @@ export class Provider {
     return this._GradeService;
   }
 
-  private set GradeService(gradeService: GradeService) {
+  set GradeService(gradeService: GradeService) {
     this._GradeService = gradeService;
   }
 
@@ -232,7 +232,7 @@ export class Provider {
     return this._NamesAndRolesService;
   }
 
-  private set NamesAndRolesService(namesAndRolesService: NamesAndRolesService) {
+  set NamesAndRolesService(namesAndRolesService: NamesAndRolesService) {
     this._NamesAndRolesService = namesAndRolesService;
   }
 
@@ -242,7 +242,7 @@ export class Provider {
     return this._DeepLinkingService;
   }
 
-  private set DeepLinkingService(deepLinkingService: DeepLinkingService) {
+  set DeepLinkingService(deepLinkingService: DeepLinkingService) {
     this._DeepLinkingService = deepLinkingService;
   }
 
@@ -778,14 +778,14 @@ export class Provider {
         if (user) {
           Debug.log(this, 'Valid session found');
           // Gets corresponding id token from database
-          const idTokenRes = await Database.findOne(IdTokenModel, {
+          const idTokenRes = await Database.findOne<IdTokenModel>(IdTokenModel, {
             where: { iss: platformUrl, clientId, deploymentId, user },
           });
           if (!idTokenRes) throw new Error('IDTOKEN_NOT_FOUND_DB');
           const idToken = JSON.parse(JSON.stringify(idTokenRes));
 
           // Gets correspondent context token from database
-          const contextToken = await Database.findOne(ContextTokenModel, {
+          const contextToken = await Database.findOne<ContextTokenModel>(ContextTokenModel, {
             where: { contextId, user },
           });
           if (!contextToken) throw new Error('CONTEXTTOKEN_NOT_FOUND_DB');
@@ -830,7 +830,7 @@ export class Provider {
     this.app.use(sessionValidator);
 
     this.app.all(this.loginRoute, async (req, res) => {
-      const params: LtiAdvantageLoginParams = { ...req.query, ...req.body };
+      const params: LtiAdvantageLoginParams = { ...req.query, ...req.body } as any;
       try {
         if (!params.iss || !params.login_hint || !params.target_link_uri)
           return res.status(400).send({
@@ -865,7 +865,7 @@ export class Provider {
               '?' + params.target_link_uri.split('?')[1],
             );
             // Check if state is unique
-            while (await Database.findOne(StateModel, { where: { state } })) {
+            while (await Database.findOne<StateModel>(StateModel, { where: { state } })) {
               state = encodeURIComponent(
                 crypto.randomBytes(25).toString('hex'),
               );
@@ -880,7 +880,7 @@ export class Provider {
             Debug.log(this, 'Query parameters found: ', queries);
             Debug.log(this, 'Final Redirect URI: ', params.target_link_uri);
             // Store state and query parameters on database
-            await Database.save(StateModel, {
+            await Database.save<StateModel>(StateModel, {
               state,
               query: queries,
             });
@@ -1157,7 +1157,7 @@ export class Provider {
         kid = crypto.randomBytes(16).toString('hex');
 
         while (
-          (await Database.find(PlatformModel, { where: { kid } })).length > 0
+          (await Database.find<PlatformModel>(PlatformModel, { where: { kid } })).length > 0
         ) {
           kid = crypto.randomBytes(16).toString('hex');
         }
@@ -1198,9 +1198,9 @@ export class Provider {
         );
       } catch (err) {
         if (kid.trim() !== '') {
-          await Database.delete(PublicKeyModel, { kid });
-          await Database.delete(PrivateKeyModel, { kid });
-          await Database.delete(PlatformModel, {
+          await Database.delete<PublicKeyModel>(PublicKeyModel, { kid });
+          await Database.delete<PrivateKeyModel>(PrivateKeyModel, { kid });
+          await Database.delete<PlatformModel>(PlatformModel, {
             kid,
           });
         }
@@ -1209,7 +1209,7 @@ export class Provider {
       }
     } else {
       Debug.log(this, 'Platform already registered');
-      await Database.update(
+      await Database.update<PlatformModel>(
         PlatformModel,
         {
           name: platform.name || _platform.name,
@@ -1249,7 +1249,7 @@ export class Provider {
     url: string,
     clientId: string,
   ): Promise<Platform | undefined> {
-    const result = await Database.findOne(PlatformModel, {
+    const result = await Database.findOne<PlatformModel>(PlatformModel, {
       where: { platformUrl: url, clientId },
     });
     if (!result) return undefined;
@@ -1263,7 +1263,7 @@ export class Provider {
    */
   async getPlatforms(url: string): Promise<Platform[]> {
     return (
-      await Database.find(PlatformModel, { where: { platformUrl: url } })
+      await Database.find<PlatformModel>(PlatformModel, { where: { platformUrl: url } })
     ).map((plat) => new Platform(plat));
   }
 
@@ -1275,7 +1275,7 @@ export class Provider {
   async getPlatformById(platformId: string): Promise<Platform | undefined> {
     if (!platformId) throw new Error('MISSING_PLATFORM_ID');
 
-    const result = await Database.findOne(PlatformModel, {
+    const result = await Database.findOne<PlatformModel>(PlatformModel, {
       where: { kid: platformId },
     });
     if (!result) return undefined;
@@ -1328,7 +1328,7 @@ export class Provider {
 
     if (alteredUrlClientIdFlag) {
       if (
-        await Database.findOne(PlatformModel, {
+        await Database.findOne<PlatformModel>(PlatformModel, {
           where: { platformUrl: update.platformUrl, clientId: update.clientId },
         })
       ) {
@@ -1337,17 +1337,17 @@ export class Provider {
     }
 
     try {
-      await Database.update(PlatformModel, update, {
+      await Database.update<PlatformModel>(PlatformModel, update, {
         kid: platformId,
       });
 
       if (alteredUrlClientIdFlag) {
-        await Database.update(
+        await Database.update<PlatformModel>(
           PublicKeyModel,
           { platformUrl: update.platformUrl, clientId: update.clientId },
           { kid: platformId },
         );
-        await Database.update(
+        await Database.update<PlatformModel>(
           PrivateKeyModel,
           { platformUrl: update.platformUrl, clientId: update.clientId },
           { kid: platformId },
@@ -1355,18 +1355,18 @@ export class Provider {
       }
 
       return new Platform(
-        await PlatformModel.findOne({ where: { kid: platformId } }),
+        await PlatformModel.findOne<PlatformModel>({ where: { kid: platformId } }),
       );
     } catch (err) {
       if (alteredUrlClientIdFlag) {
-        await Database.update(
+        await Database.update<PublicKeyModel>(
           PublicKeyModel,
-          { platformUrl: oldURL, clientId: oldClientId },
+          { platformUrl: oldURL, clientId: oldClientId } as any,
           { kid: platformId },
         );
-        await Database.update(
+        await Database.update<PrivateKeyModel>(
           PrivateKeyModel,
-          { platformUrl: oldURL, clientId: oldClientId },
+          { platformUrl: oldURL, clientId: oldClientId } as any,
           { kid: platformId },
         );
       }
