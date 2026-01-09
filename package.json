@@ -1,11 +1,19 @@
 {
-  "name": "lti-typescript",
-  "version": "0.1.0",
+  "name": "@bhunt02/lti-typescript",
+  "version": "0.1.3",
   "description": "Forked from LTIJS (cvmcosta.github.io/ltijs/). Easily turn your web application into a LTI 1.3 Learning Tool. Reformatted with Typescript for improved type safety, switched database access and schema management to use Typeorm for more hands-off management.",
   "main": "./src/index.ts",
   "exports": {
     ".": "./src/index.ts"
   },
+  "files": [
+    "dist",
+    "package.json",
+    "LICENSE",
+    "README.md",
+    "docs"
+  ],
+  "types": "dist/index.d.ts",
   "engineStrict": true,
   "engines": {
     "node": ">=20.19.3"
@@ -36,7 +44,7 @@
   "author": "bhunt02",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/bhunt02/ltijs/issues"
+    "url": "https://github.com/bhunt02/lti-typescript/issues"
   },
   "dependencies": {
     "axios": "^1.12.2",
@@ -123,5 +131,10 @@
       "!**/node_modules/**"
     ]
   },
-  "packageManager": "yarn@1.22.22"
+  "packageManager": "yarn@1.22.22",
+  "directories": {
+    "doc": "docs",
+    "test": "test"
+  },
+  "homepage": "https://github.com/bhunt02/lti-typescript#readme"
 }
